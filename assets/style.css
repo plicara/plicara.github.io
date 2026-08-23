@@ -304,7 +304,12 @@ code {
   min-width: 0;
 }
 .card-title { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
-.card-title h3 { font-size: 1.1rem; }
+/* A card's heading level depends on where the card sits, not on what a card
+   is: on the home page the grid sits under <h2>Tools</h2> so the cards are
+   h3, and on /tools/ the same grid is the page's top-level content so they
+   are h2. The style belongs to the role, so it matches on both rather than
+   forcing one page to skip a level to reach the rule. */
+.card-title h2, .card-title h3 { font-size: 1.1rem; }
 .card p { margin: 0; color: var(--pl-text-muted); font-size: 0.95rem; }
 
 .tags { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-top: auto; padding-top: 0.4rem; }
@@ -436,6 +441,7 @@ table { width: 100%; border-collapse: collapse; }
 .card:hover { border-color: var(--pl-accent); }
 .card-title a { text-decoration: none; }
 .card-title a::after { content: ""; position: absolute; inset: 0; }
+.card:hover .card-title h2,
 .card:hover .card-title h3 { text-decoration: underline; text-underline-offset: 3px; }
 .card p a { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .card { transition: none; } }

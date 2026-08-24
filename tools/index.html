@@ -6,10 +6,13 @@
     <title>Tools &middot; Plicara Labs</title>
     <meta
       name="description"
-      content="Plicara Labs tools: regexbench and labloop, published on PyPI under Apache-2.0. The leaderboard and benchmarks are coming soon."
+      content="Plicara Labs tools: regexbench and labloop, published on PyPI under Apache-2.0. The first published regexbench run is on the benchmarks page."
     />
     <link rel="canonical" href="https://plicara.ai/tools/" />
-    <meta name="theme-color" content="#ffffff" />
+    <!-- One meta per mode: the page resolves blueprint at night and notepad
+         by day. -->
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#082C35" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
 
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon-180.png" />
@@ -31,8 +34,12 @@
   </head>
   <!-- data-scheme sits on body rather than html: tokens.css declares the
        default :root block after the scheme blocks, so a scheme on the root
-       element loses the custom-property tie-break and renders Twilight. -->
-  <body data-scheme="notepad">
+       element loses the custom-property tie-break and renders Twilight.
+       `technical` rather than a pinned notepad: it resolves blueprint at
+       night and notepad by day — the switch the home page's tools band
+       already follows, so arriving here from that band no longer flashes a
+       dark reader onto a white page. -->
+  <body data-scheme="technical">
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">
@@ -56,10 +63,7 @@
     <main class="wrap preflight" id="main">
       <p class="eyebrow">still folding &middot; tools</p>
       <h1>Still folding.</h1>
-      <p class="lede">
-        Two initial tools are on PyPI, and the leaderboard and benchmarks are
-        coming soon.
-      </p>
+      <p class="lede">Two initial tools are on PyPI. The first published run built on them is on the <a href="/benchmarks/">benchmarks page</a>.</p>
 
       <div class="project-grid">
         <div class="card">
@@ -67,10 +71,7 @@
             <h2><a href="https://github.com/plicara/regexbench">regexbench</a></h2>
             <span class="arrow" aria-hidden="true">&rarr;</span>
           </div>
-          <p>
-            Evaluate generated regular expressions: semantic equivalence,
-            correctness, and ReDoS safety.
-          </p>
+          <p>Evaluate generated regular expressions: semantic equivalence, correctness, and ReDoS safety.</p>
           <div class="tags">
             <span class="tag">python</span>
             <span class="tag">apache-2.0</span>
@@ -83,12 +84,7 @@
             <h2><a href="https://github.com/plicara/labloop">labloop</a></h2>
             <span class="arrow" aria-hidden="true">&rarr;</span>
           </div>
-          <p>
-            Inspired by
-            <a href="https://github.com/karpathy/autoresearch">autoresearch</a>,
-            an agent-driven experiment loop: propose a change, run it
-            time-boxed, keep it only if the metric improves.
-          </p>
+          <p>Inspired by <a href="https://github.com/karpathy/autoresearch">autoresearch</a>, an agent-driven experiment loop: propose a change, run it time-boxed, keep it only if the metric improves.</p>
           <div class="tags">
             <span class="tag">python</span>
             <span class="tag">apache-2.0</span>
@@ -101,10 +97,7 @@
             <h2><a href="https://github.com/plicara/regexeval-2026">regexeval-2026</a></h2>
             <span class="arrow" aria-hidden="true">&rarr;</span>
           </div>
-          <p>
-            Runs <code>regexbench</code> across models and publishes the
-            numbers: scores, methodology, and a re-run command.
-          </p>
+          <p>Runs <code>regexbench</code> across models and publishes the numbers: scores, methodology, and a re-run command.</p>
           <div class="tags">
             <span class="tag">evaluation</span>
             <span class="tag" data-state="live">published</span>

@@ -143,6 +143,7 @@ def chrome_head(title, description, canonical):
           <a href="/#models">Models</a>
           <a href="/#tools">Tools</a>
           <a href="/research/">Research</a>
+          <a href="/benchmarks/">Benchmarks</a>
           <a href="/#principles">Principles</a>
           <a href="https://github.com/plicara">GitHub</a>
         </nav>

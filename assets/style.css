@@ -1,16 +1,20 @@
 /* Plicara Labs — site styles
  *
  * The palette, the four schemes and the two type systems come from
- * assets/tokens.css, which is a copy of assets/tokens/tokens.css in the
- * foundation_lab repo. Do not edit the tokens here — change them there and
- * copy the file across, so the site and the brand guide cannot drift.
+ * assets/tokens.css, which is a copy of tokens/tokens.css in the public
+ * plicara-brand repo. Do not edit the tokens here — change them there and
+ * run `python3 tools/vendor.py --sync`, which the vendor-parity CI job
+ * enforces, so the site and the brand guide cannot drift.
  *
- * Rules: https://github.com/plicara/foundation_lab/blob/main/docs/brand.md
+ * Values and drawings: https://github.com/plicara/plicara-brand
+ * Rules (naming, voice, usage): docs/brand.md in the lab's private notebook.
  *
  * Scheme use on this site:
- *   twilight / cel   the lab and the models  — default, /models/
- *   notepad           tools                   — the #tools band, /tools/
- *   blueprint         benchmarks              — /benchmarks/
+ *   twilight / cel   the lab and the models   — default, /models/
+ *   technical         benchmarks and tools     — the #tools band, /tools/,
+ *                     and /benchmarks/*; resolves blueprint at night and
+ *                     notepad by day, so neither area pins a mode on the
+ *                     reader
  */
 
 /* --- faces --------------------------------------------------------------- */
@@ -452,9 +456,9 @@ table { width: 100%; border-collapse: collapse; }
 
 /* THE MARK IS SHOWN IN COLOUR, so it is a background-image rather than a
    masked shape: a mask can only take one colour, and the colour build carries
-   rose, butterscotch and emerald facets under the line. That costs the two
-   builds below, because the outline is sumi on light grounds and chalk on
-   dark ones, and a single file cannot be both.
+   rust, orange and teal facets under the line. That costs the two builds
+   below, because the outline is sumi on light grounds and cream on dark ones,
+   and a single file cannot be both.
    Root-relative on purpose: a url() inside a custom property resolves against
    the stylesheet that consumes it, so a relative path would break the pages
    in subdirectories. */
@@ -477,6 +481,19 @@ table { width: 100%; border-collapse: collapse; }
 [data-scheme="notepad"] {
   --pl-mark: url("/assets/brand/mark-colour.svg");
   --pl-mark-small: url("/assets/brand/mark-colour-small.svg");
+}
+/* Technical follows the OS, so its mark has to follow the same switch —
+   without this pair it would fall through to :root's dark build and put a
+   cream-outlined mark on a white page. */
+[data-scheme="technical"] {
+  --pl-mark: url("/assets/brand/mark-colour-dark.svg");
+  --pl-mark-small: url("/assets/brand/mark-colour-small-dark.svg");
+}
+@media (prefers-color-scheme: light) {
+  [data-scheme="technical"] {
+    --pl-mark: url("/assets/brand/mark-colour.svg");
+    --pl-mark-small: url("/assets/brand/mark-colour-small.svg");
+  }
 }
 
 /* The small build is the same drawing as the hero, one weight heavier, so
@@ -644,6 +661,45 @@ table { width: 100%; border-collapse: collapse; }
 .preflight h1 { font-size: clamp(2.4rem, 5.6vw, 4.2rem); max-width: 16ch; }
 .preflight .cta-row { margin-top: 0.4rem; }
 
+/* --- results ------------------------------------------------------------- */
+/* A section page that has something on it. Same rhythm as .preflight above:
+   the two differ in what fills them, not in how they sit on the page. The
+   benchmarks page carried a `basecamp` class that no rule ever matched, so
+   when the study landed it shipped with none of this — no page padding, no
+   gap between the blocks, and an h1 at the browser's default size while every
+   other section page clamped its own. */
+
+.results {
+  padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  gap: 1.35rem;
+  align-content: start;
+}
+.results h1 { font-size: clamp(2.4rem, 5.6vw, 4.2rem); max-width: 20ch; }
+.results .cta-row { margin-top: 0.4rem; }
+
+/* Row groups inside a data table — the bands a paired bootstrap resolves,
+   which are groups and not rungs, so the head names the group and nothing
+   orders them. These rules arrived in a <style> block on the benchmarks page,
+   the site's only per-page CSS, and they had drifted off the palette twice
+   over: the divider was `1px solid` with no colour, so it inked in
+   currentColor at full strength against --pl-rule everywhere else on the
+   page, and the head was recessed with opacity rather than the muted ink.
+   The head is also a label, so it takes mono — uppercase belongs to mono
+   only, and it was set in the display face. */
+.data-table tbody.group + tbody.group { border-top: 1px solid var(--pl-rule); }
+.data-table tbody.group + tbody.group > tr:first-child > th { padding-top: 1.25rem; }
+.data-table .group-head > th {
+  font-family: var(--pl-font-mono);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: var(--pl-tracking-label);
+  text-transform: uppercase;
+  color: var(--pl-text-muted);
+  white-space: normal;
+  padding-bottom: 0.35rem;
+}
+
 /* --- research ------------------------------------------------------------- */
 /* Long-form articles, generated from markdown by research/build.py. The
    register sits between the homepage and a model card: warm serif at reading
@@ -742,7 +798,9 @@ table { width: 100%; border-collapse: collapse; }
 
 .article-back { margin: 2.5rem 0 0; font-family: var(--pl-font-mono); font-size: 0.8rem; }
 
-/* The index: date in the margin, title and summary beside it. */
+/* The index list: date in the margin, title and summary beside it. Shared
+   by /research/ and /benchmarks/ — what the lab publishes reads as one
+   convention, whichever half it lands in. */
 .research-list { list-style: none; margin: 1.5rem 0 0; padding: 0; }
 .research-entry {
   display: grid;

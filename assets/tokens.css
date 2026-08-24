@@ -22,23 +22,25 @@
  */
 
 :root {
-  /* --- palette: cream --------------------------------------------------- */
+  /* --- palette: harbour --------------------------------------------------- */
 
   /* Descended from the founder's pastel card, with two deliberate moves away
    * from Anthropic's identity (warm cream ground + terracotta accent):
-   * the paper is COOL (cream is b* 0.0; the warm cream it replaced was +4.8
-   * against their +4.1 — indistinguishable), and the warm accent is RUST,
-   * not coral. Orange, duck egg and smoke came through unchanged. */
+   * the identity warm is a GOLDEN CREAM a viewer can tell from their bone
+   * (dE2000 7.2, b* +13.5 against their +4.1) — with page-ground duty on
+   * the calmer paper below (dE2000 3.8, still resolvable) — and the warm
+   * accent is RUST, not coral. Orange, duck egg and smoke came through
+   * unchanged. docs/brand.md logs the measurements. */
 
   /* Orange. The one hot colour, and a fill rather than an ink: it
-   * holds dark text but must never set text itself — 1.86:1 on cream. It is
+   * holds dark text but must never set text itself — 2.31:1 on paper. It is
    * the fill inside every glyph outline and the accent of both dark
    * schemes. */
   --pl-orange: #EE8B33;
 
   /* Text placed ON a orange fill: 7.1:1. This token is what makes
    * "orange is a fill, not an ink" mechanical rather than a thing to
-   * remember. It stays a fill on every ground — 2.14:1 on cream.
+   * remember. It stays a fill on every ground — 2.31:1 on paper.
    *
    * The orange FILL is the standing exception to "one accent per
    * scheme": buttons, pills and live tags stay orange in every scheme,
@@ -49,16 +51,17 @@
 
   /* Rust is NO LONGER a fill-only colour. Harbour moved it from a pale pink
    * to a burnt rust, which made it the accent INK on the light schemes
-   * (9.16:1 on cream) — see Cel and Notepad below. It is still usable as a
+   * (9.92:1 on paper) — see Cel and Notepad below. It is still usable as a
    * fill, so it keeps a guard, but the guard had to flip with the value:
    * near-black on rust is 1.65:1, cream on rust is 9.16:1. */
   --pl-rust: #6A2A12;
   --pl-on-rust: #FAEBD3;
 
   --pl-sumi: #05192B;        /* cool near-black; every outline is drawn in it */
-  --pl-cream: #FAEBD3;       /* cool paper white — the light ground */
+  --pl-cream: #FAEBD3;       /* the identity warm: text on dark, guard on rust */
+  --pl-paper: #FDF5E6;       /* the cream calmed for page duty — the light ground */
   --pl-white: #ffffff;
-  --pl-warmwhite: #FFF9EF;   /* raised surface on the cream ground —
+  --pl-warmwhite: #FFFDF9;   /* raised surface on the paper ground —
                                 lighter than the paper, not whiter than it */
   --pl-mist: #DEEAEE;        /* raised cool surface */
   --pl-duckegg: #9ABCC6;     /* pale green; second series on dark */
@@ -121,10 +124,10 @@
   --pl-typeset: warm;
 }
 
-/* Cel — primary light. Cool paper, sumi ink, white surfaces, one teal
+/* Cel — primary light. Warm paper, sumi ink, warm-white surfaces, one rust
  * accent. */
 [data-scheme="cel"] {
-  --pl-bg: var(--pl-cream);
+  --pl-bg: var(--pl-paper);
   --pl-surface: var(--pl-warmwhite);
   --pl-text: var(--pl-sumi);
   --pl-text-muted: #436974;
@@ -178,7 +181,7 @@
 
 @media (prefers-color-scheme: light) {
   :root:not([data-scheme]) {
-    --pl-bg: var(--pl-cream); --pl-surface: var(--pl-warmwhite);
+    --pl-bg: var(--pl-paper); --pl-surface: var(--pl-warmwhite);
     --pl-text: var(--pl-sumi); --pl-text-muted: #436974; --pl-rule: #E5D5BB;
     --pl-accent: var(--pl-rust); --pl-accent-on: var(--pl-cream);
     --pl-series-1: var(--pl-teal); --pl-series-2: var(--pl-rust);

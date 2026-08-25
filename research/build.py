@@ -337,9 +337,17 @@ def main():
         if meta.get("draft", "").lower() == "true":
             print(f"  skip  {name} (draft)")
             continue
-        if "—" in body_md or "—" in str(meta):
-            print(f"  NOTE  {name} contains an em-dash;"
-                  " the site's copy carries none by decision")
+        # An em-dash is on-brand in exactly one place: an empty table
+        # cell, meaning "no comparable number" (brand.md's results-table
+        # rule). Anywhere else it is prose, and the site's prose carries
+        # none by decision.
+        stray = [n for n, ln in enumerate(body_md.splitlines(), 1)
+                 if "—" in "|".join(c for c in ln.split("|")
+                                    if c.strip() != "—")]
+        if stray or "—" in str(meta):
+            sys.exit(f"{name}: em-dash outside an empty table cell "
+                     f"(line(s) {', '.join(map(str, stray)) or 'front matter'});"
+                     " write around it")
         # The override goes through slugify too: it is the one field
         # that reaches a filesystem path and an href, so it is
         # normalized to [a-z0-9-] rather than trusted.

@@ -333,7 +333,12 @@ def main():
         if not name.endswith(".md") or name.startswith("_"):
             continue
         path = os.path.join(ARTICLES, name)
-        meta, body_md = parse_front_matter(open(path).read(), name)
+        raw = open(path).read()
+        meta, body_md = parse_front_matter(raw, name)
+        # body_md is a suffix of raw, so the difference in newline counts is
+        # exactly the lines front matter consumed. Reported line numbers have
+        # to match the file, or "go fix line 4" points at the wrong line.
+        first_line = raw.count("\n") - body_md.count("\n") + 1
         if meta.get("draft", "").lower() == "true":
             print(f"  skip  {name} (draft)")
             continue
@@ -341,9 +346,21 @@ def main():
         # cell, meaning "no comparable number" (brand.md's results-table
         # rule). Anywhere else it is prose, and the site's prose carries
         # none by decision.
-        stray = [n for n, ln in enumerate(body_md.splitlines(), 1)
-                 if "—" in "|".join(c for c in ln.split("|")
-                                    if c.strip() != "—")]
+        # Fenced code is exempt: inside a fence an em-dash is content, not
+        # prose, and on a site that publishes regex articles it is exactly
+        # the payload you must not rewrite. Same reasoning that keeps
+        # strip_hard_breaks out of fences.
+        stray, fence = [], None
+        for n, ln in enumerate(body_md.splitlines(), first_line):
+            opener = re.match(r"^\s{0,3}(```|~~~)", ln)
+            if opener:
+                token = opener.group(1)
+                fence = token if fence is None else (None if token == fence else fence)
+                continue
+            if fence is not None:
+                continue
+            if "—" in "|".join(c for c in ln.split("|") if c.strip() != "—"):
+                stray.append(n)
         if stray or "—" in str(meta):
             sys.exit(f"{name}: em-dash outside an empty table cell "
                      f"(line(s) {', '.join(map(str, stray)) or 'front matter'});"

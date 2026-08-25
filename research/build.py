@@ -32,6 +32,9 @@ Files whose names start with `_` are ignored; `draft: true` builds nothing
 and says so. Markdown is rendered with the `extra` extension set (tables,
 fenced code, footnotes) and deliberately WITHOUT `smarty`: it would turn
 `--` into em-dashes, and the site's copy carries none by decision.
+Trailing whitespace is stripped from prose before rendering, because markdown
+reads it as a forced line break; inside fenced code it is content and is left
+alone. A break that is meant can be written as a literal <br>.
 """
 
 import argparse
@@ -57,6 +60,7 @@ SITE = "https://plicara.ai"
 
 REQUIRED = ("title", "date", "summary")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+FENCE_RE = re.compile(r"^\s{0,3}(```|~~~)")
 
 
 # --- front matter ------------------------------------------------------------
@@ -83,6 +87,48 @@ def parse_front_matter(text, name):
     if not DATE_RE.match(meta["date"]):
         sys.exit(f"{name}: date must be YYYY-MM-DD, got {meta['date']!r}")
     return meta, body.lstrip("\n")
+
+
+def strip_hard_breaks(body_md, name):
+    """Remove trailing whitespace, which markdown reads as a forced <br>.
+
+    Two spaces at the end of a line is markdown's hard-break syntax: syntax
+    you cannot see, that survives a copy-paste out of an editor that does not
+    trim, and that turns every line of a hard-wrapped paragraph into a forced
+    break. Prose here is wrapped for the author's editor, not for the reader,
+    so those breaks are never the intent -- the browser is supposed to do the
+    wrapping at the reader's measure.
+
+    A break that IS meant can still be written as a literal <br>, which passes
+    through untouched like any other raw HTML. That explicit spelling is the
+    reason stripping is safe rather than presumptuous.
+
+    Fenced code blocks are left alone: trailing space inside a fence is
+    content, not syntax, and a regular expression is exactly the kind of
+    payload where silently trimming it would be a real corruption.
+    """
+    out, fence, stripped = [], None, 0
+    for line in body_md.split("\n"):
+        opener = FENCE_RE.match(line)
+        if opener:
+            token = opener.group(1)
+            if fence is None:
+                fence = token
+            elif token == fence:
+                fence = None
+            out.append(line)
+            continue
+        if fence is not None:
+            out.append(line)
+            continue
+        trimmed = line.rstrip()
+        if trimmed != line:
+            stripped += 1
+        out.append(trimmed)
+    if stripped:
+        print(f"  NOTE  {name}: stripped trailing whitespace from {stripped}"
+              " line(s); markdown reads it as a forced line break")
+    return "\n".join(out)
 
 
 def slugify(value):
@@ -334,6 +380,7 @@ def main():
             continue
         path = os.path.join(ARTICLES, name)
         meta, body_md = parse_front_matter(open(path).read(), name)
+        body_md = strip_hard_breaks(body_md, name)
         if meta.get("draft", "").lower() == "true":
             print(f"  skip  {name} (draft)")
             continue

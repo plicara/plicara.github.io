@@ -26,6 +26,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://plicara.ai/benchmarks/adventurebench/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://plicara.ai/research/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

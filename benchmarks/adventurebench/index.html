@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adventure Bench &middot; Plicara Labs</title>
+    <meta name="description" content="Audited Adventure Bench release 20260901-plicara-v1: grounded action interpretation results with raw evidence and offline replay." />
+    <link rel="canonical" href="https://plicara.ai/benchmarks/adventurebench/" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#082C35" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon-180.png" />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/archivo.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jetbrains-mono-400.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/tokens.css" />
+    <link rel="stylesheet" href="/assets/style.css" />
+  </head>
+  <body data-scheme="technical">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Plicara Labs</a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/#mission">Mission</a><a href="/#models">Models</a><a href="/#tools">Tools</a><a href="/research/">Research</a><a href="/benchmarks/">Benchmarks</a><a href="/#principles">Principles</a><a href="https://github.com/plicara">GitHub</a>
+        </nav>
+      </div>
+    </header>
+    <main class="wrap results" id="main">
+      <p class="eyebrow">benchmarks &middot; adventurebench</p>
+      <h1>Can your model play a text adventure?</h1>
+      <p class="lede">Adventure Bench measures grounded action interpretation: map a player utterance onto the visible scene&rsquo;s small action vocabulary, or refuse when the request is not grounded.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <caption class="visually-hidden">Audited Adventure Bench release 20260901-plicara-v1. Models are alphabetical by their canonical slug; comparison counts show only paired bootstrap intervals that exclude zero.</caption>
+          <thead><tr><th scope="col">Model</th><th scope="col" class="num">Score (95% CI)</th><th scope="col" class="num">Passed</th><th scope="col">Provider / runtime</th><th scope="col" class="num">Parse / transport</th><th scope="col" class="num">Separates</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" class="mono">ibm-granite/granite-4.0-h-micro</th><td class="num mono">73.4% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(67.6% to 78.7%)</td><td class="num mono">537/732</td><td class="mono">Cloudflare / openrouter:chat-completions-v1</td><td class="num mono">3 / 0</td><td class="num mono">+0 / &minus;4</td></tr>
+            <tr><th scope="row" class="mono">ibm-granite/granite-4.1-8b</th><td class="num mono">75.8% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(70.1% to 81.1%)</td><td class="num mono">555/732</td><td class="mono">CoreWeave / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+0 / &minus;4</td></tr>
+            <tr><th scope="row" class="mono">mistralai/ministral-3b-2512</th><td class="num mono">84.3% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(79.8% to 88.5%)</td><td class="num mono">617/732</td><td class="mono">Mistral / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
+            <tr><th scope="row" class="mono">mistralai/ministral-8b-2512</th><td class="num mono">84.4% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(79.8% to 88.8%)</td><td class="num mono">618/732</td><td class="mono">Mistral / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
+            <tr><th scope="row" class="mono">qwen/qwen3.5-9b</th><td class="num mono">82.7% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(77.7% to 87.3%)</td><td class="num mono">605/732</td><td class="mono">DeepInfra / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
+            <tr><th scope="row" class="mono">z-ai/glm-5.2</th><td class="num mono">90.6% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(87.0% to 93.9%)</td><td class="num mono">663/732</td><td class="mono">DeepInfra / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+5 / &minus;0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note"><strong>These results are not a ranking.</strong> The separates column is +ahead / &minus;behind and counts only paired 95% case-cluster bootstrap intervals that exclude zero. Every comparison whose interval includes zero is unresolved; unresolved comparisons are unresolved.</p>
+      <p class="note">Release <code>20260901-plicara-v1</code> covers 244 cases &times; 3 repetitions (732 case-repetitions; repetition numbers 1, 2, 3), collected on 2026-09-02 (UTC). Benchmark version: <code>1.0.0</code>. <a href="https://github.com/plicara/adventurebench/blob/main/releases/20260901-plicara-v1/release.json">Open the audited release artifact.</a></p>
+      <p class="note">Failure policy: any transport failure invalidates a collection run and prevents it from entering this release. Parsing failures are counted separately after the frozen malformed-output retry and remain visible in the table. See the <a href="https://github.com/plicara/adventurebench/blob/main/docs/methodology.md">full methodology</a>.</p>
+      <p class="note">Every number above regenerates offline from committed raw responses. The release pins every manifest and response hash plus dataset <code>f38e4650ecbe&hellip;</code> and prompt <code>a5b12544f699&hellip;</code>. Audit it with <code>make site-check RELEASE_ID=20260901-plicara-v1</code>.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <caption>Per-tag passed/total coverage for the audited release. Columns are models in alphabetical canonical-slug order.</caption>
+          <thead><tr><th scope="col">Tag</th>
+              <th scope="col" class="num">ibm-granite-granite-4-0-h-micro</th>
+              <th scope="col" class="num">ibm-granite-granite-4-1-8b</th>
+              <th scope="col" class="num">mistralai-ministral-3b-2512</th>
+              <th scope="col" class="num">mistralai-ministral-8b-2512</th>
+              <th scope="col" class="num">qwen-qwen3-5-9b</th>
+              <th scope="col" class="num">z-ai-glm-5-2</th>
+          </tr></thead>
+          <tbody>
+            <tr><th scope="row" class="mono">abbreviation</th><td class="num mono">12/30</td><td class="num mono">30/30</td><td class="num mono">13/30</td><td class="num mono">24/30</td><td class="num mono">21/30</td><td class="num mono">27/30</td></tr>
+            <tr><th scope="row" class="mono">absent-object</th><td class="num mono">12/30</td><td class="num mono">27/30</td><td class="num mono">30/30</td><td class="num mono">30/30</td><td class="num mono">30/30</td><td class="num mono">30/30</td></tr>
+            <tr><th scope="row" class="mono">adverb</th><td class="num mono">21/21</td><td class="num mono">21/21</td><td class="num mono">21/21</td><td class="num mono">21/21</td><td class="num mono">21/21</td><td class="num mono">21/21</td></tr>
+            <tr><th scope="row" class="mono">ambiguity</th><td class="num mono">12/30</td><td class="num mono">12/30</td><td class="num mono">18/30</td><td class="num mono">16/30</td><td class="num mono">27/30</td><td class="num mono">30/30</td></tr>
+            <tr><th scope="row" class="mono">classic-command</th><td class="num mono">27/48</td><td class="num mono">21/48</td><td class="num mono">44/48</td><td class="num mono">39/48</td><td class="num mono">39/48</td><td class="num mono">45/48</td></tr>
+            <tr><th scope="row" class="mono">compound</th><td class="num mono">27/27</td><td class="num mono">18/27</td><td class="num mono">22/27</td><td class="num mono">24/27</td><td class="num mono">20/27</td><td class="num mono">26/27</td></tr>
+            <tr><th scope="row" class="mono">direction-as-place</th><td class="num mono">42/45</td><td class="num mono">42/45</td><td class="num mono">42/45</td><td class="num mono">42/45</td><td class="num mono">45/45</td><td class="num mono">45/45</td></tr>
+            <tr><th scope="row" class="mono">exact-verb</th><td class="num mono">36/36</td><td class="num mono">36/36</td><td class="num mono">36/36</td><td class="num mono">36/36</td><td class="num mono">36/36</td><td class="num mono">36/36</td></tr>
+            <tr><th scope="row" class="mono">flavor-noun</th><td class="num mono">9/42</td><td class="num mono">3/42</td><td class="num mono">18/42</td><td class="num mono">11/42</td><td class="num mono">15/42</td><td class="num mono">14/42</td></tr>
+            <tr><th scope="row" class="mono">frustration</th><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">10/12</td></tr>
+            <tr><th scope="row" class="mono">full-sentence</th><td class="num mono">24/24</td><td class="num mono">21/24</td><td class="num mono">24/24</td><td class="num mono">24/24</td><td class="num mono">21/24</td><td class="num mono">24/24</td></tr>
+            <tr><th scope="row" class="mono">go-to-place</th><td class="num mono">9/12</td><td class="num mono">9/12</td><td class="num mono">9/12</td><td class="num mono">9/12</td><td class="num mono">12/12</td><td class="num mono">9/12</td></tr>
+            <tr><th scope="row" class="mono">greeting</th><td class="num mono">9/9</td><td class="num mono">9/9</td><td class="num mono">9/9</td><td class="num mono">9/9</td><td class="num mono">9/9</td><td class="num mono">8/9</td></tr>
+            <tr><th scope="row" class="mono">guess-the-noun</th><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td></tr>
+            <tr><th scope="row" class="mono">help-seeking</th><td class="num mono">12/15</td><td class="num mono">9/15</td><td class="num mono">15/15</td><td class="num mono">15/15</td><td class="num mono">12/15</td><td class="num mono">15/15</td></tr>
+            <tr><th scope="row" class="mono">meta</th><td class="num mono">18/30</td><td class="num mono">27/30</td><td class="num mono">27/30</td><td class="num mono">30/30</td><td class="num mono">30/30</td><td class="num mono">27/30</td></tr>
+            <tr><th scope="row" class="mono">missing-preposition</th><td class="num mono">27/27</td><td class="num mono">27/27</td><td class="num mono">24/27</td><td class="num mono">27/27</td><td class="num mono">27/27</td><td class="num mono">27/27</td></tr>
+            <tr><th scope="row" class="mono">multi-object</th><td class="num mono">15/15</td><td class="num mono">3/15</td><td class="num mono">13/15</td><td class="num mono">15/15</td><td class="num mono">12/15</td><td class="num mono">15/15</td></tr>
+            <tr><th scope="row" class="mono">nonsense</th><td class="num mono">9/12</td><td class="num mono">9/12</td><td class="num mono">10/12</td><td class="num mono">9/12</td><td class="num mono">12/12</td><td class="num mono">12/12</td></tr>
+            <tr><th scope="row" class="mono">out-of-vocab</th><td class="num mono">42/126</td><td class="num mono">45/126</td><td class="num mono">98/126</td><td class="num mono">80/126</td><td class="num mono">71/126</td><td class="num mono">97/126</td></tr>
+            <tr><th scope="row" class="mono">paraphrase</th><td class="num mono">51/51</td><td class="num mono">48/51</td><td class="num mono">44/51</td><td class="num mono">45/51</td><td class="num mono">48/51</td><td class="num mono">51/51</td></tr>
+            <tr><th scope="row" class="mono">politeness</th><td class="num mono">18/18</td><td class="num mono">18/18</td><td class="num mono">18/18</td><td class="num mono">18/18</td><td class="num mono">18/18</td><td class="num mono">16/18</td></tr>
+            <tr><th scope="row" class="mono">pronoun</th><td class="num mono">15/27</td><td class="num mono">15/27</td><td class="num mono">21/27</td><td class="num mono">19/27</td><td class="num mono">24/27</td><td class="num mono">25/27</td></tr>
+            <tr><th scope="row" class="mono">question</th><td class="num mono">36/45</td><td class="num mono">45/45</td><td class="num mono">45/45</td><td class="num mono">45/45</td><td class="num mono">42/45</td><td class="num mono">45/45</td></tr>
+            <tr><th scope="row" class="mono">relative-direction</th><td class="num mono">3/12</td><td class="num mono">3/12</td><td class="num mono">3/12</td><td class="num mono">6/12</td><td class="num mono">3/12</td><td class="num mono">12/12</td></tr>
+            <tr><th scope="row" class="mono">story-mode</th><td class="num mono">0/9</td><td class="num mono">9/9</td><td class="num mono">9/9</td><td class="num mono">9/9</td><td class="num mono">9/9</td><td class="num mono">9/9</td></tr>
+            <tr><th scope="row" class="mono">synonym</th><td class="num mono">63/63</td><td class="num mono">63/63</td><td class="num mono">60/63</td><td class="num mono">63/63</td><td class="num mono">60/63</td><td class="num mono">60/63</td></tr>
+            <tr><th scope="row" class="mono">typo</th><td class="num mono">36/36</td><td class="num mono">33/36</td><td class="num mono">31/36</td><td class="num mono">36/36</td><td class="num mono">33/36</td><td class="num mono">36/36</td></tr>
+            <tr><th scope="row" class="mono">verb-alias</th><td class="num mono">15/15</td><td class="num mono">15/15</td><td class="num mono">15/15</td><td class="num mono">15/15</td><td class="num mono">15/15</td><td class="num mono">15/15</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Per-tag cells are numerators and denominators, not pooled rankings; they show which grounded mapping and calibration patterns each audited run passed.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/plicara/adventurebench">Repository</a>
+        <a class="btn btn-ghost" href="https://github.com/plicara/adventurebench/tree/main/runs">Raw evidence</a>
+        <a class="btn btn-ghost" href="https://github.com/plicara/adventurebench/blob/main/DATASET_CARD.md">Dataset Card</a>
+        <a class="btn btn-ghost" href="https://github.com/plicara/adventurebench#auditable-result-collection">Re-run it</a>
+        <a class="btn btn-ghost" href="/benchmarks/">&larr; All benchmarks</a>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap"><span>&copy; Plicara Labs</span><div class="footer-links"><a href="mailto:info@plicara.ai">info@plicara.ai</a><a href="https://github.com/plicara">GitHub</a><a href="/">Home</a></div></div>
+    </footer>
+  </body>
+</html>

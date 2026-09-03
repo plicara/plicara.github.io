@@ -15,6 +15,29 @@
     <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
     <link rel="stylesheet" href="/assets/tokens.css" />
     <link rel="stylesheet" href="/assets/style.css" />
+    <style>
+      .pareto-section { margin: 3rem 0; }
+      .pareto-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; }
+      .pareto-heading h2 { margin: 0; }
+      .pareto-meta, .pareto-lede { color: var(--pl-text-muted); }
+      .pareto-meta { margin: 0; font: 0.78rem var(--pl-font-mono); white-space: nowrap; }
+      .pareto-lede { max-width: 62ch; margin: .8rem 0 1.25rem; }
+      .pareto-figure { border: 1px solid var(--pl-rule); background: var(--pl-ground); padding: clamp(.8rem, 3vw, 1.75rem); }
+      .pareto-figure svg { display: block; width: 100%; height: auto; }
+      .pareto-grid { stroke: var(--pl-rule); stroke-width: 1; }
+      .pareto-axis { stroke: var(--pl-ink); stroke-width: 1; }
+      .pareto-tick { fill: var(--pl-text-muted); font: .72rem var(--pl-font-mono); }
+      .pareto-axis-title { fill: var(--pl-ink); font: 700 .71rem var(--pl-font-mono); letter-spacing: .06em; }
+      .pareto-frontier { fill: none; stroke: var(--pl-accent); stroke-width: 3; stroke-dasharray: 7 5; }
+      .pareto-point { stroke: var(--pl-ground); stroke-width: 2; }
+      .pareto-point.frontier, .pareto-swatch.frontier { fill: var(--pl-accent); background: var(--pl-accent); }
+      .pareto-point.dominated, .pareto-swatch.dominated { fill: var(--pl-warm); background: var(--pl-warm); }
+      .pareto-label { fill: var(--pl-ink); font: 600 .75rem var(--pl-font-body); }
+      .pareto-legend { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: .9rem; color: var(--pl-text-muted); font-size: .82rem; }
+      .pareto-legend span { display: inline-flex; align-items: center; gap: .45rem; }
+      .pareto-swatch { display: inline-block; width: .65rem; height: .65rem; border-radius: 50%; }
+      @media (max-width: 42rem) { .pareto-heading { display: block; } .pareto-meta { margin-top: .5rem; white-space: normal; } .pareto-label { display: none; } }
+    </style>
   </head>
   <body data-scheme="technical">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -30,17 +53,48 @@
       <p class="eyebrow">benchmarks &middot; adventurebench</p>
       <h1>Can your model play a text adventure?</h1>
       <p class="lede">Adventure Bench measures grounded action interpretation: map a player utterance onto the visible scene&rsquo;s small action vocabulary, or refuse when the request is not grounded.</p>
+      <section class="pareto-section" aria-labelledby="pareto-heading">
+        <div class="pareto-heading"><div><p class="eyebrow">the cost curve</p><h2 id="pareto-heading">The score&ndash;cost frontier</h2></div><p class="pareto-meta">Recorded full-run cost &middot; 6 models</p></div>
+        <p class="pareto-lede">Every teal point is a model for which no cheaper tested model scored as well. Rust points are dominated on this release.</p>
+        <div class="pareto-figure">
+          <svg viewBox="0 0 840 410" role="img" aria-labelledby="pareto-title pareto-description">
+            <title id="pareto-title">Adventure Bench score versus recorded full-run cost</title>
+            <desc id="pareto-description">Pareto frontier: ibm-granite/granite-4.0-h-micro &rarr; mistralai/ministral-3b-2512 &rarr; mistralai/ministral-8b-2512 &rarr; z-ai/glm-5.2.</desc>
+            <line class="pareto-grid" x1="86" y1="332.00" x2="790" y2="332.00" />
+<line class="pareto-grid" x1="86" y1="258.00" x2="790" y2="258.00" />
+<line class="pareto-grid" x1="86" y1="184.00" x2="790" y2="184.00" />
+<line class="pareto-grid" x1="86" y1="110.00" x2="790" y2="110.00" />
+<line class="pareto-grid" x1="86" y1="36.00" x2="790" y2="36.00" />
+            <line class="pareto-axis" x1="86" y1="332" x2="790" y2="332" /><line class="pareto-axis" x1="86" y1="36" x2="86" y2="332" />
+            <text class="pareto-tick" x="74" y="336.00" text-anchor="end">71.3%</text>
+<text class="pareto-tick" x="74" y="262.00" text-anchor="end">76.6%</text>
+<text class="pareto-tick" x="74" y="188.00" text-anchor="end">82.0%</text>
+<text class="pareto-tick" x="74" y="114.00" text-anchor="end">87.3%</text>
+<text class="pareto-tick" x="74" y="40.00" text-anchor="end">92.6%</text>
+            <text class="pareto-tick" x="86.00" y="355" text-anchor="middle">$0.000</text>
+<text class="pareto-tick" x="262.00" y="355" text-anchor="middle">$0.032</text>
+<text class="pareto-tick" x="438.00" y="355" text-anchor="middle">$0.064</text>
+<text class="pareto-tick" x="614.00" y="355" text-anchor="middle">$0.096</text>
+<text class="pareto-tick" x="790.00" y="355" text-anchor="middle">$0.128</text>
+            <text class="pareto-axis-title" x="438.00" y="392" text-anchor="middle">RECORDED FULL-RUN COST (USD)</text><text class="pareto-axis-title" x="19" y="184.00" text-anchor="middle" transform="rotate(-90 19 184.00)">ADVENTURE BENCH SCORE</text>
+            <path class="pareto-frontier" d="M 131.94 303.35 L 162.85 151.79 L 205.92 149.90 L 741.26 64.65" />
+            <g><title>ibm-granite/granite-4.0-h-micro: 73.4% at $0.008</title><circle class="pareto-point frontier" cx="131.94" cy="303.35" r="6.5" /><text class="pareto-label" x="141.94" y="320.35" text-anchor="start">ibm-granite/granite-4.0-h-micro</text></g><g><title>mistralai/ministral-3b-2512: 84.3% at $0.014</title><circle class="pareto-point frontier" cx="162.85" cy="151.79" r="6.5" /><text class="pareto-label" x="172.85" y="141.79" text-anchor="start">mistralai/ministral-3b-2512</text></g><g><title>ibm-granite/granite-4.1-8b: 75.8% at $0.020</title><circle class="pareto-point dominated" cx="193.12" cy="269.25" r="6.5" /><text class="pareto-label" x="203.12" y="286.25" text-anchor="start">ibm-granite/granite-4.1-8b</text></g><g><title>mistralai/ministral-8b-2512: 84.4% at $0.022</title><circle class="pareto-point frontier" cx="205.92" cy="149.90" r="6.5" /><text class="pareto-label" x="215.92" y="139.90" text-anchor="start">mistralai/ministral-8b-2512</text></g><g><title>qwen/qwen3.5-9b: 82.7% at $0.039</title><circle class="pareto-point dominated" cx="301.21" cy="174.53" r="6.5" /><text class="pareto-label" x="311.21" y="191.53" text-anchor="start">qwen/qwen3.5-9b</text></g><g><title>z-ai/glm-5.2: 90.6% at $0.119</title><circle class="pareto-point frontier" cx="741.26" cy="64.65" r="6.5" /><text class="pareto-label" x="732.26" y="54.65" text-anchor="end">z-ai/glm-5.2</text></g>
+          </svg>
+          <div class="pareto-legend"><span><i class="pareto-swatch frontier"></i>Pareto frontier</span><span><i class="pareto-swatch dominated"></i>Dominated in this release</span></div>
+        </div>
+        <p class="note">The frontier is a cost-efficiency view, not a ranking or a statistical claim. Costs are summed from provider-recorded completion evidence; score uncertainty and paired comparisons remain in the table below.</p>
+      </section>
       <div class="table-wrap">
         <table class="data-table">
           <caption class="visually-hidden">Audited Adventure Bench release 20260901-plicara-v1. Models are alphabetical by their canonical slug; comparison counts show only paired bootstrap intervals that exclude zero.</caption>
-          <thead><tr><th scope="col">Model</th><th scope="col" class="num">Score (95% CI)</th><th scope="col" class="num">Passed</th><th scope="col">Provider / runtime</th><th scope="col" class="num">Parse / transport</th><th scope="col" class="num">Separates</th></tr></thead>
+          <thead><tr><th scope="col">Model</th><th scope="col" class="num">Score (95% CI)</th><th scope="col" class="num">Passed</th><th scope="col" class="num">Recorded cost</th><th scope="col">Provider / runtime</th><th scope="col" class="num">Parse / transport</th><th scope="col" class="num">Separates</th></tr></thead>
           <tbody>
-            <tr><th scope="row" class="mono">ibm-granite/granite-4.0-h-micro</th><td class="num mono">73.4% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(67.6% to 78.7%)</td><td class="num mono">537/732</td><td class="mono">Cloudflare / openrouter:chat-completions-v1</td><td class="num mono">3 / 0</td><td class="num mono">+0 / &minus;4</td></tr>
-            <tr><th scope="row" class="mono">ibm-granite/granite-4.1-8b</th><td class="num mono">75.8% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(70.1% to 81.1%)</td><td class="num mono">555/732</td><td class="mono">CoreWeave / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+0 / &minus;4</td></tr>
-            <tr><th scope="row" class="mono">mistralai/ministral-3b-2512</th><td class="num mono">84.3% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(79.8% to 88.5%)</td><td class="num mono">617/732</td><td class="mono">Mistral / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
-            <tr><th scope="row" class="mono">mistralai/ministral-8b-2512</th><td class="num mono">84.4% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(79.8% to 88.8%)</td><td class="num mono">618/732</td><td class="mono">Mistral / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
-            <tr><th scope="row" class="mono">qwen/qwen3.5-9b</th><td class="num mono">82.7% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(77.7% to 87.3%)</td><td class="num mono">605/732</td><td class="mono">DeepInfra / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
-            <tr><th scope="row" class="mono">z-ai/glm-5.2</th><td class="num mono">90.6% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(87.0% to 93.9%)</td><td class="num mono">663/732</td><td class="mono">DeepInfra / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+5 / &minus;0</td></tr>
+            <tr><th scope="row" class="mono">ibm-granite/granite-4.0-h-micro</th><td class="num mono">73.4% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(67.6% to 78.7%)</td><td class="num mono">537/732</td><td class="num mono">$0.008</td><td class="mono">Cloudflare / openrouter:chat-completions-v1</td><td class="num mono">3 / 0</td><td class="num mono">+0 / &minus;4</td></tr>
+            <tr><th scope="row" class="mono">ibm-granite/granite-4.1-8b</th><td class="num mono">75.8% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(70.1% to 81.1%)</td><td class="num mono">555/732</td><td class="num mono">$0.020</td><td class="mono">CoreWeave / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+0 / &minus;4</td></tr>
+            <tr><th scope="row" class="mono">mistralai/ministral-3b-2512</th><td class="num mono">84.3% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(79.8% to 88.5%)</td><td class="num mono">617/732</td><td class="num mono">$0.014</td><td class="mono">Mistral / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
+            <tr><th scope="row" class="mono">mistralai/ministral-8b-2512</th><td class="num mono">84.4% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(79.8% to 88.8%)</td><td class="num mono">618/732</td><td class="num mono">$0.022</td><td class="mono">Mistral / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
+            <tr><th scope="row" class="mono">qwen/qwen3.5-9b</th><td class="num mono">82.7% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(77.7% to 87.3%)</td><td class="num mono">605/732</td><td class="num mono">$0.039</td><td class="mono">DeepInfra / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+2 / &minus;1</td></tr>
+            <tr><th scope="row" class="mono">z-ai/glm-5.2</th><td class="num mono">90.6% <span class="visually-hidden">; 95% cluster-bootstrap interval </span>(87.0% to 93.9%)</td><td class="num mono">663/732</td><td class="num mono">$0.119</td><td class="mono">DeepInfra / openrouter:chat-completions-v1</td><td class="num mono">0 / 0</td><td class="num mono">+5 / &minus;0</td></tr>
           </tbody>
         </table>
       </div>

@@ -149,7 +149,7 @@ def chrome_head(title, description, canonical):
           href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
 
     <link rel="stylesheet" href="/assets/tokens.css" />
-    <link rel="stylesheet" href="/assets/style.css" />
+    <link rel="stylesheet" href="/assets/style.css?v=20260904" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

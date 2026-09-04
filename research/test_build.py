@@ -27,6 +27,15 @@ class ArticleRenderingTest(unittest.TestCase):
         body = build.strip_hard_breaks("```text\nvalue  \n```", "test.md")
         self.assertEqual(body, "```text\nvalue  \n```")
 
+    def test_article_uses_the_versioned_stylesheet(self):
+        rendered = build.render_article(
+            {"title": "Test", "date": "2026-09-04", "summary": "Test"},
+            "Body",
+            "test",
+            False,
+        )
+        self.assertIn('href="/assets/style.css?v=20260904"', rendered)
+
 
 if __name__ == "__main__":
     unittest.main()

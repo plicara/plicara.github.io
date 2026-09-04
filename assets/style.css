@@ -706,12 +706,9 @@ table { width: 100%; border-collapse: collapse; }
    measure, quiet chrome, the data in mono. Deliberately no wave art here;
    the words carry the page.
 
-   CASE CARVE-OUT: the global heading rule lowercases display roles, but an
-   article's title and headings are authored prose, not chrome, in the same
-   way brand.md exempts pull quotes ("body voice printed large"). Forcing
-   them through the transform would mangle acronyms and identifiers: "AI"
-   becomes "ai", "ReDoS" becomes "redos". So content headings keep their
-   capitals, and the same applies to titles listed on the index. */
+   Research titles and section headings follow the lab's lowercase display
+   convention. Source text retains its authored casing for metadata and
+   accessibility; the display role owns the visual treatment. */
 
 .article { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .article-head,
@@ -724,7 +721,7 @@ table { width: 100%; border-collapse: collapse; }
 .article-head { display: grid; gap: 0.9rem; margin-bottom: 2.25rem; }
 .article-head h1 {
   font-size: clamp(2rem, 4.6vw, 3.2rem);
-  text-transform: none;
+  text-transform: lowercase;
   text-wrap: balance;
 }
 .article-meta {
@@ -737,7 +734,7 @@ table { width: 100%; border-collapse: collapse; }
 
 .article-body h2,
 .article-body h3,
-.article-body h4 { text-transform: none; margin: 2.2rem 0 0.7rem; }
+.article-body h4 { text-transform: lowercase; margin: 2.2rem 0 0.7rem; }
 .article-body h2 { font-size: 1.5rem; }
 .article-body h3 { font-size: 1.2rem; }
 .article-body p { margin: 0 0 1rem; text-wrap: pretty; }
@@ -815,7 +812,7 @@ table { width: 100%; border-collapse: collapse; }
 }
 .research-entry:last-child { border-bottom: 1px solid var(--pl-rule); }
 .research-date { font-size: 0.78rem; color: var(--pl-text-muted); margin: 0; padding-top: 0.35rem; }
-.research-entry h2 { font-size: 1.25rem; text-transform: none; margin: 0 0 0.3rem; }
+.research-entry h2 { font-size: 1.25rem; text-transform: lowercase; margin: 0 0 0.3rem; }
 .research-entry h2 a { text-decoration: none; }
 .research-entry h2 a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .research-entry p { margin: 0; color: var(--pl-text-muted); font-size: 0.95rem; max-width: 62ch; }

@@ -176,7 +176,14 @@ MD = markdown.Markdown(extensions=["extra"], output_format="html5")
 def render_article(meta, body_md, slug, pdf_ok):
     MD.reset()
     body_html = MD.convert(body_md)
-    authors = meta.get("authors", "Plicara Labs")
+    author = meta.get("author", meta.get("authors", "Plicara Labs"))
+    author_html = html.escape(author)
+    if meta.get("author_url"):
+        author_html = (f'<a class="article-author" href="{html.escape(meta["author_url"], quote=True)}">'
+                       f'{author_html}</a>')
+    publisher = meta.get("publisher")
+    if publisher:
+        author_html += f", writing for {html.escape(publisher)}"
     pdf_link = (
         f' &middot; <a class="article-pdf-link"'
         f' href="/research/{slug}/{slug}.pdf">Download PDF</a>'
@@ -190,7 +197,7 @@ def render_article(meta, body_md, slug, pdf_ok):
           <p class="eyebrow">research &middot; {meta["date"]}</p>
           <h1>{html.escape(meta["title"])}</h1>
           <p class="article-meta">
-            {html.escape(authors)} &middot;
+            {author_html} &middot;
             <time datetime="{meta["date"]}">{meta["date"]}</time>{pdf_link}
           </p>
         </header>

@@ -716,12 +716,16 @@ table { width: 100%; border-collapse: collapse; }
 .article { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .article-head,
 .article-body,
-.article-back { max-width: var(--pl-measure); }
+.article-back {
+  max-width: var(--pl-measure);
+  margin-inline: auto;
+}
 
 .article-head { display: grid; gap: 0.9rem; margin-bottom: 2.25rem; }
 .article-head h1 {
   font-size: clamp(2rem, 4.6vw, 3.2rem);
   text-transform: none;
+  text-wrap: balance;
 }
 .article-meta {
   font-family: var(--pl-font-mono);
@@ -736,7 +740,7 @@ table { width: 100%; border-collapse: collapse; }
 .article-body h4 { text-transform: none; margin: 2.2rem 0 0.7rem; }
 .article-body h2 { font-size: 1.5rem; }
 .article-body h3 { font-size: 1.2rem; }
-.article-body p { margin: 0 0 1rem; }
+.article-body p { margin: 0 0 1rem; text-wrap: pretty; }
 .article-body a { text-decoration-thickness: 1px; text-underline-offset: 2px; }
 .article-body ul,
 .article-body ol { margin: 0 0 1rem; padding-left: 1.4rem; }
@@ -796,7 +800,7 @@ table { width: 100%; border-collapse: collapse; }
 .article-body hr { border: 0; border-top: 1px solid var(--pl-rule); margin: 2rem 0; }
 .article-body .footnote { font-size: 0.88rem; color: var(--pl-text-muted); }
 
-.article-back { margin: 2.5rem 0 0; font-family: var(--pl-font-mono); font-size: 0.8rem; }
+.article-back { margin: 2.5rem auto 0; font-family: var(--pl-font-mono); font-size: 0.8rem; }
 
 /* The index list: date in the margin, title and summary beside it. Shared
    by /research/ and /benchmarks/ — what the lab publishes reads as one

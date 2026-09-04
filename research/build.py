@@ -57,6 +57,7 @@ SITE = "https://plicara.ai"
 
 REQUIRED = ("title", "date", "summary")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+FENCE_RE = re.compile(r"^\s{0,3}(```|~~~)")
 
 
 # --- front matter ------------------------------------------------------------
@@ -83,6 +84,27 @@ def parse_front_matter(text, name):
     if not DATE_RE.match(meta["date"]):
         sys.exit(f"{name}: date must be YYYY-MM-DD, got {meta['date']!r}")
     return meta, body.lstrip("\n")
+
+
+def strip_hard_breaks(body_md, name):
+    """Remove prose trailing whitespace without modifying fenced code."""
+    lines, fence, stripped = [], None, 0
+    for line in body_md.split("\n"):
+        opener = FENCE_RE.match(line)
+        if opener:
+            token = opener.group(1)
+            fence = token if fence is None else (None if token == fence else fence)
+            lines.append(line)
+            continue
+        if fence is not None:
+            lines.append(line)
+            continue
+        trimmed = line.rstrip()
+        stripped += trimmed != line
+        lines.append(trimmed)
+    if stripped:
+        print(f"  NOTE  {name}: stripped trailing whitespace from {stripped} line(s)")
+    return "\n".join(lines)
 
 
 def slugify(value):
@@ -342,6 +364,7 @@ def main():
         path = os.path.join(ARTICLES, name)
         raw = open(path).read()
         meta, body_md = parse_front_matter(raw, name)
+        body_md = strip_hard_breaks(body_md, name)
         # body_md is a suffix of raw, so the difference in newline counts is
         # exactly the lines front matter consumed. Reported line numbers have
         # to match the file, or "go fix line 4" points at the wrong line.

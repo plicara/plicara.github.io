@@ -2,7 +2,7 @@
 title: A safety filter moved our benchmark by seven places
 date: 2026-08-27
 summary: A provider content filter silently deleted 29.3% of one model's answers on our regex benchmark, and the blanked calls were not missing at random. Depending on how a harness handles them, the same model finishes 3rd, 10th or 4th out of 11. Running k=3 rather than a single sample is what caught it.
-authors: Plicara Research
+authors: plicara research
 slug: refused-at-random
 ---
 <style>.pl-fig{margin:2rem 0}.pl-chart{width:100%;height:auto}.pl-chart .rowlab,.pl-chart .val,.pl-chart .tick,.pl-chart .axis,.pl-chart .legend{font-family:var(--pl-font-mono,monospace);fill:var(--pl-text-muted,#666)}.pl-chart .b{fill:var(--pl-series-2,#B3402A)}.pl-chart .i{fill:var(--pl-series-1,#31606D);opacity:.25}.pl-chart .p{fill:var(--pl-series-1,#31606D);opacity:.55}.pl-chart .f{fill:#B3402A}.pl-chart .drop{stroke:#B3402A;stroke-width:2}.pl-chart .dnow{fill:#31606D}.pl-chart .dthen{fill:#B3402A}.pl-chart .axisline,.pl-chart .tickline{stroke:#999}.pl-chart .meanline{stroke:#EE8B33;stroke-width:2}.pl-chart .band{fill:#EE8B33;opacity:.15}</style>

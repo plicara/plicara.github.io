@@ -3,19 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Plicara Labs</title>
+    <title>plicara labs</title>
     <meta
       name="description"
-      content="Plicara Labs is an applied research lab. We focus on simple tools for AI and ML workflows, research on best practices and the cutting edge, and training novel and thoughtfully constructed models."
+      content="Adrian Tame’s independent AI research lab. Reproducible studies, benchmarks and tools for understanding and improving AI systems."
     />
     <link rel="canonical" href="https://plicara.ai/" />
+    <link rel="alternate" type="application/rss+xml" title="plicara research" href="/research/feed.xml" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Plicara Labs" />
-    <meta property="og:title" content="Plicara Labs" />
+    <meta property="og:site_name" content="plicara labs" />
+    <meta property="og:title" content="plicara labs" />
     <meta
       property="og:description"
-      content="A (small) foundation lab. Tools, research, benchmarks and models!"
+      content="Independent research on how AI systems behave, how to measure them, and what makes them more reliable."
     />
     <meta property="og:url" content="https://plicara.ai/" />
     <meta property="og:image" content="https://plicara.ai/assets/brand/og.png" />
@@ -53,16 +54,15 @@
       <div class="wrap">
         <a class="brand" href="/">
           <span class="brand-mark" aria-hidden="true"></span>
-          Plicara Labs
+          plicara labs
         </a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="#mission">Mission</a>
-          <a href="#models">Models</a>
-          <a href="#tools">Tools</a>
           <a href="/research/">Research</a>
+          <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="#principles">Principles</a>
-          <a href="https://github.com/plicara">GitHub</a>
+          <a href="/models/">Models</a>
+          <a href="/#about">About</a>
+          <a href="/#contact">Follow</a>
         </nav>
       </div>
     </header>
@@ -70,18 +70,18 @@
     <main id="main">
       <section class="hero">
         <div class="wrap hero-inner">
-          <p class="eyebrow">pre-alpha &middot; more coming soon</p>
+          <p class="eyebrow">independent AI research &middot; Adrian Tame</p>
           <div class="hero-lockup">
             <span class="hero-mark" aria-hidden="true"></span>
-            <h1>Plicara Labs</h1>
+            <h1>plicara labs</h1>
           </div>
-          <p class="lede">We are an applied research lab specialized in training and benchmarking AI models. We develop opinionated and thoughtfully constructed artifacts, and we like to share what we learn with the broader ML and AI community.</p>
+          <p class="lede">How do we know an AI system works? plicara is my independent research lab, where I investigate that question through reproducible studies, benchmarks and practical tools.</p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#mission">
-              Read the mission <span class="arrow" aria-hidden="true">&rarr;</span>
+            <a class="btn btn-primary" href="/research/">
+              Read the research <span class="arrow" aria-hidden="true">&rarr;</span>
             </a>
-            <a class="btn btn-ghost" href="https://github.com/plicara">
-              GitHub
+            <a class="btn btn-ghost" href="/tools/">
+              Try the tools
             </a>
           </div>
         </div>
@@ -89,32 +89,35 @@
       </section>
 
       <div class="wrap">
-        <section class="section" id="mission">
+        <section class="section" id="research">
           <div class="section-head">
-            <h2>The mission</h2>
-            <p class="eyebrow">01. the mission</p>
+            <h2>Start with a question</h2>
+            <p class="eyebrow">01. selected research</p>
           </div>
-          <p class="mission-statement">&ldquo;Be a strong bedrock on which AI systems are thoughtfully evaluated and built.&rdquo;</p>
-          <div class="mission-body">
-            <p>We are entering a phase in computer science and applied research where the most important quality an engineer or developer can have is great taste. Now that digital artifacts are easy to generate, the differentiator is knowing what matters, what doesn't, and how genuinely high quality work defines the things we build.</p>
-            <p>The point of this applied research lab is to be a good source for developing that taste: finding important patterns to work with, and building the models that underpin this ethos. We train models and provide benchmarks that are opinionated, carrying the design patterns we have found helpful and important in our own experience, and we like to explain the why of it all simply, so everyone can grow along with us.</p>
-          </div>
-        </section>
-
-        <section class="section" id="models">
-          <div class="section-head">
-            <h2>Models</h2>
-            <p class="eyebrow">02. the range</p>
-          </div>
-          <p class="section-intro">Releases will be named after different paper plane designs. Nothing is released yet; more coming soon!</p>
-          <div class="range" role="img"
-               aria-label="Four plane glyphs, one per planned model">
-            <span class="peak" style="--g: url(/assets/brand/marks/plane-glider-mono.svg); left: 4%; top: 30%; width: 17%; opacity: 0.62"></span>
-            <span class="peak" style="--g: url(/assets/brand/marks/plane-delta-mono.svg); left: 25%; top: 8%; width: 19%; opacity: 0.7"></span>
-            <span class="peak" style="--g: url(/assets/brand/marks/plane-canard-mono.svg); left: 50%; top: 34%; width: 21%; opacity: 0.82"></span>
-            <span class="peak" style="--g: url(/assets/brand/marks/plane-hammer-mono.svg); left: 72%; top: 10%; width: 24%; opacity: 1"></span>
-          </div>
-          <p class="note">More coming soon. <a href="/models/">The range &rarr;</a></p>
+          <ul class="research-list">
+            <li class="research-entry">
+              <p class="research-date mono">study</p>
+              <div>
+                <h3><a href="/research/whether-anyone-ever-ran-it/">A regex can pass its tests and still fail in use</a></h3>
+                <p>Eleven models, 450 tasks, and three different checks: passing examples, matching the reference language, and screening for denial-of-service risk. The study also examines errors in the answer key.</p>
+              </div>
+            </li>
+            <li class="research-entry">
+              <p class="research-date mono">analysis</p>
+              <div>
+                <h3><a href="/research/agent-skill-programming-languages/">What agent skills are actually made of</a></h3>
+                <p>A look inside the GitSkills corpus: which skills include code, which programming languages they use, and what a file listing can tell us about the ecosystem.</p>
+              </div>
+            </li>
+            <li class="research-entry">
+              <p class="research-date mono">perspective</p>
+              <div>
+                <h3><a href="/research/harness-is-signal/">The harness is the signal</a></h3>
+                <p>Which responsibilities belong outside a model? An argument about permissions, execution, recovery and accountability, and what would change that argument.</p>
+              </div>
+            </li>
+          </ul>
+          <p class="note"><a href="/research/">All research &rarr;</a></p>
         </section>
       </div>
 
@@ -125,9 +128,9 @@
           <section class="section" id="tools">
             <div class="section-head">
               <h2>Tools</h2>
-              <p class="eyebrow">03. shipped</p>
+              <p class="eyebrow">02. tools you can use</p>
             </div>
-            <p class="section-intro" style="margin-bottom: 1.75rem">Each released artifact or tool gets its own repository, Apache-2.0. <code>regexbench</code> and <code>labloop</code> are published on PyPI; the first <a href="/benchmarks/">benchmark run</a> is published.</p>
+            <p class="section-intro" style="margin-bottom: 1.75rem">Two Python packages built around the experiments. Both are available on PyPI, with source code and examples on GitHub.</p>
 
             <div class="project-grid">
               <div class="card">
@@ -139,7 +142,7 @@
                 <div class="tags">
                   <span class="tag">python</span>
                   <span class="tag">apache-2.0</span>
-                  <span class="tag" data-state="live">pypi 0.4.0</span>
+                  <span class="tag" data-state="live">on pypi</span>
                 </div>
               </div>
 
@@ -152,25 +155,32 @@
                 <div class="tags">
                   <span class="tag">python</span>
                   <span class="tag">apache-2.0</span>
-                  <span class="tag" data-state="live">pypi 0.2.0</span>
+                  <span class="tag" data-state="live">on pypi</span>
                 </div>
               </div>
 
-              <div class="card">
-                <div class="card-title">
-                  <h3><a href="https://github.com/plicara/regexeval-2026">regexeval-2026</a></h3>
-                  <span class="arrow" aria-hidden="true">&rarr;</span>
-                </div>
-                <p>Runs <code>regexbench</code> across models and publishes the numbers: scores, methodology, and a re-run command.</p>
-                <div class="tags">
-                  <span class="tag">evaluation</span>
-                  <span class="tag" data-state="live">published</span>
-                </div>
-              </div>
             </div>
 
             <p class="note"><a href="/tools/">All tools &rarr;</a> &middot;
               <a href="/benchmarks/">Benchmarks &rarr;</a></p>
+          </section>
+          <section class="section" id="benchmarks">
+            <div class="section-head">
+              <h2>Inspect the measurements</h2>
+              <p class="eyebrow">03. benchmarks</p>
+            </div>
+            <div class="project-grid">
+              <div class="card">
+                <h3><a href="/benchmarks/adventurebench/">Adventure Bench</a></h3>
+                <p>Map a player's words to an action in a described scene. Explore grounded instruction-following, unsupported requests, and the limits of a fixed action vocabulary.</p>
+                <p><a href="/benchmarks/adventurebench/">Read the results and methodology &rarr;</a></p>
+              </div>
+              <div class="card">
+                <h3><a href="/benchmarks/regexeval-2026/">Regex evaluation</a></h3>
+                <p>Compare test passing, reference equivalence and vulnerability screening. Inspect the raw responses, uncertainty and scoring limitations.</p>
+                <p><a href="/benchmarks/regexeval-2026/">Inspect the run &rarr;</a></p>
+              </div>
+            </div>
           </section>
         </div>
       </div>
@@ -178,39 +188,50 @@
       <div class="seam-wrap seam-up"><svg class="seam" viewBox="0 0 1440 132" preserveAspectRatio="none" aria-hidden="true"><path class="wave-ground" fill="currentColor" stroke="none" d="M-116.0 62.00c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0V132H-156Z"/><g fill="none" stroke-linecap="round"><path class="wave-echo" stroke-width="2.2" d="M-146.0 36.00c38.7 -18.59 77.3 -18.59 116.0 0c38.7 18.59 77.3 18.59 116.0 0c38.7 -18.59 77.3 -18.59 116.0 0c38.7 18.59 77.3 18.59 116.0 0c38.7 -18.59 77.3 -18.59 116.0 0c38.7 18.59 77.3 18.59 116.0 0c38.7 -18.59 77.3 -18.59 116.0 0c38.7 18.59 77.3 18.59 116.0 0c38.7 -18.59 77.3 -18.59 116.0 0c38.7 18.59 77.3 18.59 116.0 0c38.7 -18.59 77.3 -18.59 116.0 0c38.7 18.59 77.3 18.59 116.0 0c38.7 -18.59 77.3 -18.59 116.0 0c38.7 18.59 77.3 18.59 116.0 0c38.7 -18.59 77.3 -18.59 116.0 0"/><path class="wave-crest" stroke-width="2.6" d="M-116.0 62.00c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0c38.7 22.67 77.3 22.67 116.0 0c38.7 -22.67 77.3 -22.67 116.0 0"/></g></svg></div>
 
       <div class="wrap">
+        <section class="section" id="about">
+          <div class="section-head">
+            <h2>A personal research practice</h2>
+            <p class="eyebrow">04. about the lab</p>
+          </div>
+          <p class="mission-statement" id="mission">Understand how AI systems behave. Measure what helps.</p>
+          <div class="mission-body">
+            <p>I’m <a href="https://github.com/AdrianTJ">Adrian Tame</a>, a mathematician by training and a data scientist by practice. My work has led me into AI evaluation, agent interfaces and the tooling around them. plicara gives me a place to explore those questions independently and share what I learn and what I spend my time doing.</p>
+            <p>This research lab is a love letter to the work I enjoy: asking interesting questions, building something to investigate it, and banging my head against the wall until something sticks. Models are one possible outcome, alongside useful tools, datasets and explanations.</p>
+          </div>
+        </section>
         <section class="section" id="principles">
           <div class="section-head">
             <h2>Principles</h2>
-            <p class="eyebrow">04. how we work</p>
+            <p class="eyebrow">05. how I work</p>
           </div>
 
           <div class="focus-grid">
             <div class="focus">
-              <h3>Open weights</h3>
-              <p>What we train, we release and explain. Weights you can download, run, and check. Black boxes are not trustworthy, nor in the spirit of this lab.</p>
+              <h3>Evidence you can inspect</h3>
+              <p>Methods, code and recorded outputs belong beside the claim. A result should give you a way to check it.</p>
             </div>
             <div class="focus">
-              <h3>Reproducible research</h3>
-              <p>Anything we publish, you can re-run and (we hope) understand.</p>
+              <h3>Limits made explicit</h3>
+              <p>A benchmark answers a particular question. Its assumptions, uncertainty and failure cases are part of the result.</p>
             </div>
             <div class="focus">
-              <h3>Reliable systems</h3>
-              <p>Boring infrastructure is a feature, and we take care to build systems that are robust and generally scalable.</p>
+              <h3>Useful baselines</h3>
+              <p>Start with the simplest workable approach. More machinery earns its place by improving an outcome we care about.</p>
             </div>
             <div class="focus">
-              <h3>Simple is not the enemy of powerful</h3>
-              <p>We reach for the plainest thing that works, and our models, research, and benchmarks carry this ethos.</p>
+              <h3>Room to be wrong</h3>
+              <p>Negative results and corrections belong in the record. An experiment can be worth sharing even when the proposed idea fails.</p>
             </div>
           </div>
         </section>
 
         <section class="section" id="contact">
           <div class="section-head">
-            <h2>Contact</h2>
-            <p class="eyebrow">05. write us</p>
+            <h2>Follow the work</h2>
+            <p class="eyebrow">06. stay in touch</p>
           </div>
           <div class="contact-card">
-            <p>Something here useful to you, or wrong? <a href="https://github.com/plicara">Open an issue</a>, or write to us. We read everything.</p>
+            <p>Read new articles through the <a href="/research/feed.xml">research RSS feed</a>, follow <a href="https://x.com/plicaralabs">plicara on X</a>, or watch a project on <a href="https://github.com/plicara">GitHub</a>. If you try an experiment, find an error, or have a related question, I’d like to hear from you.</p>
             <a class="btn btn-primary btn-mail"
                href="mailto:info@plicara.ai">info@plicara.ai</a>
           </div>
@@ -220,7 +241,7 @@
 
     <footer class="site-footer">
       <div class="wrap">
-        <span>&copy; Plicara Labs</span>
+        <span>&copy; plicara labs</span>
         <div class="footer-links">
           <a href="mailto:info@plicara.ai">info@plicara.ai</a>
           <a href="https://github.com/plicara">GitHub</a>

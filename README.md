@@ -1,6 +1,6 @@
 # plicara.github.io
 
-The Plicara Labs website — a hand-written static site, served by GitHub Pages at <https://plicara.github.io/>.
+The plicara labs website — a hand-written static site, served by GitHub Pages at <https://plicara.github.io/>.
 
 ## Brand
 
@@ -114,6 +114,9 @@ The path **must be root-relative**. A `url()` inside a custom property resolves 
 
 ## Research
 
+The homepage leads with selected research, then tools and benchmarks, followed by Adrian’s introduction. Primary navigation points to Research, Tools, Benchmarks, About and Follow. Keep selected homepage links deliberate; the complete article list and RSS feed are generated.
+
+
 The one part of the site that is written in markdown. `research/articles/` holds the sources; `research/build.py` compiles them:
 
 ```sh
@@ -121,9 +124,11 @@ pip install markdown            # once; the only authoring dependency
 python3 research/build.py       # pages + PDFs + index + sitemap
 ```
 
-Commit everything it writes. Each article becomes `/research/<slug>/` plus a PDF of the same page, printed through the print stylesheet (Chromium is found via `$CHROME` or the Playwright install; without one, pages build without the PDF link). The index at `/research/` and the research entries in `sitemap.xml` are regenerated on every run, so neither is ever edited by hand — the generated pages all share one header/footer template inside `build.py`, unlike the five hand-written pages, which still carry copies.
+Commit everything it writes. Each article becomes `/research/<slug>/` plus a PDF of the same page, printed through the print stylesheet (Chromium is found via `$CHROME` or the Playwright install; without one, pages retain links to PDFs already on disk). The index at `/research/` and the research entries in `sitemap.xml` and `research/feed.xml` are regenerated on every run, so neither is ever edited by hand — the generated pages all share one header/footer template inside `build.py`, unlike the five hand-written pages, which still carry copies.
 
 `research/articles/_template.md` documents the front matter and the two conventions that matter: asset paths are root-relative, and whitepaper PDFs are hand-dropped into `research/papers/` and linked from the article body.
+
+`python3 research/build.py --no-pdf` updates the HTML and RSS feed while preserving links to existing PDFs. It does not regenerate those PDFs. The feed uses published article summaries and stable article URLs; drafts stay excluded by the same build loop as the index.
 
 ## How this repo gets online
 
@@ -147,8 +152,8 @@ If the site later outgrows hand-written HTML, the two options are to delete `.no
 
 ```
 index.html        Landing page
-models/           /models/ — preflight page for the model range
-tools/            /tools/ — preflight page for the shipped tools (Notepad)
+models/           Existing URL retained as a short research-direction note
+tools/            /tools/ — install examples and documentation for released tools
   vendor.py       Refreshes the vendored brand files from plicara-brand
 benchmarks/       /benchmarks/ — index of published runs, one subpage per run
                   (mirrors /research/; regexeval-2026 is the first)

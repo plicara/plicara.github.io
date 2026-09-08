@@ -4,7 +4,7 @@ date: 2026-09-02
 summary: As models improve, some of today's agent machinery will disappear. The parts that govern permissions, execution, recovery and accountability probably will not.
 author: Adrian Tame
 author_url: https://github.com/AdrianTJ
-publisher: Plicara Labs
+publisher: plicara labs
 slug: harness-is-signal
 ---
 

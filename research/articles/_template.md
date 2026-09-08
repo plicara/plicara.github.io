@@ -12,9 +12,9 @@ title: A short, specific title
 date: 2026-01-01
 summary: One or two sentences for the index page and search results.
 # Optional keys:
-#   author: Adrian Tame           (defaults to "Plicara Labs")
+#   author: Adrian Tame           (defaults to "plicara labs")
 #   author_url: https://github.com/AdrianTJ
-#   publisher: Plicara Labs       (renders as "writing for ...")
+#   publisher: plicara labs       (renders as "writing for ...")
 #   authors: Adrian Tame          (legacy alias for author)
 #   slug: custom-url-name         (defaults to the file name)
 #   draft: true                   (build nothing until it is removed)

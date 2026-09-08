@@ -15,6 +15,7 @@ What it writes, per article research/articles/<name>.md:
     research/<slug>/index.html   the article page
     research/<slug>/<slug>.pdf   the article as a PDF, printed from the page
     research/index.html          the index, newest first
+    research/feed.xml            RSS summaries of published articles
     sitemap.xml                  research URLs replaced in place
 
 Authoring-time dependencies (never shipped to readers):
@@ -22,7 +23,7 @@ Authoring-time dependencies (never shipped to readers):
     pip install markdown         # the only Python dependency
     Chromium                     # for PDFs; found via $CHROME or the
                                  # Playwright install, else PDFs are skipped
-                                 # and article pages omit the PDF link
+                                 # and article pages link to existing PDFs if available
 
 Front matter is a block of `key: value` lines between two `---` lines at the
 top of the file. See articles/_template.md for the keys and the conventions
@@ -44,6 +45,10 @@ import shutil
 import subprocess
 import sys
 import threading
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
+from email.utils import format_datetime
+from pathlib import Path
 
 try:
     import markdown
@@ -128,7 +133,7 @@ def chrome_head(title, description, canonical):
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{html.escape(title)} &middot; Plicara Labs</title>
+    <title>{html.escape(title)} &middot; plicara labs</title>
     <meta name="description" content="{html.escape(description)}" />
     <link rel="canonical" href="{canonical}" />
     <meta name="theme-color" content="#05192B" />
@@ -149,6 +154,7 @@ def chrome_head(title, description, canonical):
           href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
 
     <link rel="stylesheet" href="/assets/tokens.css" />
+    <link rel="alternate" type="application/rss+xml" title="plicara research" href="/research/feed.xml" />
     <link rel="stylesheet" href="/assets/style.css?v=20260904" />
   </head>
   <body>
@@ -158,16 +164,15 @@ def chrome_head(title, description, canonical):
       <div class="wrap">
         <a class="brand" href="/">
           <span class="brand-mark" aria-hidden="true"></span>
-          Plicara Labs
+          plicara labs
         </a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="/#mission">Mission</a>
-          <a href="/#models">Models</a>
-          <a href="/#tools">Tools</a>
           <a href="/research/">Research</a>
+          <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="/#principles">Principles</a>
-          <a href="https://github.com/plicara">GitHub</a>
+          <a href="/models/">Models</a>
+          <a href="/#about">About</a>
+          <a href="/#contact">Follow</a>
         </nav>
       </div>
     </header>
@@ -177,7 +182,7 @@ def chrome_head(title, description, canonical):
 CHROME_FOOT = """
     <footer class="site-footer">
       <div class="wrap">
-        <span>&copy; Plicara Labs</span>
+        <span>&copy; plicara labs</span>
         <div class="footer-links">
           <a href="mailto:info@plicara.ai">info@plicara.ai</a>
           <a href="https://github.com/plicara">GitHub</a>
@@ -198,7 +203,7 @@ MD = markdown.Markdown(extensions=["extra"], output_format="html5")
 def render_article(meta, body_md, slug, pdf_ok):
     MD.reset()
     body_html = MD.convert(body_md)
-    author = meta.get("author", meta.get("authors", "Plicara Labs"))
+    author = meta.get("author", meta.get("authors", "plicara labs"))
     author_html = html.escape(author)
     if meta.get("author_url"):
         author_html = (f'<a class="article-author" href="{html.escape(meta["author_url"], quote=True)}">'
@@ -228,7 +233,7 @@ def render_article(meta, body_md, slug, pdf_ok):
 {body_html}
         </div>
 
-        <p class="article-back"><a href="/research/">&larr; All research</a></p>
+        <p class="article-back"><a href="/research/">&larr; All research</a> &middot; <a href="/research/feed.xml">Follow new research via RSS</a></p>
       </article>
     </main>
 {CHROME_FOOT}"""
@@ -237,7 +242,7 @@ def render_article(meta, body_md, slug, pdf_ok):
 def render_index(entries, pdf_ok):
     head = chrome_head(
         "Research",
-        "Articles, analyses and whitepapers from Plicara Labs.",
+        "Articles, analyses and whitepapers from plicara labs.",
         f"{SITE}/research/",
     )
     if entries:
@@ -245,7 +250,7 @@ def render_index(entries, pdf_ok):
         for meta, slug in entries:
             pdf = (
                 f' &middot; <a class="mono" href="/research/{slug}/{slug}.pdf">pdf</a>'
-                if pdf_ok else ""
+                if pdf_ok or os.path.isfile(os.path.join(RESEARCH, slug, f"{slug}.pdf")) else ""
             )
             rows.append(f"""        <li class="research-entry">
           <p class="research-date mono">{meta["date"]}</p>
@@ -269,8 +274,32 @@ def render_index(entries, pdf_ok):
       </p>
 
 {listing}
+      <p class="note"><a href="/research/feed.xml">Follow new research via RSS</a> &middot; <a href="https://x.com/plicaralabs">plicara on X</a></p>
     </main>
 {CHROME_FOOT}"""
+
+
+# --- RSS ---------------------------------------------------------------------
+
+def render_feed(entries):
+    """RSS summaries for the same published entries as the research index."""
+    rss = ET.Element("rss", version="2.0")
+    channel = ET.SubElement(rss, "channel")
+    for key, value in (("title", "plicara labs research"),
+                       ("link", f"{SITE}/research/"),
+                       ("description", "Studies, tools and perspectives from Adrian Tame’s independent AI research lab."),
+                       ("language", "en")):
+        ET.SubElement(channel, key).text = value
+    for meta, slug in entries:
+        item = ET.SubElement(channel, "item")
+        url = f"{SITE}/research/{slug}/"
+        for key, value in (("title", meta["title"]), ("link", url),
+                           ("description", meta["summary"])):
+            ET.SubElement(item, key).text = value
+        ET.SubElement(item, "guid", isPermaLink="true").text = url
+        date = datetime.strptime(meta["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        ET.SubElement(item, "pubDate").text = format_datetime(date, usegmt=True)
+    return '<?xml version="1.0" encoding="utf-8"?>\n' + ET.tostring(rss, encoding="unicode") + '\n'
 
 
 # --- PDFs --------------------------------------------------------------------
@@ -325,7 +354,7 @@ def update_sitemap(slugs):
     happens to contain it (say, /blog/research-notes/methodology/).
     """
     path = os.path.join(ROOT, "sitemap.xml")
-    text = open(path).read()
+    text = Path(path).read_text(encoding="utf-8")
     text = re.sub(
         rf"[ \t]*<url>\s*<loc>{re.escape(SITE)}/research/[^<]*</loc>.*?</url>\n",
         "", text, flags=re.S)
@@ -336,7 +365,7 @@ def update_sitemap(slugs):
         for u in urls
     )
     text = text.replace("</urlset>", block + "</urlset>")
-    open(path, "w").write(text)
+    Path(path).write_text(text, encoding="utf-8")
 
 
 # --- main --------------------------------------------------------------------
@@ -344,13 +373,13 @@ def update_sitemap(slugs):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--no-pdf", action="store_true",
-                    help="skip PDFs; article pages then omit the PDF link")
+                    help="skip PDF generation; preserve links to existing PDFs")
     args = ap.parse_args()
 
     chromium = None if args.no_pdf else find_chromium()
     if not args.no_pdf and not chromium:
         print("NOTE: no Chromium found ($CHROME unset, no Playwright install);"
-              " building without PDFs. Pages will omit the PDF link.")
+              " building without new PDFs. Existing PDF links are preserved.")
     pdf_ok = chromium is not None
     server = port = None
     if pdf_ok:
@@ -362,7 +391,7 @@ def main():
         if not name.endswith(".md") or name.startswith("_"):
             continue
         path = os.path.join(ARTICLES, name)
-        raw = open(path).read()
+        raw = Path(path).read_text(encoding="utf-8")
         meta, body_md = parse_front_matter(raw, name)
         body_md = strip_hard_breaks(body_md, name)
         # body_md is a suffix of raw, so the difference in newline counts is
@@ -407,7 +436,8 @@ def main():
         out_dir = os.path.join(RESEARCH, slug)
         os.makedirs(out_dir, exist_ok=True)
         out_html = os.path.join(out_dir, "index.html")
-        open(out_html, "w").write(render_article(meta, body_md, slug, pdf_ok))
+        existing_pdf = os.path.isfile(os.path.join(out_dir, f"{slug}.pdf"))
+        Path(out_html).write_text(render_article(meta, body_md, slug, pdf_ok or existing_pdf), encoding="utf-8")
         if pdf_ok:
             print_pdf(chromium, f"http://127.0.0.1:{port}/research/{slug}/",
                       os.path.join(out_dir, f"{slug}.pdf"))
@@ -419,8 +449,8 @@ def main():
         server.shutdown()
 
     entries.sort(key=lambda e: e[0]["date"], reverse=True)
-    open(os.path.join(RESEARCH, "index.html"), "w").write(
-        render_index(entries, pdf_ok))
+    Path(RESEARCH, "index.html").write_text(render_index(entries, pdf_ok), encoding="utf-8")
+    Path(RESEARCH, "feed.xml").write_text(render_feed(entries), encoding="utf-8")
     update_sitemap([slug for _, slug in entries])
     print(f"  built research/index.html ({len(entries)} article(s))"
           f" and refreshed sitemap.xml")

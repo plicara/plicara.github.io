@@ -1,7 +1,7 @@
 ---
 title: whether a regular expression is dangerous depends on whether anyone ever ran it
 date: 2026-08-21
-authors: Plicara Labs
+authors: plicara labs
 slug: whether-anyone-ever-ran-it
 summary: Eleven models write regular expressions, scored three ways, and the safety screen then points at half a million patterns from shipped packages. Vulnerability tracks whether a pattern was ever executed, not whether a human or a model wrote it.
 ---

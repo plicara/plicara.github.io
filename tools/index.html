@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tools &middot; Plicara Labs</title>
+    <title>Tools &middot; plicara labs</title>
     <meta
       name="description"
-      content="Plicara Labs tools: regexbench and labloop, published on PyPI under Apache-2.0. The first published regexbench run is on the benchmarks page."
+      content="plicara labs tools: regexbench and labloop, published on PyPI under Apache-2.0. The first published regexbench run is on the benchmarks page."
     />
     <link rel="canonical" href="https://plicara.ai/tools/" />
     <!-- One meta per mode: the page resolves blueprint at night and notepad
@@ -46,24 +46,23 @@
       <div class="wrap">
         <a class="brand" href="/">
           <span class="brand-mark" aria-hidden="true"></span>
-          Plicara Labs
+          plicara labs
         </a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="/#mission">Mission</a>
-          <a href="/#models">Models</a>
-          <a href="/#tools">Tools</a>
           <a href="/research/">Research</a>
+          <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="/#principles">Principles</a>
-          <a href="https://github.com/plicara">GitHub</a>
+          <a href="/models/">Models</a>
+          <a href="/#about">About</a>
+          <a href="/#contact">Follow</a>
         </nav>
       </div>
     </header>
 
     <main class="wrap preflight" id="main">
-      <p class="eyebrow">still folding &middot; tools</p>
-      <h1>Still folding.</h1>
-      <p class="lede">Two initial tools are on PyPI. The first published run built on them is on the <a href="/benchmarks/">benchmarks page</a>.</p>
+      <p class="eyebrow">tools &middot; install and experiment</p>
+      <h1>Tools</h1>
+      <p class="lede">Python tools for checking generated output and running experiments. Start with an example, then inspect the source and the limits of the method.</p>
 
       <div class="project-grid">
         <div class="card">
@@ -71,11 +70,14 @@
             <h2><a href="https://github.com/plicara/regexbench">regexbench</a></h2>
             <span class="arrow" aria-hidden="true">&rarr;</span>
           </div>
-          <p>Evaluate generated regular expressions: semantic equivalence, correctness, and ReDoS safety.</p>
+          <p>Check whether two regular expressions describe the same language, test generated patterns against examples, and screen for ReDoS risk.</p>
+          <pre><code>pip install regexbench
+regexbench eq '[0-9]+' '[0-9][0-9]*'</code></pre>
+          <p><a href="https://github.com/plicara/regexbench#supported-syntax">Supported syntax and limits</a> &middot; <a href="https://pypi.org/project/regexbench/">PyPI</a></p>
           <div class="tags">
             <span class="tag">python</span>
             <span class="tag">apache-2.0</span>
-            <span class="tag" data-state="live">pypi 0.4.0</span>
+            <span class="tag" data-state="live">on pypi</span>
           </div>
         </div>
 
@@ -84,25 +86,16 @@
             <h2><a href="https://github.com/plicara/labloop">labloop</a></h2>
             <span class="arrow" aria-hidden="true">&rarr;</span>
           </div>
-          <p>Inspired by <a href="https://github.com/karpathy/autoresearch">autoresearch</a>, an agent-driven experiment loop: propose a change, run it time-boxed, keep it only if the metric improves.</p>
+          <p>Run a command, measure the outcome, and keep or revert an agent’s proposed change. The trial record includes failed attempts. Inspired by <a href="https://github.com/karpathy/autoresearch">autoresearch</a>.</p>
+          <pre><code>pip install labloop</code></pre>
+          <p><a href="https://github.com/plicara/labloop#use">Run your first experiment</a> &middot; <a href="https://pypi.org/project/labloop/">PyPI</a></p>
           <div class="tags">
             <span class="tag">python</span>
             <span class="tag">apache-2.0</span>
-            <span class="tag" data-state="live">pypi 0.2.0</span>
+            <span class="tag" data-state="live">on pypi</span>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-title">
-            <h2><a href="https://github.com/plicara/regexeval-2026">regexeval-2026</a></h2>
-            <span class="arrow" aria-hidden="true">&rarr;</span>
-          </div>
-          <p>Runs <code>regexbench</code> across models and publishes the numbers: scores, methodology, and a re-run command.</p>
-          <div class="tags">
-            <span class="tag">evaluation</span>
-            <span class="tag" data-state="live">published</span>
-          </div>
-        </div>
       </div>
 
       <div class="contact-card">
@@ -120,7 +113,7 @@
 
     <footer class="site-footer">
       <div class="wrap">
-        <span>&copy; Plicara Labs</span>
+        <span>&copy; plicara labs</span>
         <div class="footer-links">
           <a href="mailto:info@plicara.ai">info@plicara.ai</a>
           <a href="https://github.com/plicara">GitHub</a>

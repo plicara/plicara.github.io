@@ -315,6 +315,7 @@ code {
    forcing one page to skip a level to reach the rule. */
 .card-title h2, .card-title h3 { font-size: 1.1rem; }
 .card p { margin: 0; color: var(--pl-text-muted); font-size: 0.95rem; }
+.card pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 
 .tags { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-top: auto; padding-top: 0.4rem; }
 .tag {
@@ -363,7 +364,7 @@ code {
 /* --- wide content -------------------------------------------------------- */
 
 table { width: 100%; border-collapse: collapse; }
-.table-wrap { overflow-x: auto; }
+.table-wrap { overflow-x: auto; position: relative; }
 
 /* --- hero waves ---------------------------------------------------------- */
 /* One wavelength, one gap, one amplitude law, and a constant phase step from
@@ -839,13 +840,13 @@ table { width: 100%; border-collapse: collapse; }
   .article { padding-block: 0; }
   .article-head h1 { color: #05192B; }
   .article-meta,
-  .eyebrow { color: #829AA1; }
+  .eyebrow { color: #05192B; }
   .article-body a { color: #05192B; }
-  .article-body blockquote { border-left-color: #05192B; color: #829AA1; }
+  .article-body blockquote { border-left-color: #05192B; color: #05192B; }
   .article-body code,
   .article-body pre { background: #DEEAEE; }
   .article-body pre { border-color: #CADADF; }
-  .article-body .footnote { color: #829AA1; }
+  .article-body .footnote { color: #05192B; }
   /* No scrollbars on paper: code wraps and tables lay out as tables again,
      so wide content folds instead of clipping at the page edge. */
   .article-body pre { white-space: pre-wrap; overflow-wrap: break-word; }

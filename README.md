@@ -116,6 +116,8 @@ The path **must be root-relative**. A `url()` inside a custom property resolves 
 
 The homepage leads with selected research, then tools and benchmarks, followed by Adrian’s introduction. Primary navigation points to Research, Tools, Benchmarks, About and Follow. Keep selected homepage links deliberate; the complete article list and RSS feed are generated.
 
+The lab site hosts the research record; Adrian's [personal site](https://adriantj.github.io/) and [experience page](https://adriantj.github.io/cv/) explain his professional background and contributions. `/models/` remains reachable for old links but is not promoted until there is a release. Editorial decisions are recorded in [docs/decision-log.md](docs/decision-log.md).
+
 
 The one part of the site that is written in markdown. `research/articles/` holds the sources; `research/build.py` compiles them:
 
@@ -129,6 +131,8 @@ Commit everything it writes. Each article becomes `/research/<slug>/` plus a PDF
 `research/articles/_template.md` documents the front matter and the two conventions that matter: asset paths are root-relative, and whitepaper PDFs are hand-dropped into `research/papers/` and linked from the article body.
 
 `python3 research/build.py --no-pdf` updates the HTML and RSS feed while preserving links to existing PDFs. It does not regenerate those PDFs. The feed uses published article summaries and stable article URLs; drafts stay excluded by the same build loop as the index.
+
+Run `python3 -m unittest discover -s research` after rebuilding. Install `requirements-test.txt` and Playwright's Chromium, serve the site on port 4001, and run `python3 tools/check_browser.py` for mobile/desktop layout and keyboard-scrolling checks. Pull requests run both checks and reject uncommitted generated-page changes. When article wording changes, regenerate its downloadable PDF as well. Archived whitepapers under `research/papers/` remain versioned historical artifacts; an article that revises their interpretation should say so explicitly.
 
 ## How this repo gets online
 

@@ -74,7 +74,17 @@ class ArticleRenderingTest(unittest.TestCase):
             "test",
             False,
         )
-        self.assertIn('href="/assets/style.css?v=20260904"', rendered)
+        self.assertIn('href="/assets/style.css?v=20260913"', rendered)
+
+    def test_scrollable_article_content_is_keyboard_focusable(self):
+        rendered = build.render_article(
+            {"title": "Test", "date": "2026-09-13", "summary": "Test"},
+            "```text\nlong command\n```\n\n| Name | Value |\n| --- | --- |\n| Test | 1 |",
+            "test",
+            False,
+        )
+        self.assertIn('<pre tabindex="0">', rendered)
+        self.assertIn('<table tabindex="0">', rendered)
 
 
 if __name__ == "__main__":

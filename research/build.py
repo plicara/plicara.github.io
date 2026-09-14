@@ -155,7 +155,7 @@ def chrome_head(title, description, canonical):
 
     <link rel="stylesheet" href="/assets/tokens.css" />
     <link rel="alternate" type="application/rss+xml" title="plicara research" href="/research/feed.xml" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260904" />
+    <link rel="stylesheet" href="/assets/style.css?v=20260913" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -170,7 +170,6 @@ def chrome_head(title, description, canonical):
           <a href="/research/">Research</a>
           <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="/models/">Models</a>
           <a href="/#about">About</a>
           <a href="/#contact">Follow</a>
         </nav>
@@ -203,6 +202,7 @@ MD = markdown.Markdown(extensions=["extra"], output_format="html5")
 def render_article(meta, body_md, slug, pdf_ok):
     MD.reset()
     body_html = MD.convert(body_md)
+    body_html = body_html.replace("<table>", '<table tabindex="0">').replace("<pre>", '<pre tabindex="0">')
     author = meta.get("author", meta.get("authors", "plicara labs"))
     author_html = html.escape(author)
     if meta.get("author_url"):

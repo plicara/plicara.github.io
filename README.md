@@ -114,9 +114,9 @@ The path **must be root-relative**. A `url()` inside a custom property resolves 
 
 ## Research
 
-The homepage leads with selected research, then tools and benchmarks, followed by Adrian’s introduction. Primary navigation points to Research, Tools, Benchmarks, About and Follow. Keep selected homepage links deliberate; the complete article list and RSS feed are generated.
+The homepage leads with selected research, then tools and benchmarks. Primary navigation points to Research, Tools, Benchmarks, About and Follow. Keep selected homepage links deliberate; the complete article list and RSS feed are generated.
 
-The lab site hosts the research record; Adrian's [personal site](https://adriantj.github.io/) and [experience page](https://adriantj.github.io/cv/) explain his professional background and contributions. `/models/` remains reachable for old links but is not promoted until there is a release. Editorial decisions are recorded in [docs/decision-log.md](docs/decision-log.md).
+The lab site stands on its own as the research record. `/models/` remains reachable for old links but is not promoted until there is a release. Editorial decisions are recorded in [docs/decision-log.md](docs/decision-log.md).
 
 
 The one part of the site that is written in markdown. `research/articles/` holds the sources; `research/build.py` compiles them:

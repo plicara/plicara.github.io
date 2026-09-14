@@ -27,7 +27,7 @@
 
     <link rel="stylesheet" href="/assets/tokens.css" />
     <link rel="alternate" type="application/rss+xml" title="plicara research" href="/research/feed.xml" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260904" />
+    <link rel="stylesheet" href="/assets/style.css?v=20260913" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -42,7 +42,6 @@
           <a href="/research/">Research</a>
           <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="/models/">Models</a>
           <a href="/#about">About</a>
           <a href="/#contact">Follow</a>
         </nav>
@@ -141,7 +140,7 @@
 <figcaption>1,870,299 distinct skill contents. The 14.3% that are not English are led by Chinese.</figcaption>
 </figure>
 
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th>Language</th>
@@ -186,7 +185,7 @@
 <p>So 14.3% of skills are not in English, and split by script the Chinese ones run 104,985 simplified against 9,112 traditional. The rows above do not quite sum to that, because 6,810 skills came back below our confidence floor and are counted as neither. The comparison worth making is against GitHub's own documentation instead of its issues or pull requests, and a <a href="https://arxiv.org/abs/2602.19446">2026 ICSE study</a> put repository documentation at 13.0% non-English, with Chinese at 3.3% of repositories. In aggregate that makes skills unremarkable, 14.3% against 13.0% being a dead heat. They are markedly more Chinese, though, 6.2% against 3.3%.</p>
 <h2>why every published number disagrees</h2>
 <p>Ours is not the only published figure, and the published figures do not agree with each other.</p>
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th>Reported English share</th>
@@ -237,7 +236,7 @@
 <figcaption>Band is the 95% Wilson interval. July 2026 is shaded: collection ran mid-month, so that cohort is censored and excluded from comparisons.</figcaption>
 </figure>
 
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th>Quarter</th>
@@ -318,7 +317,7 @@
 <figcaption>Shaded band is the 95% Wilson interval; the hollow final point is the censored July cohort, plotted but never compared. European groups German, French, Spanish, Portuguese, Italian, Russian and Dutch.</figcaption>
 </figure>
 
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th></th>
@@ -405,7 +404,7 @@
 <figcaption>Centre figure is the share of first commits in that window. The non-English groups are small, so read the contrast, not the decimals.</figcaption>
 </figure>
 
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th>Language</th>
@@ -494,7 +493,7 @@
 <figcaption>Compared at equal age: among skills at least N days old, the share revised within their first N days.</figcaption>
 </figure>
 
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th>Window</th>
@@ -523,7 +522,7 @@
 <p>The gap opens over the first month and then holds, +1.3 points at a week, +5.2 at a month and +5.2 at three, which leaves two populations behaving quite differently: English skills propagate, written once and copied widely and rarely touched again, while non-English skills are tended, copied less and revised more. The likely reason for the copying half is search. Discovery is lexical, and a developer searching in English will not surface a skill written in Chinese even where a multilingual model could execute it perfectly, so what stands between a Shenzhen developer's skill and the person who needs it is a text match. If that is right, the ecosystem globalises in what gets written well before it globalises in what gets reused, and the lag between the two is a tooling problem somebody could fix.</p>
 <h2>who is actually writing these?</h2>
 <p>The <a href="https://arxiv.org/abs/2608.10906">GitSkills authors</a> asked one more thing worth answering: how many skills do agents write themselves? The obvious way to check fails immediately, because GitHub's own bot flag catches almost nothing: agent-written code is committed under the human's account. The signal that does work is the trailer, the <code>Co-Authored-By</code> line a coding agent appends to commits it authored, which is the tool claiming authorship instead of us inferring it from prose.</p>
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th>Measure</th>

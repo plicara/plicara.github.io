@@ -14,7 +14,7 @@
     <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jetbrains-mono-400.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
     <link rel="stylesheet" href="/assets/tokens.css" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260904" />
+    <link rel="stylesheet" href="/assets/style.css?v=20260913" />
     <style>
       .pareto-section { margin: 3rem 0; }
       .pareto-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; }
@@ -49,7 +49,6 @@
           <a href="/research/">Research</a>
           <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="/models/">Models</a>
           <a href="/#about">About</a>
           <a href="/#contact">Follow</a>
         </nav>
@@ -57,7 +56,7 @@
     </header>
     <main class="wrap results" id="main">
       <p class="eyebrow">benchmarks &middot; adventurebench</p>
-      <h1>Can your model play a text adventure?</h1>
+      <h1>Can your model interpret a text-adventure command?</h1>
       <p class="lede">Adventure Bench measures grounded action interpretation: map a player utterance onto the visible scene&rsquo;s small action vocabulary, or refuse when the request is not grounded.</p>
       <section class="pareto-section" aria-labelledby="pareto-heading">
         <div class="pareto-heading"><div><p class="eyebrow">the cost curve</p><h2 id="pareto-heading">The score&ndash;cost frontier</h2></div><p class="pareto-meta">Recorded full-run cost &middot; 12 models</p></div>
@@ -92,7 +91,7 @@
         </div>
         <p class="note">The frontier is a cost-efficiency view, not a ranking or a statistical claim. Costs are summed from provider-recorded completion evidence; score uncertainty and paired comparisons remain in the table below.</p>
       </section>
-      <div class="table-wrap">
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Model results">
         <table class="data-table">
           <caption class="visually-hidden">Audited Adventure Bench release 20260903-plicara-v1-expanded. Models are alphabetical by their canonical slug; comparison counts show only paired bootstrap intervals that exclude zero.</caption>
           <thead><tr><th scope="col">Model</th><th scope="col" class="num">Score (95% CI)</th><th scope="col" class="num">Passed</th><th scope="col" class="num">Recorded cost</th><th scope="col">Provider / runtime</th><th scope="col" class="num">Parse / transport</th><th scope="col" class="num">Separates</th></tr></thead>
@@ -116,7 +115,7 @@
       <p class="note">Release <code>20260903-plicara-v1-expanded</code> covers 244 cases &times; 3 repetitions (732 case-repetitions; repetition numbers 1, 2, 3), collected from 2026-09-02 through 2026-09-03 (UTC). Benchmark version: <code>1.0.0</code>. <a href="https://github.com/plicara/benchmarks/blob/main/adventurebench/releases/20260903-plicara-v1-expanded/release.json">Open the audited release artifact.</a></p>
       <p class="note">Failure policy: any transport failure invalidates a collection run and prevents it from entering this release. Parsing failures are counted separately after the frozen malformed-output retry and remain visible in the table. See the <a href="https://github.com/plicara/benchmarks/blob/main/adventurebench/docs/methodology.md">full methodology</a>.</p>
       <p class="note">Every number above regenerates offline from committed raw responses. The release pins every manifest and response hash plus dataset <code>f38e4650ecbe&hellip;</code> and prompt <code>a5b12544f699&hellip;</code>. Audit it with <code>make site-check RELEASE_ID=20260903-plicara-v1-expanded</code>.</p>
-      <div class="table-wrap">
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Per-tag results">
         <table class="data-table">
           <caption>Per-tag passed/total coverage for the audited release. Columns are models in alphabetical canonical-slug order.</caption>
           <thead><tr><th scope="col">Tag</th>

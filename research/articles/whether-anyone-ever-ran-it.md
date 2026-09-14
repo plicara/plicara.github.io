@@ -1,14 +1,18 @@
 ---
-title: whether a regular expression is dangerous depends on whether anyone ever ran it
+title: a regex can pass its tests and still fail in use
 date: 2026-08-21
-authors: plicara labs
+author: Adrian Tame Jacobo
+author_url: https://adriantj.github.io/
+publisher: plicara labs
 slug: whether-anyone-ever-ran-it
-summary: Eleven models write regular expressions, scored three ways, and the safety screen then points at half a million patterns from shipped packages. Vulnerability tracks whether a pattern was ever executed, not whether a human or a model wrote it.
+summary: A study of generated regular expressions, benchmark answer keys, and vulnerability screening across corpora. Passing tests is a limited guarantee; corpus differences do not establish what caused them.
 ---
+
+*Editorial clarification, September 2026: this article distinguishes observational comparisons from causal explanations, and unresolved differences from equivalence. The recorded results are unchanged. The linked v1.0 whitepaper is an archived release; this article contains the updated interpretation.*
 
 > Eleven current language models wrote 450 regular expressions each, three times over, scored three ways: whether the pattern passes its tests, whether it means what the task asked for, and whether it is vulnerable to regular-expression denial of service. Then we took the safety screen, which needs no model at all, and pointed it at five more populations of regular expressions, half a million of them pulled out of shipped packages.
 >
-> Three things came out of it. **Vulnerability tracks whether a pattern was ever executed, and not whether a human or a model wrote it**: everything written to be read screens at 13% to 20%, while shipped code sits at 8.9% and the models sit with it at 9.8%. **7.4% of the patterns that work are exploitable**, which is a tenth of what the equivalent benchmarks for backend code report, so the correctness-to-security penalty is a fact about a domain rather than about models. Then **that 7.4% came back as 16.5% on a second benchmark**, so it is a fact about a corpus too.
+> Three findings guide the study. **Vulnerability-screening rates differ across the sampled corpora**: the forum, reuse-library, and answer-key populations screen at 13% to 20%, shipped-package patterns at 8.9%, and model outputs at 9.8%. Execution and maintenance are possible explanations, not measured causes. **7.4% of the patterns that pass their tests are exploitable**, compared with much larger penalties reported for backend code. **That 7.4% becomes 16.5% on a second benchmark**, so the measured effect depends on the corpus as well as the domain.
 
 Claude Opus 5 produced the following pattern for a domain-name validation task. It passes every test the benchmark supplies.
 
@@ -111,7 +115,7 @@ The tempting conclusion is that dangerous regular expressions are endemic to how
 
 ---
 
-## the dividing line is whether the pattern was ever run
+## shipped packages and published examples differ
 
 The really nice thing about this is that none of it needs a single API call. The safety screen reads patterns, so running it on somebody else's corpus costs nothing but CPU cycles. We screened the gold answers of [KB13][kb13], the machine-generated patterns of [NL-RX][nlrx], and three corpora from [Davis et al.'s][linguafranca] artifact: half a million regular expressions **extracted from shipped packages** across npm, PyPI, Maven, CPAN, crates.io, godoc, packagist and RubyGems, half a million more **posted to Stack Overflow**, and the 3,838 patterns **published to regexlib.com** for other people to reuse.
 
@@ -119,25 +123,25 @@ The last two matter because Re(gEx\|DoS)Eval was built from real user posts. If 
 
 Raw rates are dominated by task mix. This corpus is full of validators, email and ISBN and hostname, which is exactly the shape that backtracks, while most regexes in the wild are short fragments with no opportunity to. So the table below restricts every population to anchored `^...$` patterns, which is the closest we can get to comparing similar objects:
 
-| anchored patterns only | written to be | n | vulnerable |
+| anchored patterns only | source context | n | vulnerable |
 | --- | --- | ---: | ---: |
-| RegexLib, published for reuse | read | 1,684 | 20.1% |
-| Stack Overflow answers | read | 4,000 | 17.3% |
-| Re(gEx\|DoS)Eval gold answers | read | 538 | 13.4% |
+| RegexLib, published for reuse | reuse library | 1,684 | 20.1% |
+| Stack Overflow answers | forum | 4,000 | 17.3% |
+| Re(gEx\|DoS)Eval gold answers | benchmark | 538 | 13.4% |
 | **our eleven models** | — | 3,613 | **9.8%** |
-| **production code** | **run** | 4,000 | **8.9%** |
+| **production code** | **shipped packages** | 4,000 | **8.9%** |
 
-Real shipped code is safer than every model we tested, so the endemic reading is wrong. But the more interesting thing is the column we did not expect to need.
+The sampled shipped-package patterns have a lower screening rate than the sampled reference and forum populations. That comparison does not establish a general ordering of human and model safety.
 
-> **The dividing line is whether the pattern was ever run on real systems.**
+> **Corpus membership is observed; execution history is not.**
 
-Everything written to be *read* sits between 13% and 20%. The one population that has been *executed*, under real traffic, in code somebody installed, sits at 8.9%. The models sit with it, at 9.8%, a difference that does not resolve (*p* = 0.20).
+The forum, reuse-library, and answer-key populations screen between 13% and 20%. Patterns extracted from shipped packages screen at 8.9%, compared with 9.8% for model outputs. The reported test does not resolve that latter difference (*p* = 0.20); it does not establish equivalence.
 
 The model row is restricted the same way as every other row: we keep only the models' own anchored outputs, because the rule keys on the pattern and not on who wrote it. Putting the models in at their unrestricted rate would compare a restricted human population against an unrestricted machine one, which is exactly the confound the restriction exists to remove. Restricting them moves the models slightly *toward* the answer key and away from production code, and the conclusion holds anyway.
 
-That is not really a story about carelessness. A pattern published to a library, or posted in an answer, or written to key a benchmark, is authored once to communicate an idea and then nothing ever happens to it. A pattern inside a shipped package gets run millions of times, and some of them have been repaired specifically for this. Vulnerability tracks exposure to execution, and an answer key has none. It also explains this corpus's answers without blaming whoever wrote them. They came from forum posts, and forum posts screen at 17.3%. The gold set is actually *safer* than the population it was drawn from, which suggests the corpus authors filtered as they went. It still does not get them down to the level of code that runs.
+Execution and maintenance could help explain the lower rate in shipped packages: deployed patterns may be tested, monitored, or repaired. But this is an **observational comparison**. We did not measure whether each pattern had actually run, and forum snippets may also have been executed. Restricting to anchored patterns does not control for task complexity, ecosystem, selection, or maintenance history. Forum posts screen at 17.3%; the lower rate in the gold set could reflect selection, but it does not demonstrate how the corpus authors filtered it. A matched or longitudinal study would be needed to distinguish these explanations.
 
-The practical implication survives with a better reason behind it. Safe regular expressions require screening at the point of use. Neither a pattern copied from the internet nor one just produced by a model has been run in anger or on a system that is failing at 5 am.
+The practical implication is to screen patterns at the point of use, whether they came from a model, a forum, or a shipped package. These measurements do not justify assuming any source is safe.
 
 ---
 
@@ -161,7 +165,7 @@ Our screen is *worse* at production code, 80%, than at the showcase populations 
 
 What rescues the finding is the size. Correct each population by its own recall and the gap between the most vulnerable read-only population and shipped code goes from 11.2 points to 10.8. The instrument's bias is real and it eats four tenths of an eleven-point gap. A differential that would have to close eleven points closes less than one.
 
-Our own models have the second-worst recall in that table. Correcting everything by its own recall moves the models from 9.8% to 13.4% and production code from 8.9% to 11.1%, so the distance between them roughly doubles. The two populations we described as sitting together move apart, and the models land nearer the corrected answer key. We do not think that overturns the pairing, because the interval on that 73.3% runs from 48% to 89% and a correction that noisy cannot carry a two-point conclusion.
+Our own models have the second-worst recall in that table. Correcting everything by its own recall moves the models from 9.8% to 13.4% and production code from 8.9% to 11.1%, so the point-estimate gap roughly doubles. The interval on that 73.3% recall runs from 48% to 89%, making the correction uncertain. Neither the raw comparison nor this correction establishes equivalence between the populations.
 
 ---
 
@@ -237,7 +241,7 @@ The objection survives, weakly and against us: the number moves in the direction
 
 ---
 
-## paying more buys almost nothing
+## cost differences and unresolved score differences
 
 The eleven models span a 98× range in price.
 
@@ -246,9 +250,9 @@ The eleven models span a 98× range in price.
 | `deepseek-v4-flash-0731` | 19.8% | $0.000026 |
 | `claude-opus-5` | 20.8% | $0.002514 |
 
-DeepSeek's model costs **98× less** and scores a point *lower*, a difference comfortably inside what our own statistics can resolve, which is to say the two are indistinguishable. **The whole field fits inside seven percentage points.**
+DeepSeek's model costs **98× less** and scores a point *lower*. The reported comparison does not resolve that score difference. **The whole field fits inside seven percentage points**, but this is a statement about these measured scores, not proof of equal capability.
 
-For this task specifically, model choice is close to a rounding error and cost is not. It is also evidence that regular expressions turn up often enough and uniformly enough in text that every one of these training runs picked up about the same competence at them.
+For this task, the cost difference is clear while the score comparison remains uncertain. Practical equivalence would require a prespecified acceptable difference and an analysis designed to test it. These results also cannot establish what the models encountered in training.
 
 ---
 
@@ -324,7 +328,7 @@ Three of the results above replaced an earlier reading of the same data, and the
 
 **The composite came before the decomposition.** We built the three-way conjunction because that is what the joint-benchmark literature reports, and it gave a gap of about the size that literature would predict. 87% of it was the equivalence term, and the equivalence term was 85% noise. A composite is no more reliable than its worst conjunct and it does not tell you which conjunct is binding, so publish the decomposition or do not publish the composite.
 
-**The human baseline came before the control.** One corpus said models are safer than people. Six populations said the variable is execution, not authorship. One population cannot separate a fact about people from a fact about the artifact that population happens to be, and the extension cost a few hours of CPU and no API calls at all.
+**The human baseline came before the cross-corpus comparison.** One corpus suggested that model outputs screened safer than human reference answers. Extending the analysis exposed differences between kinds of artifacts. Execution and maintenance are hypotheses for those differences, not identified causes; the extension required no further model calls.
 
 **Reference-independent did not mean corpus-independent.** The 7.4% consults no answer key, which makes it more trustworthy than the composite and does not make it general. StructuredRegex said 16.5%. Treat an effect size as local to its corpus until a second one disagrees, and the second corpus is usually cheaper than the first.
 

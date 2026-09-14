@@ -27,7 +27,7 @@
 
     <link rel="stylesheet" href="/assets/tokens.css" />
     <link rel="alternate" type="application/rss+xml" title="plicara research" href="/research/feed.xml" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260904" />
+    <link rel="stylesheet" href="/assets/style.css?v=20260913" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -42,7 +42,6 @@
           <a href="/research/">Research</a>
           <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="/models/">Models</a>
           <a href="/#about">About</a>
           <a href="/#contact">Follow</a>
         </nav>
@@ -73,7 +72,7 @@
 <p>This architecture can create its own problems though. Every handoff gives us another place to lose context or misunderstand a result, and another interaction to debug. Maybe better models will need simpler, more powerful tools and less instruction about how to use them. If that happens, some of the elaborate control structures we are building today will turn out to have been unnecessary for the next generation. I would want to see that happen before calling it the answer, though. A simpler harness that fails halfway through the job is not an improvement. The comparison has to include what the system can actually finish, how reliably it does it and what it costs. A tool count alone will not tell us that.</p>
 <h2>What has to stay outside the model?</h2>
 <p>One way to sort through this is to ask what we would keep if the model got much better tomorrow. I would still want permissions enforced and a record of what it did. I might not need to make it write a plan, critique the plan and ask another agent to critique the critique. That is the distinction I mean by structural and compensatory. Here is roughly where I would put the pieces:</p>
-<table>
+<table tabindex="0">
 <thead>
 <tr>
 <th>Responsibility</th>

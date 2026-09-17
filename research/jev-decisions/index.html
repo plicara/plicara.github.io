@@ -122,7 +122,7 @@
 
 <h2>a second pass after tuning on synthetic data</h2>
 <p>Across 244 distinct cases evaluated three times each (732 scored attempts), Jev achieves 92.3% accuracy (case-clustered 95% interval: 88.9–95.4%) at a recorded cost of $0.028. A second, pinned <code>jev-1.13.0</code> run scores 0.925 (677/732). At this benchmark's scale, where a full run costs pennies, small chat models are brutally efficient and Jev's per-token price advantage mostly washes out against its longer structured requests.</p>
-<p>Every Jev answer carries a confidence estimate, and our runtime refuses to act below a threshold. This second pass is a new prompt specification, selected on synthetic data and frozen before the evaluation release: missing targets become unclear, mapping tags use a 0.75 gate, calibration tags use a 0.9 gate, and relative directions without orientation are refused. The historic v1 evidence still replays under its pinned v1 mapping; this is not a rewrite of the published result.</p>
+<p>Every Jev answer carries a confidence estimate, and our runtime refuses to act below a threshold. This second pass is a new prompt specification, selected on synthetic data and frozen before the evaluation release: missing targets become unclear, mapping tags use a 0.75 gate, calibration tags use a 0.9 gate, and relative directions without orientation are refused. The gate a case gets is chosen from the case's pattern label, which the runtime sees but a deployed system reading only the player's command and the described scene would not, so these numbers measure the model together with that routing rather than the model alone. The historic v1 evidence still replays under its pinned v1 mapping; this is not a rewrite of the published result.</p>
 <p>Importantly for the purposes of this benchmark, the release was not used to tune those rules. The failure mode is still instructive: 47 of 56 misses in the alias run are overcautious refusals rather than confident mistakes. A model whose characteristic failure is saying "I don't know" is better than one that is overconfident in its answers.</p>
 <h2>where it genuinely wins, and where it loses</h2>
 <p>The per-pattern table is the most Jev-shaped result in this piece:</p>
@@ -130,8 +130,8 @@
 <thead>
 <tr>
 <th>Pattern</th>
-<th>Passed</th>
-<th>Total</th>
+<th>Attempts passed</th>
+<th>Attempts total</th>
 </tr>
 </thead>
 <tbody>
@@ -170,7 +170,7 @@
 <p>Refusal calibration is essentially perfect: unknown verbs, missing objects and nonsense all get refused at 100 percent, with zero type errors by construction. The weakness is terse commands. Single letters and dropped prepositions carry so little evidence that confidence sags below the gate, and good mappings get refused along with the bad ones. That is the price of the confidence tuned dial, and it suggests the next improvement is not a better model but state design: give the judgment more context and the same confidence goes further. When Jev does refuse, it is usually right (precision 0.862), and it catches nearly all genuine refusals (recall 0.980).</p>
 <h2>how this could be wrong</h2>
 <ol>
-<li>This is one model snapshot (pinned jev-1.13.0, also tested under its floating alias with 721 of 732 per-case agreement); vendors like TypeSafe can change backends and prices move.</li>
+<li>This is one model snapshot (pinned jev-1.13.0, also tested under its floating alias with 721 of 732 case/repetition agreements); vendors like TypeSafe can change backends and prices move.</li>
 <li>Latency is client-measured round-trip time from one collection window, not a hardware benchmark.</li>
 <li>The comparison set is twelve chat models on one 244-case benchmark. It says nothing about reasoning tasks, open-ended generation, or anything where strings are the actual product (this is the point though).</li>
 </ol>

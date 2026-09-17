@@ -74,7 +74,7 @@ Jev's median per-case time is 303 ms. At 300 milliseconds, model judgment fits i
 
 ## a second pass after tuning on synthetic data
 
-Jev scores 0.923 (95% interval 0.889 to 0.954) across 732 scored cases at a recorded cost of $0.028. A second, pinned `jev-1.13.0` run scores 0.925 (677/732). At this benchmark's scale, where a full run costs pennies, small chat models are brutally efficient and Jev's per-token price advantage mostly washes out against its longer structured requests.
+Across 244 distinct cases evaluated three times each (732 scored attempts), Jev achieves 92.3% accuracy (case-clustered 95% interval: 88.9–95.4%) at a recorded cost of $0.028. A second, pinned `jev-1.13.0` run scores 0.925 (677/732). At this benchmark's scale, where a full run costs pennies, small chat models are brutally efficient and Jev's per-token price advantage mostly washes out against its longer structured requests.
 
 Every Jev answer carries a confidence estimate, and our runtime refuses to act below a threshold. This second pass is a new prompt specification, selected on synthetic data and frozen before the evaluation release: missing targets become unclear, mapping tags use a 0.75 gate, calibration tags use a 0.9 gate, and relative directions without orientation are refused. The historic v1 evidence still replays under its pinned v1 mapping; this is not a rewrite of the published result.
 

@@ -76,7 +76,7 @@ Jev's median per-case time is 303 ms. At 300 milliseconds, model judgment fits i
 
 Across 244 distinct cases evaluated three times each (732 scored attempts), Jev achieves 92.3% accuracy (case-clustered 95% interval: 88.9–95.4%) at a recorded cost of $0.028. A second, pinned `jev-1.13.0` run scores 0.925 (677/732). At this benchmark's scale, where a full run costs pennies, small chat models are brutally efficient and Jev's per-token price advantage mostly washes out against its longer structured requests.
 
-Every Jev answer carries a confidence estimate, and our runtime refuses to act below a threshold. This second pass is a new prompt specification, selected on synthetic data and frozen before the evaluation release: missing targets become unclear, mapping tags use a 0.75 gate, calibration tags use a 0.9 gate, and relative directions without orientation are refused. The historic v1 evidence still replays under its pinned v1 mapping; this is not a rewrite of the published result.
+Every Jev answer carries a confidence estimate, and our runtime refuses to act below a threshold. This second pass is a new prompt specification, selected on synthetic data and frozen before the evaluation release: missing targets become unclear, mapping tags use a 0.75 gate, calibration tags use a 0.9 gate, and relative directions without orientation are refused. The gate a case gets is chosen from the case's pattern label, which the runtime sees but a deployed system reading only the player's command and the described scene would not, so these numbers measure the model together with that routing rather than the model alone. The historic v1 evidence still replays under its pinned v1 mapping; this is not a rewrite of the published result.
 
 Importantly for the purposes of this benchmark, the release was not used to tune those rules. The failure mode is still instructive: 47 of 56 misses in the alias run are overcautious refusals rather than confident mistakes. A model whose characteristic failure is saying "I don't know" is better than one that is overconfident in its answers.
 
@@ -84,7 +84,7 @@ Importantly for the purposes of this benchmark, the release was not used to tune
 
 The per-pattern table is the most Jev-shaped result in this piece:
 
-| Pattern | Passed | Total |
+| Pattern | Attempts passed | Attempts total |
 | --- | --- | --- |
 | Out-of-vocabulary verbs | 126 | 126 |
 | Absent objects | 30 | 30 |
@@ -97,7 +97,7 @@ Refusal calibration is essentially perfect: unknown verbs, missing objects and n
 
 ## how this could be wrong
 
-1. This is one model snapshot (pinned jev-1.13.0, also tested under its floating alias with 721 of 732 per-case agreement); vendors like TypeSafe can change backends and prices move.
+1. This is one model snapshot (pinned jev-1.13.0, also tested under its floating alias with 721 of 732 case/repetition agreements); vendors like TypeSafe can change backends and prices move.
 2. Latency is client-measured round-trip time from one collection window, not a hardware benchmark.
 3. The comparison set is twelve chat models on one 244-case benchmark. It says nothing about reasoning tasks, open-ended generation, or anything where strings are the actual product (this is the point though).
 

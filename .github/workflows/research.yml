@@ -14,22 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements-test.txt
-      - run: python -m playwright install --with-deps chromium
-      - run: python research/build.py --no-pdf
-      - run: python -m unittest discover -s research
+      - run: make setup
+      - run: uv run --locked python -m playwright install --with-deps chromium
+      - run: uv run --locked python research/build.py --no-pdf
+      - run: uv run --locked python -m unittest discover -s research
       - name: Check generated pages are committed
         run: git diff --exit-code -- research sitemap.xml
       - name: Check responsive layout and keyboard scrolling
         run: |
-          python -m http.server 4001 --bind 127.0.0.1 &
+          uv run --locked python -m http.server 4001 --bind 127.0.0.1 &
           server_pid=$!
           trap 'kill "$server_pid"' EXIT
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:4001/ >/dev/null; then break; fi
             sleep 1
           done
-          python tools/check_browser.py
+          uv run --locked python tools/check_browser.py

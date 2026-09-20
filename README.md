@@ -15,8 +15,8 @@ The visual system is defined in [`plicara-brand`](https://github.com/plicara/pli
 **`assets/tokens.css`, `assets/tokens.json`, the favicon, the marks and the plane glyphs are copies, not sources.** They come from `plicara-brand`. `tools/vendor.py` holds the manifest and does the copying:
 
 ```sh
-python3 tools/vendor.py --check    # fail if any copy has drifted
-python3 tools/vendor.py --sync     # refresh the copies from upstream
+uv run --locked python tools/vendor.py --check    # fail if any copy has drifted
+uv run --locked python tools/vendor.py --sync     # refresh the copies from upstream
 ```
 
 Both take `--upstream PATH`, defaulting to `../plicara-brand`. To change a colour, a typeface or the mark, change it **there**, regenerate, then `--sync` here. The JSON carries the generated contrast matrix and fill guards, so the "generated rather than asserted" claim in the CSS header holds next to the copy too. `assets/style.css` holds only site-specific layout and components, and reads everything else from tokens.
@@ -76,7 +76,7 @@ Line not fill, and drawn in the same language as the mark. The hero band is a **
 The bands are **generated, not hand-drawn**, following the same rule as the marks in `plicara-brand`: change `assets/brand/waves.py` and re-run it, never the path data.
 
 ```sh
-python3 assets/brand/waves.py   # paste the output into index.html
+uv run --locked python assets/brand/waves.py   # paste the output into index.html
 ```
 
 Curves are exact cubic-Bezier sine arches, one per half wavelength: for an arch of amplitude `A` over a half period `L/2`, control points at `L/6` and `L/3` at height `4A/3` put the curve's midpoint at exactly `A`. That is the closest a single cubic gets to a sinusoid, and it keeps the whole file near 5 KB.
@@ -122,17 +122,17 @@ The lab site stands on its own as the research record. `/models/` remains reacha
 The one part of the site that is written in markdown. `research/articles/` holds the sources; `research/build.py` compiles them:
 
 ```sh
-pip install markdown            # once; the only authoring dependency
-python3 research/build.py       # pages + PDFs + index + sitemap
+make setup                     # install the locked authoring environment
+uv run --locked python research/build.py       # pages + PDFs + index + sitemap
 ```
 
 Commit everything it writes. Each article becomes `/research/<slug>/` plus a PDF of the same page, printed through the print stylesheet (Chromium is found via `$CHROME` or the Playwright install; without one, pages retain links to PDFs already on disk). The index at `/research/` and the research entries in `sitemap.xml` and `research/feed.xml` are regenerated on every run, so neither is ever edited by hand — the generated pages all share one header/footer template inside `build.py`, unlike the five hand-written pages, which still carry copies.
 
 `research/articles/_template.md` documents the front matter and the two conventions that matter: asset paths are root-relative, and whitepaper PDFs are hand-dropped into `research/papers/` and linked from the article body.
 
-`python3 research/build.py --no-pdf` updates the HTML and RSS feed while preserving links to existing PDFs. It does not regenerate those PDFs. The feed uses published article summaries and stable article URLs; drafts stay excluded by the same build loop as the index.
+`uv run --locked python research/build.py --no-pdf` updates the HTML and RSS feed while preserving links to existing PDFs. It does not regenerate those PDFs. The feed uses published article summaries and stable article URLs; drafts stay excluded by the same build loop as the index.
 
-Run `python3 -m unittest discover -s research` after rebuilding. Install `requirements-test.txt` and Playwright's Chromium, serve the site on port 4001, and run `python3 tools/check_browser.py` for mobile/desktop layout and keyboard-scrolling checks. Pull requests run both checks and reject uncommitted generated-page changes. When article wording changes, regenerate its downloadable PDF as well. Archived whitepapers under `research/papers/` remain versioned historical artifacts; an article that revises their interpretation should say so explicitly.
+Run `uv run --locked python -m unittest discover -s research` after rebuilding. Run `make setup` and `make setup-browser`, serve the site on port 4001, and run `uv run --locked python tools/check_browser.py` for mobile/desktop layout and keyboard-scrolling checks. Pull requests run both checks and reject uncommitted generated-page changes. When article wording changes, regenerate its downloadable PDF as well. Archived whitepapers under `research/papers/` remain versioned historical artifacts; an article that revises their interpretation should say so explicitly.
 
 ## How this repo gets online
 
@@ -183,7 +183,7 @@ Everything is self-contained: no CDNs, no external fonts, no JavaScript.
 There's no build step, so opening `index.html` in a browser mostly works. Absolute paths (`/assets/...` in `404.html`) only resolve over HTTP, so prefer:
 
 ```sh
-python3 -m http.server 8000
+make serve
 # then visit http://localhost:8000
 ```
 
@@ -223,3 +223,7 @@ The `CNAME` file makes GitHub redirect `plicara.github.io` to the custom domain.
 ### Verify the domain
 
 Org **Settings → Pages → Verified domains** gives a TXT record to add. Worth doing: an unverified domain can be claimed by another GitHub account if the `CNAME` is ever removed while the DNS still points at GitHub.
+
+## Working in this repository
+
+Project metadata and research context live in [.plicara/README.md](.plicara/README.md); agent constraints live in [AGENTS.md](AGENTS.md). Use `make setup` and `make check` for the default local environment and verification. Expensive experiments, model downloads, and publication are separate explicit steps. Project status is authoritative in `.plicara/project.yaml`; no central board update is required.

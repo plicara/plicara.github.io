@@ -852,3 +852,49 @@ table { width: 100%; border-collapse: collapse; }
   .article-body pre { white-space: pre-wrap; overflow-wrap: break-word; }
   .article-body table { display: table; width: 100%; }
 }
+
+/* --- about ---------------------------------------------------------------- */
+
+.site-nav a[aria-current="page"] { color: var(--pl-text); border-bottom-color: var(--pl-accent); }
+
+.about-hero h1 { font-size: clamp(2.4rem, 5.6vw, 4.2rem); max-width: 16ch; }
+
+.about-person {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 21rem);
+  gap: 2rem 3rem;
+  align-items: start;
+}
+@media (max-width: 52rem) { .about-person { grid-template-columns: 1fr; } }
+
+.about-card { display: grid; gap: 1.25rem; }
+
+.portrait {
+  aspect-ratio: 4 / 5;
+  max-width: 100%;
+  background: var(--pl-surface);
+  border: 1px dashed var(--pl-text-muted);
+  display: grid;
+  place-items: center;
+}
+
+.facts { margin: 0; border-top: 2px solid var(--pl-text); }
+.facts div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.2rem 1rem;
+  padding-block: 0.65rem;
+  border-bottom: 1px solid var(--pl-rule);
+}
+.facts dt {
+  font-family: var(--pl-font-mono);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: var(--pl-tracking-label);
+  color: var(--pl-text-muted);
+  padding-top: 0.3rem;
+}
+.facts dd { margin: 0; font-size: 0.95rem; line-height: 1.45; }
+.outputs-list h3 { font-size: 1.25rem; margin-bottom: 0.3rem; }
+.outputs-list h3 a { text-decoration: none; }
+.outputs-list h3 a:hover { text-decoration: underline; text-underline-offset: 3px; }

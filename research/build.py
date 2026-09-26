@@ -170,7 +170,7 @@ def chrome_head(title, description, canonical):
           <a href="/research/">Research</a>
           <a href="/tools/">Tools</a>
           <a href="/benchmarks/">Benchmarks</a>
-          <a href="/#about">About</a>
+          <a href="/about/">About</a>
           <a href="/#contact">Follow</a>
         </nav>
       </div>
@@ -270,7 +270,7 @@ def render_index(entries, pdf_ok):
       <h1>Research</h1>
       <p class="lede">
         Articles and analyses from the lab, with the whitepapers behind them.
-        Everything here is re-runnable where a claim depends on a number.
+        Articles link to methods and evidence where available. Each study states what can be reproduced and where records or checks are missing.
       </p>
 
 {listing}

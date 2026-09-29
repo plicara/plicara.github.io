@@ -155,7 +155,7 @@ def chrome_head(title, description, canonical):
 
     <link rel="stylesheet" href="/assets/tokens.css" />
     <link rel="alternate" type="application/rss+xml" title="plicara research" href="/research/feed.xml" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260913" />
+    <link rel="stylesheet" href="/assets/style.css?v=20260929" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

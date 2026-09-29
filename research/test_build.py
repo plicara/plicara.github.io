@@ -74,7 +74,7 @@ class ArticleRenderingTest(unittest.TestCase):
             "test",
             False,
         )
-        self.assertIn('href="/assets/style.css?v=20260913"', rendered)
+        self.assertIn('href="/assets/style.css?v=20260929"', rendered)
 
     def test_scrollable_article_content_is_keyboard_focusable(self):
         rendered = build.render_article(

@@ -44,11 +44,9 @@ Apply with `data-scheme` on any element. Schemes nest and paint their own ground
 
 ### Seams
 
-Where two schemes meet, the ground changes along a **squiggle**: the incoming scheme's ground is filled to a smooth wave edge, the edge itself is inked, and one lower-opacity echo rides above it. Entering the band (`.seam-down`), the tools' paper ground rises into the lab's sky inked in the band's own accent (`--pl-band-ink`); leaving it (`.seam-up`), the lab's own ground rises back inked in the page's accent (`--pl-accent`), so no line ever sits on its own colour. Both are tokens rather than literals, so the seam follows the band's light/dark switch instead of needing a retune whenever the palette is repainted.
+Where two schemes meet, the ground changes along a **straight inked edge**: a 3px rule in the page's ink colour above and below the technical band, and under the hero. There is no squiggle.
 
-The register is the one Material 3 uses for its wavy dividers and progress tracks: one wavelength held across the whole drawing, generous amplitude, round caps. It replaces two earlier attempts — terrain contours, then origami pleats — both of which read as noise at page width.
-
-The seam's ground path carries `fill="currentColor"` as a presentation attribute as well as its class. That is deliberate: if this stylesheet is ever served stale against newer markup, the fill degrades to the inherited text colour instead of SVG's black default. An earlier pleated seam had no such guard, and a cached stylesheet rendered it as solid black sawteeth.
+Cards, buttons, pills and the contact card take the mark's own language: a heavy ink outline and a hard, blur-free offset shadow, one colour per surface. The shadow is a token (`--pl-shadow`, `--pl-shadow-btn`), and inside the band it takes the band's accent.
 
 ### Case
 
@@ -71,17 +69,8 @@ Self-hosted in `assets/fonts/`, no external requests. Fraunces and Newsreader ar
 
 ### Illustration
 
-Line not fill, and drawn in the same language as the mark. The hero band is a **wave field**: one wavelength, one gap, one amplitude law, and a constant phase step from line to line, so the set nests and no two lines can ever cross. Tidiness is enforced by construction rather than by taste.
+Drawn in the same language as the mark: thick ink outline, flat fills nudged off-register. The hero carries the mark itself, with an offset shadow behind it, and no wave field. `assets/brand/waves.py` is retained for reference but is no longer used by any page.
 
-The bands are **generated, not hand-drawn**, following the same rule as the marks in `plicara-brand`: change `assets/brand/waves.py` and re-run it, never the path data.
-
-```sh
-uv run --locked python assets/brand/waves.py   # paste the output into index.html
-```
-
-Curves are exact cubic-Bezier sine arches, one per half wavelength: for an arch of amplitude `A` over a half period `L/2`, control points at `L/6` and `L/3` at height `4A/3` put the curve's midpoint at exactly `A`. That is the closest a single cubic gets to a sinusoid, and it keeps the whole file near 5 KB.
-
-They have to be inline SVG rather than `<img>`, because they read `currentColor` and the scheme custom properties.
 
 ### The house mark
 

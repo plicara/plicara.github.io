@@ -2,8 +2,8 @@
 title: The harness is the signal
 date: 2026-09-11
 summary: As models improve, some of today's agent machinery will disappear. The parts that govern permissions, execution, recovery and accountability probably will not.
-author: Adrian Tame
-author_url: https://github.com/AdrianTJ
+author: Adrian Tame Jacobo
+author_url: https://adriantj.github.io/
 publisher: Plicara Labs
 slug: harness-is-signal
 ---

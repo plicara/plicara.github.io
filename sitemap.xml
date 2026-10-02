@@ -41,6 +41,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://plicara.ai/research/benchmarks-are-living-things/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://plicara.ai/research/pi-audit-loop/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://plicara.ai/research/model-that-only-chooses/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

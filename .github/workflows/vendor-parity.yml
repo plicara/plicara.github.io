@@ -35,12 +35,14 @@ jobs:
           repository: plicara/plicara-brand
           path: plicara-brand
 
+      - uses: astral-sh/setup-uv@v6
+
       - name: Compare the vendored copies
         id: check
         continue-on-error: true
         run: |
           cd site
-          python3 tools/vendor.py --check --upstream ../plicara-brand \
+          uv run --locked python tools/vendor.py --check --upstream ../plicara-brand \
             | tee "$GITHUB_WORKSPACE/parity.txt"
 
       - name: Report
@@ -54,6 +56,6 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
           if [ "${{ steps.check.outcome }}" != "success" ]; then
             echo "These files are copies, not sources. Change them in plicara-brand," >> "$GITHUB_STEP_SUMMARY"
-            echo "then run \`python3 tools/vendor.py --sync\` here." >> "$GITHUB_STEP_SUMMARY"
+            echo "then run \`uv run --locked python tools/vendor.py --sync\` here." >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi

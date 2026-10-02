@@ -15,8 +15,8 @@ The visual system is defined in [`plicara-brand`](https://github.com/plicara/pli
 **`assets/tokens.css`, `assets/tokens.json`, the favicon, the marks and the plane glyphs are copies, not sources.** They come from `plicara-brand`. `tools/vendor.py` holds the manifest and does the copying:
 
 ```sh
-python3 tools/vendor.py --check    # fail if any copy has drifted
-python3 tools/vendor.py --sync     # refresh the copies from upstream
+uv run --locked python tools/vendor.py --check    # fail if any copy has drifted
+uv run --locked python tools/vendor.py --sync     # refresh the copies from upstream
 ```
 
 Both take `--upstream PATH`, defaulting to `../plicara-brand`. To change a colour, a typeface or the mark, change it **there**, regenerate, then `--sync` here. The JSON carries the generated contrast matrix and fill guards, so the "generated rather than asserted" claim in the CSS header holds next to the copy too. `assets/style.css` holds only site-specific layout and components, and reads everything else from tokens.
@@ -44,11 +44,9 @@ Apply with `data-scheme` on any element. Schemes nest and paint their own ground
 
 ### Seams
 
-Where two schemes meet, the ground changes along a **squiggle**: the incoming scheme's ground is filled to a smooth wave edge, the edge itself is inked, and one lower-opacity echo rides above it. Entering the band (`.seam-down`), the tools' paper ground rises into the lab's sky inked in the band's own accent (`--pl-band-ink`); leaving it (`.seam-up`), the lab's own ground rises back inked in the page's accent (`--pl-accent`), so no line ever sits on its own colour. Both are tokens rather than literals, so the seam follows the band's light/dark switch instead of needing a retune whenever the palette is repainted.
+Where two schemes meet, the ground changes along a **straight inked edge**: a 3px rule in the page's ink colour above and below the technical band, and under the hero. There is no squiggle.
 
-The register is the one Material 3 uses for its wavy dividers and progress tracks: one wavelength held across the whole drawing, generous amplitude, round caps. It replaces two earlier attempts — terrain contours, then origami pleats — both of which read as noise at page width.
-
-The seam's ground path carries `fill="currentColor"` as a presentation attribute as well as its class. That is deliberate: if this stylesheet is ever served stale against newer markup, the fill degrades to the inherited text colour instead of SVG's black default. An earlier pleated seam had no such guard, and a cached stylesheet rendered it as solid black sawteeth.
+Cards, buttons, pills and the contact card take the mark's own language: a heavy ink outline and a hard, blur-free offset shadow, one colour per surface. The shadow is a token (`--pl-shadow`, `--pl-shadow-btn`), and inside the band it takes the band's accent.
 
 ### Case
 
@@ -71,17 +69,8 @@ Self-hosted in `assets/fonts/`, no external requests. Fraunces and Newsreader ar
 
 ### Illustration
 
-Line not fill, and drawn in the same language as the mark. The hero band is a **wave field**: one wavelength, one gap, one amplitude law, and a constant phase step from line to line, so the set nests and no two lines can ever cross. Tidiness is enforced by construction rather than by taste.
+Drawn in the same language as the mark: thick ink outline, flat fills nudged off-register. The hero carries the mark itself, with an offset shadow behind it, and no wave field. `assets/brand/waves.py` is retained for reference but is no longer used by any page.
 
-The bands are **generated, not hand-drawn**, following the same rule as the marks in `plicara-brand`: change `assets/brand/waves.py` and re-run it, never the path data.
-
-```sh
-python3 assets/brand/waves.py   # paste the output into index.html
-```
-
-Curves are exact cubic-Bezier sine arches, one per half wavelength: for an arch of amplitude `A` over a half period `L/2`, control points at `L/6` and `L/3` at height `4A/3` put the curve's midpoint at exactly `A`. That is the closest a single cubic gets to a sinusoid, and it keeps the whole file near 5 KB.
-
-They have to be inline SVG rather than `<img>`, because they read `currentColor` and the scheme custom properties.
 
 ### The house mark
 
@@ -122,17 +111,17 @@ The lab site stands on its own as the research record. `/models/` remains reacha
 The one part of the site that is written in markdown. `research/articles/` holds the sources; `research/build.py` compiles them:
 
 ```sh
-pip install markdown            # once; the only authoring dependency
-python3 research/build.py       # pages + PDFs + index + sitemap
+make setup                     # install the locked authoring environment
+uv run --locked python research/build.py       # pages + PDFs + index + sitemap
 ```
 
 Commit everything it writes. Each article becomes `/research/<slug>/` plus a PDF of the same page, printed through the print stylesheet (Chromium is found via `$CHROME` or the Playwright install; without one, pages retain links to PDFs already on disk). The index at `/research/` and the research entries in `sitemap.xml` and `research/feed.xml` are regenerated on every run, so neither is ever edited by hand — the generated pages all share one header/footer template inside `build.py`, unlike the five hand-written pages, which still carry copies.
 
 `research/articles/_template.md` documents the front matter and the two conventions that matter: asset paths are root-relative, and whitepaper PDFs are hand-dropped into `research/papers/` and linked from the article body.
 
-`python3 research/build.py --no-pdf` updates the HTML and RSS feed while preserving links to existing PDFs. It does not regenerate those PDFs. The feed uses published article summaries and stable article URLs; drafts stay excluded by the same build loop as the index.
+`uv run --locked python research/build.py --no-pdf` updates the HTML and RSS feed while preserving links to existing PDFs. It does not regenerate those PDFs. The feed uses published article summaries and stable article URLs; drafts stay excluded by the same build loop as the index.
 
-Run `python3 -m unittest discover -s research` after rebuilding. Install `requirements-test.txt` and Playwright's Chromium, serve the site on port 4001, and run `python3 tools/check_browser.py` for mobile/desktop layout and keyboard-scrolling checks. Pull requests run both checks and reject uncommitted generated-page changes. When article wording changes, regenerate its downloadable PDF as well. Archived whitepapers under `research/papers/` remain versioned historical artifacts; an article that revises their interpretation should say so explicitly.
+Run `uv run --locked python -m unittest discover -s research` after rebuilding. Run `make setup` and `make setup-browser`, serve the site on port 4001, and run `uv run --locked python tools/check_browser.py` for mobile/desktop layout and keyboard-scrolling checks. Pull requests run both checks and reject uncommitted generated-page changes. When article wording changes, regenerate its downloadable PDF as well. Archived whitepapers under `research/papers/` remain versioned historical artifacts; an article that revises their interpretation should say so explicitly.
 
 ## How this repo gets online
 
@@ -183,7 +172,7 @@ Everything is self-contained: no CDNs, no external fonts, no JavaScript.
 There's no build step, so opening `index.html` in a browser mostly works. Absolute paths (`/assets/...` in `404.html`) only resolve over HTTP, so prefer:
 
 ```sh
-python3 -m http.server 8000
+make serve
 # then visit http://localhost:8000
 ```
 
@@ -223,3 +212,7 @@ The `CNAME` file makes GitHub redirect `plicara.github.io` to the custom domain.
 ### Verify the domain
 
 Org **Settings → Pages → Verified domains** gives a TXT record to add. Worth doing: an unverified domain can be claimed by another GitHub account if the `CNAME` is ever removed while the DNS still points at GitHub.
+
+## Working in this repository
+
+Project metadata and research context live in [.plicara/README.md](.plicara/README.md); agent constraints live in [AGENTS.md](AGENTS.md). Use `make setup` and `make check` for the default local environment and verification. Expensive experiments, model downloads, and publication are separate explicit steps. Project status is authoritative in `.plicara/project.yaml`; no central board update is required.

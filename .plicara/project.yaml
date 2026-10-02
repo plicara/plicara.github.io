@@ -1,0 +1,14 @@
+schema_version: 1
+id: plicara-site
+name: "Plicara website"
+description: "Publication surface for Plicara research, tools, and benchmarks."
+kind: publication
+status: maintained
+repository: https://github.com/plicara/plicara.github.io
+python:
+  - .
+artifacts:
+  - kind: reference
+    path: research
+  - kind: reference
+    path: tools

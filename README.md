@@ -213,6 +213,11 @@ The `CNAME` file makes GitHub redirect `plicara.github.io` to the custom domain.
 
 Org **Settings → Pages → Verified domains** gives a TXT record to add. Worth doing: an unverified domain can be claimed by another GitHub account if the `CNAME` is ever removed while the DNS still points at GitHub.
 
+## License
+
+Code is Apache-2.0; see [LICENSE](LICENSE).
+Article text, figures and the Plicara marks are not covered by that licence; all rights reserved.
+
 ## Working in this repository
 
 Project metadata and research context live in [.plicara/README.md](.plicara/README.md); agent constraints live in [AGENTS.md](AGENTS.md). Use `make setup` and `make check` for the default local environment and verification. Expensive experiments, model downloads, and publication are separate explicit steps. Project status is authoritative in `.plicara/project.yaml`; no central board update is required.

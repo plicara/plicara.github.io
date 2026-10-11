@@ -19,7 +19,8 @@ with sync_playwright() as p:
                 assert response.status == 200, route
                 assert page.evaluate("document.documentElement.scrollWidth") <= width, (route, width, theme)
                 for region in page.locator(".table-wrap, .article-body table, .article-body pre").all():
-                    if region.evaluate("el => el.scrollWidth > el.clientWidth"):
+                    # A region inside a closed <details> is not rendered, so a reader cannot scroll it until they open it.
+                    if region.is_visible() and region.evaluate("el => el.scrollWidth > el.clientWidth"):
                         assert region.get_attribute("tabindex") == "0", route
                         region.focus()
                         page.keyboard.press("ArrowRight")

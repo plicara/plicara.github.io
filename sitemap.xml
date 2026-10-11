@@ -36,6 +36,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://plicara.ai/benchmarks/pollbench/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://plicara.ai/research/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

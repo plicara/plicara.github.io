@@ -6,7 +6,7 @@ from playwright.sync_api import sync_playwright
 
 
 BASE = os.environ.get("SITE_URL", "http://127.0.0.1:4001")
-ROUTES = ("/", "/research/", "/research/whether-anyone-ever-ran-it/", "/benchmarks/adventurebench/", "/tools/")
+ROUTES = ("/", "/research/", "/research/whether-anyone-ever-ran-it/", "/benchmarks/adventurebench/", "/benchmarks/pollbench/", "/tools/")
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True, executable_path=os.environ.get("CHROME"))

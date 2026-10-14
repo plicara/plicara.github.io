@@ -99,7 +99,7 @@ def sections():
 # The old path keeps working as a static redirect page (GitHub Pages has no
 # server-side redirects). The stale PDF at the old path is left in place so
 # existing links to it do not break.
-REDIRECTS = {"harness-is-signal": "essays"}
+REDIRECTS = {"harness-is-signal": "essays", "pi-audit-loop": "essays"}
 
 REQUIRED = ("title", "date", "summary")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")

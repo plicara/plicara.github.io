@@ -23,7 +23,7 @@ jobs:
       - run: uv run --locked python research/build.py --no-pdf
       - run: uv run --locked python -m unittest discover -s research
       - name: Check generated pages are committed
-        run: git diff --exit-code -- research sitemap.xml
+        run: git diff --exit-code -- research essays sitemap.xml
       - name: Check responsive layout and keyboard scrolling
         run: |
           uv run --locked python -m http.server 4001 --bind 127.0.0.1 &

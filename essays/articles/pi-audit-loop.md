@@ -59,7 +59,7 @@ Pi Audit Loop began as a small way to alternate code review and simplification, 
 
 The first experiments also showed how easily a useful result can be mistaken for a guarantee. I wrote an instruction the models never read, briefly measured code that an earlier run had already changed, and watched a model make a test suite pass while introducing another bug, in that same suite. Those results led to a different package: one focused review, one selected fix or simplification, verification tied to the repository state, and a review of the resulting diff.
 
-I wrote recently about [which responsibilities belong in the harness around a model](/research/harness-is-signal/). This was a small, practical way to explore that question. What can we put into ordinary code, and what still depends on the model making a good judgement? The September 2026 fixture and real-project runs below tested v0.1.0 during its development, which I do not recommend anyone try. The later v0.4.0 sweep is a separate set of development runs of a different workflow really.
+I wrote recently about [which responsibilities belong in the harness around a model](/essays/harness-is-signal/). This was a small, practical way to explore that question. What can we put into ordinary code, and what still depends on the model making a good judgement? The September 2026 fixture and real-project runs below tested v0.1.0 during its development, which I do not recommend anyone try. The later v0.4.0 sweep is a separate set of development runs of a different workflow really.
 
 ## The original loop
 

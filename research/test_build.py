@@ -29,7 +29,8 @@ class ArticleRenderingTest(unittest.TestCase):
                 (articles / f"{name}.md").write_text(
                     f"---\ntitle: {name}\ndate: 2026-09-08\nsummary: Example\ndraft: {draft}\n---\nBody"
                 )
-            with patch.multiple(build, ROOT=str(root), RESEARCH=str(research), ARTICLES=str(articles)), \
+            with patch.multiple(build, ROOT=str(root), RESEARCH=str(research), ARTICLES=str(articles),
+                           ESSAYS=str(root / "essays"), ESSAY_ARTICLES=str(root / "essays" / "articles")), \
                     patch.object(build.sys, "argv", ["build.py", "--no-pdf"]), \
                     contextlib.redirect_stdout(io.StringIO()):
                 build.main()
@@ -52,6 +53,38 @@ class ArticleRenderingTest(unittest.TestCase):
             self.assertIn('href="/research/test/test.pdf"', build.render_index([entry], False))
         with patch.object(build.os.path, "isfile", return_value=False):
             self.assertNotIn('href="/research/test/test.pdf"', build.render_index([entry], False))
+
+    def test_essays_build_separately_and_moved_articles_redirect(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            research, essays = root / "research", root / "essays"
+            (research / "articles").mkdir(parents=True)
+            (essays / "articles").mkdir(parents=True)
+            (research / "moved").mkdir()
+            (root / "sitemap.xml").write_text("<urlset>\n</urlset>")
+            (research / "articles" / "study.md").write_text(
+                "---\ntitle: Study\ndate: 2026-09-08\nsummary: A study\n---\nBody")
+            (essays / "articles" / "moved.md").write_text(
+                "---\ntitle: Moved\ndate: 2026-09-09\nsummary: An essay\n---\nBody")
+            with patch.multiple(build, ROOT=str(root), RESEARCH=str(research), ARTICLES=str(research / "articles"),
+                                ESSAYS=str(essays), ESSAY_ARTICLES=str(essays / "articles"),
+                                REDIRECTS={"moved": "essays"}), \
+                    patch.object(build.sys, "argv", ["build.py", "--no-pdf"]), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                build.main()
+            self.assertIn("/essays/moved/", (essays / "index.html").read_text())
+            self.assertNotIn("/essays/moved/", (research / "index.html").read_text())
+            self.assertIn("https://plicara.ai/essays/moved/", (essays / "feed.xml").read_text())
+            self.assertIn('url=/essays/moved/', (research / "moved" / "index.html").read_text())
+            sitemap = (root / "sitemap.xml").read_text()
+            self.assertIn("https://plicara.ai/essays/moved/", sitemap)
+            self.assertNotIn("https://plicara.ai/research/moved/", sitemap)
+
+    def test_essay_pages_link_back_to_essays(self):
+        sec = build.sections()[1]
+        rendered = build.render_article({"title": "T", "date": "2026-09-04", "summary": "S"}, "Body", "t", False, sec)
+        self.assertIn('href="/essays/"', rendered)
+        self.assertIn("essay &middot; 2026-09-04", rendered)
 
     def test_trailing_whitespace_does_not_create_a_hard_break(self):
         body = build.strip_hard_breaks("First line  \nSecond line", "test.md")

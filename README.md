@@ -103,7 +103,7 @@ The path **must be root-relative**. A `url()` inside a custom property resolves 
 
 ## Research
 
-The homepage leads with selected research, then tools and benchmarks. Primary navigation points to Research, Tools, Benchmarks, About and Follow. Keep selected homepage links deliberate; the complete article list and RSS feed are generated.
+The homepage leads with selected research, then tools and benchmarks. Primary navigation points to Research, Essays, Tools, Benchmarks, About and Follow. Keep selected homepage links deliberate; the complete article list and RSS feed are generated.
 
 The lab site stands on its own as the research record. `/models/` remains reachable for old links but is not promoted until there is a release. Editorial decisions are recorded in [docs/decision-log.md](docs/decision-log.md).
 
@@ -116,6 +116,8 @@ uv run --locked python research/build.py       # pages + PDFs + index + sitemap
 ```
 
 Commit everything it writes. Each article becomes `/research/<slug>/` plus a PDF of the same page, printed through the print stylesheet (Chromium is found via `$CHROME` or the Playwright install; without one, pages retain links to PDFs already on disk). The index at `/research/` and the research entries in `sitemap.xml` and `research/feed.xml` are regenerated on every run, so neither is ever edited by hand — the generated pages all share one header/footer template inside `build.py`, unlike the five hand-written pages, which still carry copies.
+
+Essays live in a second section built by the same script: sources in `essays/articles/`, output at `/essays/<slug>/`, with its own index and `essays/feed.xml`. Research holds studies and analyses that report evidence; essays hold arguments and working notes. To move an article between sections, move its markdown file, add its slug to `REDIRECTS` in `research/build.py` so the old URL becomes a redirect page, and rebuild. The old PDF stays at its original path so existing links keep working.
 
 `research/articles/_template.md` documents the front matter and the two conventions that matter: asset paths are root-relative, and whitepaper PDFs are hand-dropped into `research/papers/` and linked from the article body.
 
@@ -151,6 +153,7 @@ tools/            /tools/ — install examples and documentation for released to
 benchmarks/       /benchmarks/ — index of published runs, one subpage per run
                   (mirrors /research/; regexeval-2026 is the first)
 research/         /research/ — articles and analyses, generated from markdown
+essays/          /essays/ — essays, generated from markdown by research/build.py
 404.html          Custom not-found page (Pages serves this automatically)
 assets/
   style.css       All styling; light and dark via prefers-color-scheme

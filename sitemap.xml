@@ -66,11 +66,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://plicara.ai/research/harness-is-signal/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://plicara.ai/research/agent-skill-programming-languages/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -87,6 +82,16 @@
   </url>
   <url>
     <loc>https://plicara.ai/research/whether-anyone-ever-ran-it/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://plicara.ai/essays/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://plicara.ai/essays/harness-is-signal/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

@@ -86,6 +86,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://plicara.ai/essays/agents-plural/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://plicara.ai/essays/pi-profiles/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://plicara.ai/essays/pi-audit-loop/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

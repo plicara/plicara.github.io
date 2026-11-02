@@ -27,7 +27,7 @@ with sync_playwright() as p:
                         page.wait_for_function("el => el.scrollLeft > 0", arg=region.element_handle())
             page.emulate_media(media="print")
             page.goto(BASE + "/research/whether-anyone-ever-ran-it/", wait_until="networkidle")
-            assert page.locator(".article-body blockquote").first.evaluate("el => getComputedStyle(el).color") == "rgb(5, 25, 43)"
+            assert page.locator(".article-body blockquote").first.evaluate("el => getComputedStyle(el).color") == "rgb(23, 21, 18)"
             context.close()
     browser.close()
 print("Responsive layout, keyboard scrolling, and print text checks passed.")

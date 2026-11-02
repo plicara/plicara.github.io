@@ -25,29 +25,23 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://plicara.ai/assets/brand/og.png" />
 
-    <meta name="theme-color" content="#05192B" />
+    <meta name="theme-color" content="#F4EFE4" />
 
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon-180.png" />
 
+    <!-- The display serif and the body sans render above the fold on every
+         page; JetBrains Mono only sets figures and code, so it loads late. -->
     <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/fraunces.woff2" crossorigin />
+          href="/assets/fonts/hedvig-letters-serif.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/newsreader.woff2" crossorigin />
-    <!-- JetBrains Mono sets the nav, the eyebrows and the buttons, all of
-         which are above the fold on every page. Both weights: 400 for the
-         nav and footer, 700 for eyebrows and buttons. Without these the
-         browser only discovers them after parsing style.css, which is a
-         guaranteed flash of unstyled nav on every pageview. -->
-    <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/jetbrains-mono-400.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
+          href="/assets/fonts/figtree.woff2" crossorigin />
 
     <link rel="stylesheet" href="/assets/tokens.css" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260929" />
+    <link rel="stylesheet" href="/assets/style.css?v=20261102" />
   </head>
   <body>
+    <svg class="paper-defs" aria-hidden="true" focusable="false"><filter id="torn" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter></svg>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">
@@ -72,22 +66,22 @@
         <section class="section">
           <p class="eyebrow">about the lab</p>
           <h1 style="margin-bottom: 1.5rem">Good questions.<br>Experiments you can inspect.</h1>
-          <p class="lede">plicara is an independent AI research lab. We study how systems behave, what makes them useful, and how to tell when they work.</p>
+          <p class="lede">plicara is an independent AI research lab. I study how systems behave, what makes them useful, and how to tell when they work.</p>
         </section>
         <section class="section" aria-labelledby="questions">
-          <div class="section-head"><h2 id="questions">What we are curious about</h2><p class="eyebrow">01. questions</p></div>
+          <div class="section-head"><h2 id="questions">What I am curious about</h2><p class="eyebrow">01. questions</p></div>
           <div class="focus-grid">
             <div class="focus"><h3>Evaluation</h3><p>What does a benchmark actually measure? Where does success on a test stop predicting success in use?</p></div>
             <div class="focus"><h3>Systems around models</h3><p>How do tools, interfaces and the information available to a model change what it can do?</p></div>
           </div>
         </section>
         <section class="section" aria-labelledby="practice">
-          <div class="section-head"><h2 id="practice">How we investigate</h2><p class="eyebrow">02. practice</p></div>
+          <div class="section-head"><h2 id="practice">How I investigate</h2><p class="eyebrow">02. practice</p></div>
           <p class="section-intro">Start with a concrete question and a simple baseline. Build an experiment, inspect the failures, and revise the explanation when the evidence changes. State the limits alongside the result.</p>
         </section>
         <section class="section" aria-labelledby="share">
-          <div class="section-head"><h2 id="share">What we share</h2><p class="eyebrow">03. work in the open</p></div>
-          <p class="section-intro">Research articles, benchmarks and small tools that help others investigate the same questions. We aim to publish the evidence needed to check a claim, and identify gaps when that evidence is incomplete.</p>
+          <div class="section-head"><h2 id="share">What I share</h2><p class="eyebrow">03. work in the open</p></div>
+          <p class="section-intro">Research articles, benchmarks and small tools that help others investigate the same questions. I aim to publish the evidence needed to check a claim, and to name the gaps when that evidence is incomplete.</p>
           <div class="cta-row"><a class="btn btn-primary" href="/research/">Explore the research <span aria-hidden="true">&rarr;</span></a><a class="btn btn-ghost" href="mailto:info@plicara.ai">Get in touch</a></div>
         </section>
         <section class="section" aria-labelledby="elsewhere">

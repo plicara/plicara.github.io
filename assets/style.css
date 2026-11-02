@@ -1,42 +1,33 @@
 /* Plicara Labs — site styles
  *
- * The palette, the four schemes and the two type systems come from
- * assets/tokens.css, which is a copy of tokens/tokens.css in the public
- * plicara-brand repo. Do not edit the tokens here — change them there and
- * run `python3 tools/vendor.py --sync`, which the vendor-parity CI job
- * enforces, so the site and the brand guide cannot drift.
+ * One scheme, one type system: cut paper (2026-11). The palette, the two
+ * lights (daylight and lamplight) and the typeset come from assets/tokens.css,
+ * a copy of tokens/tokens.css in the public plicara-brand repo. Do not edit
+ * the tokens here; change them there and run `tools/vendor.py --sync`, which
+ * the vendor-parity CI job enforces.
+ *
+ * Every page, lab and benchmarks alike, uses this one stylesheet and no
+ * data-scheme. Colour arrives as flat paper blocks (fired, pine, pink,
+ * butter) with torn edges and as the hand-drawn plane glyphs, on a kraft
+ * ground with a little grain.
  *
  * Values and drawings: https://github.com/plicara/plicara-brand
- * Rules (naming, voice, usage): docs/brand.md in the lab's private notebook.
- *
- * Scheme use on this site:
- *   twilight / cel   the lab and the models   — default, /models/
- *   technical         benchmarks and tools     — the #tools band, /tools/,
- *                     and /benchmarks/*; resolves blueprint at night and
- *                     notepad by day, so neither area pins a mode on the
- *                     reader
  */
 
 /* --- faces --------------------------------------------------------------- */
 /* Self-hosted. No external requests, by design. */
 
 @font-face {
-  font-family: "Fraunces";
-  src: url("fonts/fraunces.woff2") format("woff2-variations");
-  font-weight: 100 900;
+  font-family: "Hedvig Letters Serif";
+  src: url("fonts/hedvig-letters-serif.woff2") format("woff2");
+  font-weight: 400;
   font-display: swap;
 }
 @font-face {
-  font-family: "Newsreader";
-  src: url("fonts/newsreader.woff2") format("woff2-variations");
-  font-weight: 200 800;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Archivo";
-  src: url("fonts/archivo.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-stretch: 62% 125%;
+  font-family: "Figtree";
+  src: url("fonts/figtree.woff2") format("woff2-variations"),
+       url("fonts/figtree.woff2") format("woff2");
+  font-weight: 300 900;
   font-display: swap;
 }
 @font-face {
@@ -60,27 +51,39 @@
 
 html { -webkit-text-size-adjust: 100%; }
 
-body,
-[data-scheme] {
-  /* --pl-face-body follows the scheme's typeset: Newsreader in the warm half,
-     Archivo in the technical half. Using --pl-font-body here instead would
-     pin every scheme to the serif. */
-  font-family: var(--pl-face-body);
-}
-
 body {
   margin: 0;
+  font-family: var(--pl-face-body);
   font-size: 18px;
   line-height: 1.62;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
+
+/* Paper grain over everything. Fixed, so it does not scroll with the page,
+   and never interactive. Multiply darkens kraft a touch; under lamplight it
+   lightens umber instead, at a third of the strength. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.26;
+  mix-blend-mode: multiply;
+}
+@media (prefers-color-scheme: dark) {
+  body::after { opacity: 0.08; mix-blend-mode: screen; }
+}
+@media print { body::after { display: none; } }
 
 .wrap {
   width: min(100% - 2.5rem, 74rem);
   margin-inline: auto;
 }
 
-a { color: inherit; }
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
 :focus-visible {
   outline: 2px solid var(--pl-accent);
@@ -90,34 +93,27 @@ a { color: inherit; }
 .skip-link {
   position: absolute;
   left: -9999px;
-  background: var(--pl-accent);
-  color: var(--pl-accent-on);
+  background: var(--pl-text);
+  color: var(--pl-bg);
   padding: 0.6rem 1rem;
-  font-family: var(--pl-font-mono);
-  font-size: 0.8rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 999px;
 }
-.skip-link:focus { left: 1rem; top: 1rem; z-index: 10; }
+.skip-link:focus { left: 1rem; top: 1rem; z-index: 60; }
+
+/* The SVG that carries the torn-edge filters. Every page includes it once,
+   right after <body>. */
+.paper-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 /* --- type roles ---------------------------------------------------------- */
 
-/* CASE. One rule, both typesets, no exceptions:
- *
- *   headings are sentence case      — warm and technical alike
- *   uppercase belongs to mono only  — eyebrows, nav, buttons, tags, pills,
- *                                     column heads
- *
- * Uppercase is what marks a label as a label. Spending it on headings too
- * would leave the two roles looking the same, and it would wreck the package
- * names in the Code band — regexbench and labloop are identifiers, and
- * REGEXBENCH is a different string.
- *
- * Display roles are LOWERCASE (2026-08, brand.md § Typography): headlines,
- * the lab name, section titles. Professional with an air of levity, and a
- * property of the role rather than something to remember per heading. */
+/* CASE. Display and label roles are lowercase; body text keeps its capitals.
+   The transform makes it a property of the role rather than a thing to
+   remember per heading. Identifiers such as regexbench are unchanged by it. */
 h1, h2, h3 {
   font-family: var(--pl-face-display);
-  font-variation-settings: var(--pl-display-settings);
-  font-weight: var(--pl-display-weight);
+  font-weight: 400;
   letter-spacing: var(--pl-tracking-display);
   text-transform: lowercase;
   line-height: 1.04;
@@ -125,17 +121,14 @@ h1, h2, h3 {
   margin: 0;
 }
 
-/* The display face also sets row headers in data tables — model names, phase
-   numbers. Same case rule applies. */
 .data-table tbody th { text-transform: lowercase; }
 
-/* Eyebrows are lowercase by decision (2026-08): "01. the mission", not
-   "01. THE MISSION". The other mono labels (nav, buttons, tags, column heads)
-   keep uppercase until the wider branding pass. */
+/* Labels: eyebrows, nav, buttons, tags, column heads. Lowercase, in the body
+   face at a heavier weight. */
 .eyebrow {
-  font-family: var(--pl-font-mono);
-  font-weight: 700;
-  font-size: 0.72rem;
+  font-family: var(--pl-face-body);
+  font-weight: 600;
+  font-size: 0.82rem;
   letter-spacing: var(--pl-tracking-label);
   text-transform: lowercase;
   color: var(--pl-text-muted);
@@ -143,8 +136,6 @@ h1, h2, h3 {
 }
 
 .mono,
-.tag,
-.tags,
 code {
   font-family: var(--pl-font-mono);
   font-variant-numeric: tabular-nums;
@@ -153,71 +144,351 @@ code {
 /* --- header -------------------------------------------------------------- */
 
 .site-header {
-  border-bottom: 1px solid var(--pl-rule);
   position: sticky;
   top: 0;
+  z-index: 20;
   background: var(--pl-bg);
-  z-index: 5;
 }
 .site-header .wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  padding-block: 1rem;
+  gap: 0.75rem 1.75rem;
+  padding-block: 1.1rem;
   flex-wrap: wrap;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.6rem;
   text-decoration: none;
-  font-family: var(--pl-face-display);
-  font-variation-settings: var(--pl-display-settings);
-  font-weight: var(--pl-display-weight);
-  font-size: 1.15rem;
-  letter-spacing: var(--pl-tracking-display);
-  /* The in-page header sets the name in the surface's display face beside
-     the mark — lowercase either way (brand.md § Logo). */
+  font-family: var(--pl-face-body);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
   text-transform: lowercase;
 }
-.brand svg { display: block; color: var(--pl-accent); flex: none; }
 
-/* The header .wrap wraps the nav onto its own line, but the nav has to wrap
-   its own items too: five uppercase mono labels measure ~408px, which is
-   wider than a 390px phone, and without this the page scrolls sideways. The
-   row gap is tighter than the column gap so a wrapped second row sits close
-   to the first rather than reading as a separate block. */
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.6rem;
-  font-family: var(--pl-font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  gap: 0.35rem 1.4rem;
+  font-weight: 500;
+  font-size: 0.98rem;
+  text-transform: lowercase;
 }
-.site-nav a {
+.site-nav a { text-decoration: none; }
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  text-decoration: underline wavy var(--pl-fired);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
+/* --- torn paper ---------------------------------------------------------- */
+/* A block of flat colour with ragged edges. The colour sits on a ::before
+   layer that carries the displacement filter, so the text above it stays
+   sharp. Set the colour with --block and the ink with --block-ink. */
+
+.torn {
+  position: relative;
+  isolation: isolate;
+  --block: var(--pl-surface);
+  --block-ink: var(--pl-text);
+  color: var(--block-ink);
+}
+.torn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--block);
+  filter: url(#torn);
+}
+.block-fired  { --block: var(--pl-fired);  --block-ink: var(--pl-on-fired); }
+.block-pine   { --block: var(--pl-pine);   --block-ink: var(--pl-on-pine); }
+.block-pink   { --block: var(--pl-pink);   --block-ink: var(--pl-on-pink); }
+.block-butter { --block: var(--pl-butter); --block-ink: var(--pl-on-butter); }
+/* An unfilled block: a dashed outline, for things that are not here yet. */
+.block-empty  { --block: transparent; --block-ink: var(--pl-text); }
+.block-empty::before { border: 2px dashed var(--pl-text-muted); }
+
+/* Hand-drawn glyphs. Light builds by day; the -dark builds swap in through
+   <picture> where a glyph sits on the page ground. */
+.glyph { display: block; height: auto; }
+
+/* --- buttons and tags ---------------------------------------------------- */
+
+.cta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.6rem; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.25rem;
+  border-radius: 999px;
   text-decoration: none;
+  font-family: var(--pl-face-body);
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-transform: lowercase;
+  border: 1.5px solid var(--pl-text);
+}
+.btn-primary { background: var(--pl-text); color: var(--pl-bg); }
+.btn-ghost { background: transparent; color: var(--pl-text); }
+.btn:hover { text-decoration: underline; text-underline-offset: 3px; }
+.arrow { display: inline-block; }
+
+.tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: auto; padding-top: 0.4rem; }
+.tag {
+  font-family: var(--pl-face-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: lowercase;
+  padding: 0.18rem 0.65rem;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
   color: var(--pl-text-muted);
-  padding-bottom: 2px;
-  border-bottom: 2px solid transparent;
 }
-.site-nav a:hover { color: var(--pl-text); border-bottom-color: var(--pl-accent); }
+.tag[data-state="live"] { background: var(--pl-fired); color: var(--pl-on-fired); border-color: var(--pl-fired); }
+.tag[data-state="wip"] { border-style: dashed; }
 
-/* --- hero ---------------------------------------------------------------- */
+/* --- sections ------------------------------------------------------------ */
 
-.hero { padding-block: clamp(3.5rem, 9vw, 7.5rem) clamp(2.5rem, 6vw, 5rem); }
-.hero-inner { display: grid; gap: 1.4rem; }
-.hero h1 {
-  font-size: clamp(2.6rem, 6.4vw, 5.1rem);
-  max-width: 18ch;
+.section { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+
+.section-head {
+  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  flex-wrap: wrap;
+}
+.section-head h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); }
+.section-head p { margin: 0; }
+
+.section-intro {
+  font-size: 1.12rem;
+  color: var(--pl-text-muted);
+  max-width: var(--pl-measure);
+  margin: 0;
 }
 
-/* The mark and the wordmark together. In-page headers may set the name in the
-   surface's display face beside the mark — the mark carries the identity, the
-   letterforms follow the page's register. */
+.lede {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  color: var(--pl-text-muted);
+  max-width: 58ch;
+  margin: 0;
+}
+
+.note {
+  margin: 1.5rem 0 0;
+  color: var(--pl-text-muted);
+  font-size: 0.95rem;
+  max-width: 62ch;
+}
+.note strong { color: var(--pl-text); font-weight: 600; }
+
+/* --- home ---------------------------------------------------------------- */
+
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-block: 0.75rem clamp(2.5rem, 6vw, 4rem);
+}
+.hero-card {
+  padding: clamp(1.75rem, 5vw, 3.5rem);
+  min-height: clamp(20rem, 38vw, 28rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.hero-card .hero-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: lowercase;
+}
+.hero-card h1 { font-size: clamp(2.6rem, 6.2vw, 5.2rem); line-height: 0.98; max-width: 12ch; }
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+.hero-logo { width: min(100%, 27rem); }
+.hero-side p { font-size: 1.15rem; max-width: 34ch; margin: 0; }
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr));
+  gap: 1.1rem;
+}
+.tile {
+  min-height: 21rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow: hidden;
+  text-decoration: none;
+}
+.tile h3 { font-size: 2.15rem; }
+.tile p { margin: 0; max-width: 30ch; }
+.tile .tile-latest {
+  margin-top: auto;
+  max-width: 58%;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: underline;
+}
+.tile .glyph {
+  position: absolute;
+  z-index: -1;
+  width: 13rem;
+  right: -2.75rem;
+  bottom: -3.25rem;
+  transform: rotate(18deg);
+}
+a.tile:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; }
+.tile .soon {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  background: var(--pl-text);
+  color: var(--pl-bg);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: lowercase;
+  transform: rotate(-3deg);
+}
+
+.toolrow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+.stickers { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+.sticker {
+  width: min(100%, 22rem);
+  padding: 1.4rem 1.5rem;
+  display: grid;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+.sticker h3 { font-size: 1.75rem; }
+.sticker p { margin: 0; }
+.sticker code { font-size: 0.85rem; opacity: 0.9; }
+a.sticker:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; }
+.flyer { width: min(100%, 22rem); justify-self: center; transform: rotate(-14deg); }
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 1.75rem;
+}
+.principles .glyph { width: 2.75rem; margin-bottom: 0.6rem; }
+.principles h3 { font-size: 1.35rem; margin-bottom: 0.35rem; }
+.principles p { margin: 0; color: var(--pl-text-muted); font-size: 0.98rem; }
+
+.follow p { margin: 0; max-width: 60ch; }
+.follow .cta-row { margin-top: 1.1rem; }
+
+@media (max-width: 48rem) {
+  .home-hero, .toolrow { grid-template-columns: 1fr; }
+  .hero-card { min-height: 0; }
+  .hero-logo { width: min(100%, 18rem); }
+  .flyer { width: 13rem; order: -1; }
+}
+
+/* --- section pages ------------------------------------------------------- */
+
+.focus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.75rem;
+}
+.focus h3 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+.focus p { color: var(--pl-text-muted); margin: 0; font-size: 0.98rem; }
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1.25rem;
+}
+
+/* A card is a sheet of linen torn from the pad. The title link stretches over
+   the whole card; links in the body sit above the stretch. Nothing moves on
+   hover: the title underlines. */
+.card {
+  position: relative;
+  isolation: isolate;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-width: 0;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--pl-surface);
+  filter: url(#torn);
+}
+.card h2, .card h3 { font-size: 1.6rem; }
+.card-title { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+.card-title a { text-decoration: none; }
+.card-title a::after { content: ""; position: absolute; inset: 0; }
+.card:hover .card-title h2,
+.card:hover .card-title h3 { text-decoration: underline; text-decoration-thickness: 2px; }
+.card p { margin: 0; color: var(--pl-text-muted); font-size: 0.97rem; }
+.card p a { position: relative; z-index: 1; }
+.card pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.contact-card {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  flex-wrap: wrap;
+}
+.contact-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--pl-surface);
+  filter: url(#torn);
+}
+.contact-card p { margin: 0; color: var(--pl-text-muted); max-width: 48ch; }
+.btn-mail { text-transform: none; }
+
+/* The band is retired: benchmarks and tools sit on the same page ground as
+   everything else. Kept as a plain wrapper so older markup still lays out. */
+.band { padding: 0; }
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  background: var(--pl-mark-small) center / contain no-repeat;
+}
 .hero-lockup { display: flex; align-items: center; gap: clamp(1.1rem, 2.6vw, 1.9rem); flex-wrap: wrap; }
 .hero-mark {
   width: clamp(78px, 11vw, 132px);
@@ -225,129 +496,36 @@ code {
   flex: none;
   background: var(--pl-mark) center / contain no-repeat;
 }
-.lede {
-  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-  color: var(--pl-text-muted);
-  max-width: 58ch;
-  margin: 0;
-}
 
-.cta-row { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.6rem; }
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.72rem 1.25rem;
-  text-decoration: none;
-  font-family: var(--pl-font-mono);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  border: 1px solid transparent;
+/* The mark is a colour drawing, so it is a background image rather than a
+   mask: sumi outline by day, cream outline at night. Root-relative so pages
+   in subdirectories resolve it. */
+:root {
+  --pl-mark: url("/assets/brand/mark-colour.svg");
+  --pl-mark-small: url("/assets/brand/mark-colour-small.svg");
 }
-.btn-primary {
-  background: var(--pl-orange);
-  color: var(--pl-on-orange);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pl-mark: url("/assets/brand/mark-colour-dark.svg");
+    --pl-mark-small: url("/assets/brand/mark-colour-small-dark.svg");
+  }
 }
-.btn-primary:hover { filter: brightness(1.07); }
-.btn-ghost {
-  border-color: var(--pl-rule);
-  color: var(--pl-text);
-}
-.btn-ghost:hover { border-color: var(--pl-accent); }
-.arrow { transition: transform 140ms ease-out; }
-.btn:hover .arrow { transform: translateX(3px); }
-@media (prefers-reduced-motion: reduce) {
-  .arrow { transition: none; }
-  .btn:hover .arrow { transform: none; }
-}
-
-/* --- sections ------------------------------------------------------------ */
-
-.section { padding-block: clamp(2.75rem, 6vw, 5rem); }
-
-.section-head {
-  border-top: 2px solid var(--pl-text);
-  padding-top: 0.9rem;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.section-head h2 { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
-.section-head p { margin: 0; }
-
-/* --- focus grid ---------------------------------------------------------- */
-
-.focus-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1.75rem;
-}
-.focus h3 { font-size: 1.2rem; margin-bottom: 0.4rem; }
-.focus p { color: var(--pl-text-muted); margin: 0; font-size: 0.97rem; }
-
-/* --- projects ------------------------------------------------------------ */
-
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: 1.25rem;
-}
-.card {
-  background: var(--pl-surface);
-  border: 1px solid var(--pl-rule);
-  padding: 1.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  min-width: 0;
-}
-.card-title { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
-/* A card's heading level depends on where the card sits, not on what a card
-   is: on the home page the grid sits under <h2>Tools</h2> so the cards are
-   h3, and on /tools/ the same grid is the page's top-level content so they
-   are h2. The style belongs to the role, so it matches on both rather than
-   forcing one page to skip a level to reach the rule. */
-.card-title h2, .card-title h3 { font-size: 1.1rem; }
-.card p { margin: 0; color: var(--pl-text-muted); font-size: 0.95rem; }
-.card pre { white-space: pre-wrap; overflow-wrap: anywhere; }
-
-.tags { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-top: auto; padding-top: 0.4rem; }
-.tag {
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.55rem;
-  border: 1px solid var(--pl-rule);
-  color: var(--pl-text-muted);
-}
-.tag[data-state="live"] { background: var(--pl-orange); color: var(--pl-on-orange); border-color: transparent; }
 
 /* --- footer -------------------------------------------------------------- */
 
-.site-footer {
-  border-top: 1px solid var(--pl-rule);
-  padding-block: 2rem 3rem;
-  margin-top: 2rem;
-}
+.site-footer { padding-block: 0 3rem; margin-top: 2rem; }
 .site-footer .wrap {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem 1.5rem;
   flex-wrap: wrap;
-  font-family: var(--pl-font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--pl-text-muted);
+  padding-top: 1.75rem;
+  border-top: 1.5px solid var(--pl-text);
+  font-weight: 500;
+  text-transform: lowercase;
 }
-.footer-links { display: flex; gap: 1.4rem; }
-.site-footer a { text-decoration: none; }
+.footer-links { display: flex; gap: 0.5rem 1.4rem; flex-wrap: wrap; }
+.site-footer a { text-decoration: underline; }
 .site-footer a:hover { color: var(--pl-accent); }
 
 /* --- 404 ----------------------------------------------------------------- */
@@ -359,98 +537,12 @@ code {
   gap: 1rem;
   padding-block: 4rem;
 }
-.notfound h1 { font-size: clamp(2.4rem, 6vw, 4rem); }
+.notfound h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); }
 
-/* --- wide content -------------------------------------------------------- */
+/* --- utilities ----------------------------------------------------------- */
 
 table { width: 100%; border-collapse: collapse; }
 .table-wrap { overflow-x: auto; position: relative; }
-
-/* --- banded scheme ------------------------------------------------------- */
-/* A scheme that paints its own ground must be full-bleed and must carry inline
-   padding. An inset rectangle with flush text reads as a mistake — the ground
-   has to run to the edge of the viewport, and the content has to sit in .wrap
-   like everything else. */
-
-.band {
-  padding-block: clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2.5rem);
-}
-
-/* The band's inked edge already marks the entry and exit, so the first and
-   last sections inside it do not need their full padding on top of that. */
-.band .section:first-child { padding-top: clamp(1rem, 2.5vw, 2rem); }
-.band .section:last-child { padding-bottom: clamp(1.5rem, 3vw, 2.5rem); }
-
-/* The card's title is the repository link, stretched over the whole card so
-   the card stays clickable; links inside the body sit above the stretch. Kept
-   as a div-plus-stretched-link rather than one big anchor so a card can carry
-   links of its own (labloop credits autoresearch). */
-.card { position: relative; transition: border-color 140ms ease-out; }
-.card:hover { border-color: var(--pl-accent); }
-.card-title a { text-decoration: none; }
-.card-title a::after { content: ""; position: absolute; inset: 0; }
-.card:hover .card-title h2,
-.card:hover .card-title h3 { text-decoration: underline; text-underline-offset: 3px; }
-.card p a { position: relative; z-index: 1; }
-@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
-
-/* --- brand mark ---------------------------------------------------------- */
-/* Masked rather than inlined, so the mark takes the scheme's accent without
-   duplicating 3 KB of path data in every page that shows it. */
-
-/* THE MARK IS SHOWN IN COLOUR, so it is a background-image rather than a
-   masked shape: a mask can only take one colour, and the colour build carries
-   rust, orange and teal facets under the line. That costs the two builds
-   below, because the outline is sumi on light grounds and cream on dark ones,
-   and a single file cannot be both.
-   Root-relative on purpose: a url() inside a custom property resolves against
-   the stylesheet that consumes it, so a relative path would break the pages
-   in subdirectories. */
-:root {
-  --pl-mark: url("/assets/brand/mark-colour-dark.svg");
-  --pl-mark-small: url("/assets/brand/mark-colour-small-dark.svg");
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-scheme]) {
-    --pl-mark: url("/assets/brand/mark-colour.svg");
-    --pl-mark-small: url("/assets/brand/mark-colour-small.svg");
-  }
-}
-[data-scheme="twilight"],
-[data-scheme="blueprint"] {
-  --pl-mark: url("/assets/brand/mark-colour-dark.svg");
-  --pl-mark-small: url("/assets/brand/mark-colour-small-dark.svg");
-}
-[data-scheme="cel"],
-[data-scheme="notepad"] {
-  --pl-mark: url("/assets/brand/mark-colour.svg");
-  --pl-mark-small: url("/assets/brand/mark-colour-small.svg");
-}
-/* Technical follows the OS, so its mark has to follow the same switch —
-   without this pair it would fall through to :root's dark build and put a
-   cream-outlined mark on a white page. */
-[data-scheme="technical"] {
-  --pl-mark: url("/assets/brand/mark-colour-dark.svg");
-  --pl-mark-small: url("/assets/brand/mark-colour-small-dark.svg");
-}
-@media (prefers-color-scheme: light) {
-  [data-scheme="technical"] {
-    --pl-mark: url("/assets/brand/mark-colour.svg");
-    --pl-mark-small: url("/assets/brand/mark-colour-small.svg");
-  }
-}
-
-/* The small build is the same drawing as the hero, one weight heavier, so
-   the line holds at 30px. It is a weight change and nothing else: the back
-   range stays in, because the header and the hero have to be one logo. */
-.brand-mark {
-  width: 30px;
-  height: 30px;
-  flex: none;
-  background: var(--pl-mark-small) center / contain no-repeat;
-}
-
-/* --- utilities ----------------------------------------------------------- */
 
 .visually-hidden {
   position: absolute;
@@ -462,15 +554,10 @@ table { width: 100%; border-collapse: collapse; }
 }
 
 /* --- mission ------------------------------------------------------------- */
-
-/* Deliberately NOT lowercased, though it is set in the display face. This is
-   a quotation, not a display role, and it contains an acronym — "ai systems"
-   reads as a typo rather than as levity. brand.md carves this out: the
-   lowercase transform is for display roles; quoted text keeps its capitals. */
+/* Not lowercased, though it is set in the display face: it is a quotation
+   with an acronym in it, and "ai systems" reads as a typo. */
 .mission-statement {
   font-family: var(--pl-face-display);
-  font-variation-settings: var(--pl-display-settings);
-  font-weight: var(--pl-display-weight);
   letter-spacing: var(--pl-tracking-display);
   font-size: clamp(1.45rem, 2.8vw, 2rem);
   line-height: 1.28;
@@ -478,17 +565,14 @@ table { width: 100%; border-collapse: collapse; }
   max-width: 60ch;
   margin: 0 0 1.6rem;
 }
-
 .mission-body { max-width: var(--pl-measure); }
 .mission-body p { color: var(--pl-text-muted); margin: 0 0 1rem; }
 .mission-body p:last-child { margin-bottom: 0; }
 
-/* Short intro line under a section head. */
-.section-intro {
-  font-size: 1.12rem;
-  color: var(--pl-text-muted);
-  max-width: var(--pl-measure);
-  margin: 0;
+.social-links { flex-wrap: wrap; margin-top: 0.6rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 
 /* --- data tables --------------------------------------------------------- */
@@ -512,11 +596,11 @@ table { width: 100%; border-collapse: collapse; }
 .data-table td:last-child { padding-right: 0; }
 
 .data-table thead th {
-  font-family: var(--pl-font-mono);
-  font-weight: 700;
-  font-size: 0.68rem;
+  font-family: var(--pl-face-body);
+  font-weight: 600;
+  font-size: 0.8rem;
   letter-spacing: var(--pl-tracking-label);
-  text-transform: uppercase;
+  text-transform: lowercase;
   color: var(--pl-text-muted);
   border-bottom-width: 2px;
   border-bottom-color: var(--pl-text);
@@ -525,9 +609,8 @@ table { width: 100%; border-collapse: collapse; }
 
 .data-table tbody th {
   font-family: var(--pl-face-display);
-  font-variation-settings: var(--pl-display-settings);
-  font-weight: var(--pl-display-weight);
-  font-size: 1.04rem;
+  font-weight: 400;
+  font-size: 1.1rem;
   white-space: nowrap;
 }
 
@@ -536,6 +619,7 @@ table { width: 100%; border-collapse: collapse; }
 .data-table thead .num { text-align: right; }
 .data-table tbody tr:last-child th,
 .data-table tbody tr:last-child td { border-bottom: none; }
+
 
 /* --- the range ----------------------------------------------------------- */
 /* The model family, unnamed until there is something to name. One paper-plane
@@ -575,23 +659,6 @@ table { width: 100%; border-collapse: collapse; }
   border-color: var(--pl-text-muted);
 }
 
-/* --- contact ------------------------------------------------------------- */
-
-.contact-card {
-  background: var(--pl-surface);
-  border: 1px solid var(--pl-rule);
-  padding: clamp(1.4rem, 3vw, 2.2rem);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem 2rem;
-  flex-wrap: wrap;
-}
-.contact-card p { margin: 0; color: var(--pl-text-muted); max-width: 48ch; }
-
-/* An email address is an identifier, so the label rule's uppercase would make
-   it a different string. The button keeps the mono and drops the transform. */
-.btn-mail { text-transform: none; letter-spacing: 0.02em; font-size: 0.92rem; }
 
 /* --- preflight ----------------------------------------------------------- */
 /* The dedicated pages, before there is anything to show on them. */
@@ -602,7 +669,7 @@ table { width: 100%; border-collapse: collapse; }
   gap: 1.35rem;
   align-content: start;
 }
-.preflight h1 { font-size: clamp(2.4rem, 5.6vw, 4.2rem); max-width: 16ch; }
+.preflight h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); max-width: 16ch; }
 .preflight .cta-row { margin-top: 0.4rem; }
 
 /* --- results ------------------------------------------------------------- */
@@ -619,7 +686,7 @@ table { width: 100%; border-collapse: collapse; }
   gap: 1.35rem;
   align-content: start;
 }
-.results h1 { font-size: clamp(2.4rem, 5.6vw, 4.2rem); max-width: 20ch; }
+.results h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); max-width: 20ch; }
 .results .cta-row { margin-top: 0.4rem; }
 
 /* Row groups inside a data table — the bands a paired bootstrap resolves,
@@ -634,15 +701,16 @@ table { width: 100%; border-collapse: collapse; }
 .data-table tbody.group + tbody.group { border-top: 1px solid var(--pl-rule); }
 .data-table tbody.group + tbody.group > tr:first-child > th { padding-top: 1.25rem; }
 .data-table .group-head > th {
-  font-family: var(--pl-font-mono);
-  font-weight: 700;
-  font-size: 0.68rem;
+  font-family: var(--pl-face-body);
+  font-weight: 600;
+  font-size: 0.8rem;
   letter-spacing: var(--pl-tracking-label);
-  text-transform: uppercase;
+  text-transform: lowercase;
   color: var(--pl-text-muted);
   white-space: normal;
   padding-bottom: 0.35rem;
 }
+
 
 /* --- research ------------------------------------------------------------- */
 /* Long-form articles, generated from markdown by research/build.py. The
@@ -664,13 +732,13 @@ table { width: 100%; border-collapse: collapse; }
 
 .article-head { display: grid; gap: 0.9rem; margin-bottom: 2.25rem; }
 .article-head h1 {
-  font-size: clamp(2rem, 4.6vw, 3.2rem);
+  font-size: clamp(2.3rem, 5.2vw, 3.8rem);
   text-transform: lowercase;
   text-wrap: balance;
 }
 .article-meta {
-  font-family: var(--pl-font-mono);
-  font-size: 0.78rem;
+  font-weight: 500;
+  font-size: 0.92rem;
   color: var(--pl-text-muted);
   margin: 0;
 }
@@ -679,8 +747,8 @@ table { width: 100%; border-collapse: collapse; }
 .article-body h2,
 .article-body h3,
 .article-body h4 { text-transform: lowercase; margin: 2.2rem 0 0.7rem; }
-.article-body h2 { font-size: 1.5rem; }
-.article-body h3 { font-size: 1.2rem; }
+.article-body h2 { font-size: 1.9rem; }
+.article-body h3 { font-size: 1.4rem; }
 .article-body p { margin: 0 0 1rem; text-wrap: pretty; }
 .article-body a { text-decoration-thickness: 1px; text-underline-offset: 2px; }
 .article-body ul,
@@ -690,7 +758,7 @@ table { width: 100%; border-collapse: collapse; }
 .article-body blockquote {
   margin: 1.4rem 0;
   padding: 0.2rem 0 0.2rem 1.1rem;
-  border-left: 3px solid var(--pl-accent);
+  border-left: 3px solid var(--pl-fired);
   color: var(--pl-text-muted);
 }
 .article-body blockquote p:last-child { margin-bottom: 0; }
@@ -727,11 +795,11 @@ table { width: 100%; border-collapse: collapse; }
   border-bottom: 1px solid var(--pl-rule);
 }
 .article-body th {
-  font-family: var(--pl-font-mono);
-  font-weight: 700;
-  font-size: 0.68rem;
+  font-family: var(--pl-face-body);
+  font-weight: 600;
+  font-size: 0.8rem;
   letter-spacing: var(--pl-tracking-label);
-  text-transform: uppercase;
+  text-transform: lowercase;
   color: var(--pl-text-muted);
   border-bottom-width: 2px;
   border-bottom-color: var(--pl-text);
@@ -741,7 +809,7 @@ table { width: 100%; border-collapse: collapse; }
 .article-body hr { border: 0; border-top: 1px solid var(--pl-rule); margin: 2rem 0; }
 .article-body .footnote { font-size: 0.88rem; color: var(--pl-text-muted); }
 
-.article-back { margin: 2.5rem auto 0; font-family: var(--pl-font-mono); font-size: 0.8rem; }
+.article-back { margin: 2.5rem auto 0; font-weight: 600; font-size: 0.95rem; text-transform: lowercase; }
 
 /* The index list: date in the margin, title and summary beside it. Shared
    by /research/ and /benchmarks/ — what the lab publishes reads as one
@@ -755,115 +823,46 @@ table { width: 100%; border-collapse: collapse; }
   border-top: 1px solid var(--pl-rule);
 }
 .research-entry:last-child { border-bottom: 1px solid var(--pl-rule); }
-.research-date { font-size: 0.78rem; color: var(--pl-text-muted); margin: 0; padding-top: 0.35rem; }
-.research-entry h2 { font-size: 1.25rem; text-transform: lowercase; margin: 0 0 0.3rem; }
-.research-entry h2 a { text-decoration: none; }
-.research-entry h2 a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.research-date { font-family: var(--pl-face-body); font-weight: 600; font-size: 0.85rem; text-transform: lowercase; color: var(--pl-text-muted); margin: 0; padding-top: 0.35rem; }
+.research-entry h2, .research-entry h3 { font-size: 1.6rem; text-transform: lowercase; margin: 0 0 0.3rem; }
+.research-entry h2 a, .research-entry h3 a { text-decoration: none; }
+.research-entry h2 a:hover, .research-entry h3 a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .research-entry p { margin: 0; color: var(--pl-text-muted); font-size: 0.95rem; max-width: 62ch; }
 @media (max-width: 40rem) {
   .research-entry { grid-template-columns: 1fr; gap: 0.15rem; }
   .research-date { padding-top: 0; }
 }
 
+
 /* --- print ---------------------------------------------------------------- */
 /* Article pages double as their own PDFs: build.py prints them through
    Chromium, so this block IS the PDF layout. One fixed light look, in
    literals on purpose; a PDF does not follow the reader's OS theme.
-   The literals are harbour's ink, smoke, mist and rule — keep them in step
-   with the palette by hand, since var() would resolve to the reader's
-   scheme and defeat the point. */
+   The literals are cut paper's ink, kraft and rule. Keep them in step with
+   the palette by hand, since var() would resolve to the reader's light or
+   dark preference and defeat the point. The faces are the site's own, so a
+   PDF reads in Hedvig Letters Serif and Figtree like the page. */
 @media print {
   @page { margin: 18mm 16mm; }
-  body { background: #ffffff; color: #05192B; font-size: 11pt; }
+  body { background: #ffffff; color: #171512; font-size: 11pt; }
   .site-header,
   .site-footer,
   .skip-link,
   .article-back,
   .article-pdf-link { display: none; }  /* the PDF linking to itself */
   .article { padding-block: 0; }
-  .article-head h1 { color: #05192B; }
+  .article-head h1 { color: #171512; }
   .article-meta,
-  .eyebrow { color: #05192B; }
-  .article-body a { color: #05192B; }
-  .article-body blockquote { border-left-color: #05192B; color: #05192B; }
+  .eyebrow { color: #171512; }
+  .article-body a { color: #171512; }
+  .article-body blockquote { border-left-color: #EE6A26; color: #171512; }
   .article-body code,
-  .article-body pre { background: #DEEAEE; }
-  .article-body pre { border-color: #CADADF; }
-  .article-body .footnote { color: #05192B; }
+  .article-body pre { background: #F4EFE4; }
+  .article-body pre { border-color: #DDD5C4; }
+  .article-body .footnote { color: #171512; }
   /* No scrollbars on paper: code wraps and tables lay out as tables again,
      so wide content folds instead of clipping at the page edge. */
   .article-body pre { white-space: pre-wrap; overflow-wrap: break-word; }
   .article-body table { display: table; width: 100%; }
 }
 
-/* --- offset print -------------------------------------------------------- */
-/* The mark is drawn in a thick ink outline with its flat colour fills nudged
-   off-register. Cards, buttons, pills and the header rules borrow that: a
-   heavy ink line and a hard shadow with no blur, in one colour per surface.
-   Ink is the page text colour, so it flips with the scheme. Scheme changes
-   happen along a straight inked edge, not a squiggle. */
-
-:root {
-  --pl-ink: var(--pl-text);
-  --pl-shadow: var(--pl-teal);
-  --pl-shadow-btn: var(--pl-duckegg);
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-scheme]) {
-    --pl-shadow: var(--pl-duckegg);
-    --pl-shadow-btn: var(--pl-teal);
-  }
-}
-[data-scheme="cel"], [data-scheme="notepad"] {
-  --pl-shadow: var(--pl-duckegg);
-  --pl-shadow-btn: var(--pl-teal);
-}
-
-.site-header { border-bottom: 3px solid var(--pl-ink); }
-.hero { border-bottom: 3px solid var(--pl-ink); }
-.band { border-block: 3px solid var(--pl-ink); }
-.section-head { border-top-width: 3px; }
-
-.hero-mark { filter: drop-shadow(6px 6px 0 var(--pl-shadow)); }
-
-.card,
-.contact-card {
-  border: 2px solid var(--pl-ink);
-  box-shadow: 6px 6px 0 var(--pl-shadow);
-  transition: transform 120ms ease-out, box-shadow 120ms ease-out;
-}
-.card:hover {
-  border-color: var(--pl-ink);
-  transform: translate(-2px, -2px);
-  box-shadow: 9px 9px 0 var(--pl-shadow);
-}
-/* Inside the technical band the shadow takes the band's accent. */
-.band .card,
-.band .contact-card { box-shadow: 6px 6px 0 var(--pl-accent); }
-.band .card:hover { box-shadow: 9px 9px 0 var(--pl-accent); }
-
-.btn {
-  border: 2px solid var(--pl-ink);
-  box-shadow: 4px 4px 0 var(--pl-shadow-btn);
-  transition: transform 120ms ease-out, box-shadow 120ms ease-out;
-}
-.btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 var(--pl-shadow-btn);
-  filter: none;
-}
-.btn-ghost { background: var(--pl-surface); border-color: var(--pl-ink); }
-
-.tag {
-  border: 1.5px solid currentColor;
-  border-radius: 999px;
-  padding-inline: 0.65rem;
-}
-.tag[data-state="live"] { border-color: var(--pl-ink); }
-
-@media (prefers-reduced-motion: reduce) {
-  .card, .btn { transition: none; }
-  .card:hover, .btn:hover { transform: none; }
-}
-
-.social-links { flex-wrap: wrap; margin-top: 0.6rem; }

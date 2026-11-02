@@ -838,27 +838,28 @@ table { width: 100%; border-collapse: collapse; }
 /* Article pages double as their own PDFs: build.py prints them through
    Chromium, so this block IS the PDF layout. One fixed light look, in
    literals on purpose; a PDF does not follow the reader's OS theme.
-   The literals are harbour's ink, smoke, mist and rule — keep them in step
-   with the palette by hand, since var() would resolve to the reader's
-   scheme and defeat the point. */
+   The literals are cut paper's ink, kraft and rule. Keep them in step with
+   the palette by hand, since var() would resolve to the reader's light or
+   dark preference and defeat the point. The faces are the site's own, so a
+   PDF reads in Hedvig Letters Serif and Figtree like the page. */
 @media print {
   @page { margin: 18mm 16mm; }
-  body { background: #ffffff; color: #05192B; font-size: 11pt; }
+  body { background: #ffffff; color: #171512; font-size: 11pt; }
   .site-header,
   .site-footer,
   .skip-link,
   .article-back,
   .article-pdf-link { display: none; }  /* the PDF linking to itself */
   .article { padding-block: 0; }
-  .article-head h1 { color: #05192B; }
+  .article-head h1 { color: #171512; }
   .article-meta,
-  .eyebrow { color: #05192B; }
-  .article-body a { color: #05192B; }
-  .article-body blockquote { border-left-color: #05192B; color: #05192B; }
+  .eyebrow { color: #171512; }
+  .article-body a { color: #171512; }
+  .article-body blockquote { border-left-color: #EE6A26; color: #171512; }
   .article-body code,
-  .article-body pre { background: #DEEAEE; }
-  .article-body pre { border-color: #CADADF; }
-  .article-body .footnote { color: #05192B; }
+  .article-body pre { background: #F4EFE4; }
+  .article-body pre { border-color: #DDD5C4; }
+  .article-body .footnote { color: #171512; }
   /* No scrollbars on paper: code wraps and tables lay out as tables again,
      so wide content folds instead of clipping at the page edge. */
   .article-body pre { white-space: pre-wrap; overflow-wrap: break-word; }

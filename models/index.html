@@ -9,29 +9,23 @@
       content="plicara has no model release yet. Explore the lab’s research, tools and benchmarks."
     />
     <link rel="canonical" href="https://plicara.ai/models/" />
-    <meta name="theme-color" content="#05192B" />
+    <meta name="theme-color" content="#F4EFE4" />
 
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon-180.png" />
 
+    <!-- The display serif and the body sans render above the fold on every
+         page; JetBrains Mono only sets figures and code, so it loads late. -->
     <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/fraunces.woff2" crossorigin />
+          href="/assets/fonts/hedvig-letters-serif.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/newsreader.woff2" crossorigin />
-    <!-- JetBrains Mono sets the nav, the eyebrows and the buttons, all of
-         which are above the fold on every page. Both weights: 400 for the
-         nav and footer, 700 for eyebrows and buttons. Without these the
-         browser only discovers them after parsing style.css, which is a
-         guaranteed flash of unstyled nav on every pageview. -->
-    <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/jetbrains-mono-400.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2"
-          href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
+          href="/assets/fonts/figtree.woff2" crossorigin />
 
     <link rel="stylesheet" href="/assets/tokens.css" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260929" />
+    <link rel="stylesheet" href="/assets/style.css?v=20261102" />
   </head>
   <body>
+    <svg class="paper-defs" aria-hidden="true" focusable="false"><filter id="torn" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter></svg>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">

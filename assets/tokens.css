@@ -4,21 +4,18 @@
  * docs/brand.md. Change them there first, then here, then regenerate the JSON
  * with `python3 build.py`.
  *
- * Two decisions shape this file.
+ * ONE SCHEME, ONE TYPE SYSTEM (2026-11). Cut paper: flat, bold paper colours
+ * on a kraft ground, a bookish serif for display and a clean sans for
+ * everything else. The four area schemes and the two typesets are retired;
+ * the lab, the essays, the benchmarks and the tools read as one brand.
  *
- * 1. FOUR SCHEMES, PAIRED BY AREA. Twilight/Cel carry the lab and the models;
- *    Blueprint/Notepad carry benchmarks and tools. A reader can tell which
- *    half of the lab they are in before reading a word.
+ * Two lights, chosen by the reader's OS:
+ *   daylight    kraft ground, ink text, pine accent    (default)
+ *   lamplight   umber ground, cream text, orange accent (prefers dark)
  *
- * 2. TWO TYPE SYSTEMS. Warm serif for the lab and the models, grotesque and
- *    mono for benchmarks and tools. JetBrains Mono is shared by both, which is
- *    what keeps them one brand rather than two.
- *
- * Apply a scheme with data-scheme on any element; nest freely.
- *   <html data-scheme="twilight">    lab, models        (dark)
- *   <html data-scheme="cel">         lab, models        (light)
- *   <html data-scheme="blueprint">   benchmarks, tools  (dark)
- *   <html data-scheme="notepad">     benchmarks, tools  (light)
+ * data-scheme="daylight" or "lamplight" pins one on any element. The retired
+ * names (twilight, cel, blueprint, notepad, technical) still resolve, to the
+ * matching light, so an old page does not break; do not use them in new work.
  */
 
 :root {
@@ -73,21 +70,39 @@
   --pl-print: #082C35;       /* derived: smoked slate; dark tools ground */
   --pl-drafting: #1D3E47;    /* raised surface on print */
 
+  /* --- palette: cut paper (2026-11) ---------------------------------------- */
+  --pl-kraft: #F4EFE4;       /* light ground: an unbleached sheet */
+  --pl-linen: #FBF8F1;       /* raised surface on kraft */
+  --pl-ink: #171512;         /* warm near-black; text on kraft and light fills */
+  --pl-umber: #1A1714;       /* dark ground: the same sheet under lamplight */
+  --pl-bark: #2A2520;        /* raised surface on umber */
+  --pl-fired: #EE6A26;       /* hot block colour; a fill only */
+  --pl-ember: #C9531A;       /* fired, darkened to a chart series on kraft */
+  --pl-pine: #0E5E50;        /* accent ink on kraft; block that holds cream */
+  --pl-sage: #4FB39E;        /* pine lifted for the dark ground */
+  --pl-pink: #EBAAB9;        /* block that holds ink */
+  --pl-butter: #F2CF5B;      /* block that holds ink */
+  --pl-stone: #CFC8B8;       /* not-counted marks in a chart; never text */
+
+  /* Guards: the only inks allowed on each block. Fired holds ink, not cream
+   * (cream on fired is 2.9:1). */
+  --pl-on-fired: #171512;
+  --pl-on-pine: #FAEBD3;
+  --pl-on-pink: #171512;
+  --pl-on-butter: #171512;
+
   /* --- type ------------------------------------------------------------- */
 
-  /* Warm system — the lab and the models. Fraunces is built on deliberate
-   * irregularity, which is the same argument the drawings make. */
-  --pl-font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --pl-font-body: "Newsreader", Georgia, "Times New Roman", serif;
-
-  /* Technical system — benchmarks and tools. */
-  --pl-font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
-
-  /* Shared by both. The through-line. */
+  /* One system. Hedvig Letters Serif for display, Figtree for body, labels
+   * and UI, JetBrains Mono for figures and code. --pl-font-sans is kept as an
+   * alias of the body face so older consumers still resolve. */
+  --pl-font-display: "Hedvig Letters Serif", Georgia, "Times New Roman", serif;
+  --pl-font-body: "Figtree", "Helvetica Neue", Arial, sans-serif;
+  --pl-font-sans: var(--pl-font-body);
   --pl-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --pl-tracking-label: 0.2em;
-  --pl-tracking-display: -0.01em;
+  --pl-tracking-label: 0.04em;
+  --pl-tracking-display: -0.02em;
 
   --pl-step-0: 1rem;
   --pl-step-1: 1.125rem;
@@ -101,163 +116,90 @@
 }
 
 /* --- schemes ------------------------------------------------------------- */
-/* Every pairing below clears WCAG AA for body text — including the accent on
- * a raised surface, which the previous palette did not. Series colours clear
- * AA large. Ratios are in tokens.json, generated rather than asserted, and
- * build.py fails loudly if any sanctioned pairing slips. */
+/* Every pairing below clears WCAG AA for body text, including the accent on
+ * the raised surface. Series colours clear AA large. Ratios are in
+ * tokens.json, generated rather than asserted. */
 
-/* Twilight — primary dark. The lab and the models. Deep water: night ground,
- * slate tiles, and the colour arriving through PANELS — teal and rust
- * grounds, orange fills, rust and duck-egg series — rather than
- * through the base ground. Dark pages are not monotone; they are dark paper
- * that pastel things sit on. */
-[data-scheme="twilight"] {
-  --pl-bg: var(--pl-night);
-  --pl-surface: var(--pl-slate);
-  --pl-text: var(--pl-cream);
-  --pl-text-muted: #9CB5BC;
-  --pl-rule: #25364A;
-  --pl-accent: var(--pl-orange);
-  --pl-accent-on: var(--pl-sumi);
-  --pl-series-1: var(--pl-duckegg);
-  --pl-series-2: var(--pl-apricot);
-  --pl-typeset: warm;
-}
-
-/* Cel — primary light. Warm paper, sumi ink, warm-white surfaces, one rust
- * accent. */
-[data-scheme="cel"] {
-  --pl-bg: var(--pl-paper);
-  --pl-surface: var(--pl-warmwhite);
-  --pl-text: var(--pl-sumi);
-  --pl-text-muted: #436974;
-  --pl-rule: #E5D5BB;
-  --pl-accent: var(--pl-rust);
-  --pl-accent-on: var(--pl-cream);
-  --pl-series-1: var(--pl-teal);
-  --pl-series-2: var(--pl-rust);
-  --pl-typeset: warm;
-}
-
-/* Blueprint — secondary dark. Benchmarks and tools, on smoked slate. */
-[data-scheme="blueprint"] {
-  --pl-bg: var(--pl-print);
-  --pl-surface: var(--pl-drafting);
-  --pl-text: var(--pl-white);
-  --pl-text-muted: #9CB5BC;
-  --pl-rule: #395760;
-  --pl-accent: var(--pl-orange);
-  --pl-accent-on: var(--pl-sumi);
-  --pl-series-1: var(--pl-apricot);
-  --pl-series-2: var(--pl-duckegg);
-  --pl-typeset: technical;
-}
-
-/* Notepad — secondary light. White page, mist tiles, teal accent.
- * For anything read at length. */
+/* Daylight: kraft ground, ink text, pine accent. The default. */
+:root,
+[data-scheme="daylight"],
+[data-scheme="cel"],
 [data-scheme="notepad"] {
-  --pl-bg: var(--pl-white);
-  --pl-surface: var(--pl-mist);
-  --pl-text: var(--pl-sumi);
-  --pl-text-muted: #436974;
-  --pl-rule: #CADADF;
-  --pl-accent: var(--pl-rust);
+  --pl-bg: var(--pl-kraft);
+  --pl-surface: var(--pl-linen);
+  --pl-text: var(--pl-ink);
+  --pl-text-muted: #5C554A;
+  --pl-rule: #DDD5C4;
+  --pl-accent: var(--pl-pine);
   --pl-accent-on: var(--pl-cream);
-  --pl-series-1: var(--pl-teal);
-  --pl-series-2: var(--pl-rust);
-  --pl-typeset: technical;
+  --pl-series-1: var(--pl-pine);
+  --pl-series-2: var(--pl-ember);
+  --pl-series-3: var(--pl-stone);
+  /* Kept for consumers that painted a "band"; it is the page now. */
+  --pl-band-bg: var(--pl-bg); --pl-band-surface: var(--pl-surface);
+  --pl-band-ink: var(--pl-accent);
+  --pl-typeset: cutpaper;
+  color-scheme: light;
 }
 
-/* Default, when nothing declares a scheme: the lab pair, following the OS. */
-:root { --pl-bg: #05192B; --pl-surface: #132538; --pl-text: #FAEBD3;
-        --pl-text-muted: #9CB5BC; --pl-rule: #25364A;
-        --pl-accent: var(--pl-orange); --pl-accent-on: var(--pl-sumi);
-        --pl-series-1: var(--pl-duckegg); --pl-series-2: var(--pl-apricot);
-        /* The technical band's ground, exposed so page furniture that
-         * straddles the boundary — seams, dividers — can reference it
-         * instead of hard-coding a colour. Follows the same switch. */
-        --pl-band-bg: var(--pl-print); --pl-band-surface: var(--pl-drafting);
-        --pl-band-ink: var(--pl-orange); }
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-scheme]) {
-    --pl-bg: var(--pl-paper); --pl-surface: var(--pl-warmwhite);
-    --pl-text: var(--pl-sumi); --pl-text-muted: #436974; --pl-rule: #E5D5BB;
-    --pl-accent: var(--pl-rust); --pl-accent-on: var(--pl-cream);
-    --pl-series-1: var(--pl-teal); --pl-series-2: var(--pl-rust);
-    --pl-band-bg: var(--pl-white); --pl-band-surface: var(--pl-mist);
-    --pl-band-ink: var(--pl-teal);
-  }
-}
-
-/* A technical band that FOLLOWS the page rather than pinning itself. Hard-
- * coding a band to notepad leaves a full-bleed white slab in the middle of a
- * dark page; this resolves to blueprint at night and notepad by day, using
- * the same dark-first shape :root uses for twilight/cel. */
-[data-scheme="technical"] {
-  --pl-bg: var(--pl-print);
-  --pl-surface: var(--pl-drafting);
-  --pl-text: var(--pl-white);
-  --pl-text-muted: #9CB5BC;
-  --pl-rule: #395760;
+/* Lamplight: umber ground, cream text, orange accent. */
+[data-scheme="lamplight"],
+[data-scheme="twilight"],
+[data-scheme="blueprint"] {
+  --pl-bg: var(--pl-umber);
+  --pl-surface: var(--pl-bark);
+  --pl-text: #F1EADB;
+  --pl-text-muted: #B3A994;
+  --pl-rule: #3A332B;
   --pl-accent: var(--pl-orange);
-  --pl-accent-on: var(--pl-sumi);
-  --pl-series-1: var(--pl-apricot);
-  --pl-series-2: var(--pl-duckegg);
-  --pl-typeset: technical;
+  --pl-accent-on: var(--pl-ink);
+  --pl-series-1: var(--pl-sage);
+  --pl-series-2: var(--pl-pink);
+  --pl-series-3: #4A433A;
+  --pl-band-bg: var(--pl-bg); --pl-band-surface: var(--pl-surface);
+  --pl-band-ink: var(--pl-accent);
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
+  :root:not([data-scheme="daylight"]),
   [data-scheme="technical"] {
-    --pl-bg: var(--pl-white);
-    --pl-surface: var(--pl-mist);
-    --pl-text: var(--pl-sumi);
-    --pl-text-muted: #436974;
-    --pl-rule: #CADADF;
-    --pl-accent: var(--pl-rust);
-    --pl-accent-on: var(--pl-cream);
-    --pl-series-1: var(--pl-teal);
-    --pl-series-2: var(--pl-rust);
+    --pl-bg: var(--pl-umber);
+    --pl-surface: var(--pl-bark);
+    --pl-text: #F1EADB;
+    --pl-text-muted: #B3A994;
+    --pl-rule: #3A332B;
+    --pl-accent: var(--pl-orange);
+    --pl-accent-on: var(--pl-ink);
+    --pl-series-1: var(--pl-sage);
+    --pl-series-2: var(--pl-pink);
+    --pl-series-3: #4A433A;
+    --pl-band-bg: var(--pl-bg); --pl-band-surface: var(--pl-surface);
+    --pl-band-ink: var(--pl-accent);
+    color-scheme: dark;
   }
 }
 
 /* --- roles --------------------------------------------------------------- */
 
-/* Any element carrying a scheme paints its own ground, so a scheme can be
- * applied to <html> or to a single <section> and behave the same either way. */
 body,
 [data-scheme] {
   background: var(--pl-bg);
   color: var(--pl-text);
 }
 
-/* Warm typeset — the lab and the models. */
-[data-scheme="twilight"], [data-scheme="cel"], :root:not([data-scheme]) {
+:root {
   --pl-face-display: var(--pl-font-display);
   --pl-face-body: var(--pl-font-body);
-  --pl-display-settings: "opsz" 96, "SOFT" 24, "WONK" 1;
-  --pl-display-weight: 600;
+  --pl-display-settings: normal;
+  --pl-display-weight: 400;
   --pl-body-weight: 400;
 }
 
-/* Technical typeset — benchmarks and tools. */
-[data-scheme="blueprint"], [data-scheme="notepad"],
-[data-scheme="technical"] {
-  --pl-face-display: var(--pl-font-sans);
-  --pl-face-body: var(--pl-font-sans);
-  --pl-display-settings: "wght" 800, "wdth" 125;
-  --pl-display-weight: 800;
-  --pl-body-weight: 400;
-}
-
-/* Display is LOWERCASE in both typesets — headlines, the lab name, section
- * titles. Professional, with an air of levity; the transform makes it
- * mechanical rather than a thing to remember. Proper nouns inside running
- * body text keep their capitals — the transform applies to display roles
- * only. */
+/* Display is LOWERCASE: headlines, the lab name, section titles. Proper nouns
+ * inside running body text keep their capitals. */
 .fh-display {
   font-family: var(--pl-face-display);
-  font-variation-settings: var(--pl-display-settings);
   font-weight: var(--pl-display-weight);
   letter-spacing: var(--pl-tracking-display);
   line-height: 1.02;
@@ -272,20 +214,18 @@ body,
   max-width: var(--pl-measure);
 }
 
-/* Figures are mono and tabular in BOTH systems. A flight time and an eval
- * score are the same kind of fact and must look like it. */
+/* Figures are mono and tabular. */
 .fh-data {
   font-family: var(--pl-font-mono);
   font-variant-numeric: tabular-nums;
 }
 
-/* The ONLY role that is uppercase. Display roles are lowercase — uppercase is
- * what marks a label as a label, and it never touches identifiers:
- * `regexbench` is a package name and REGEXBENCH is a different string. */
+/* Labels are lowercase too, in the body face at a heavier weight. Identifiers
+ * such as `regexbench` are safe under the transform. */
 .fh-label {
-  font-family: var(--pl-font-mono);
-  font-weight: 700;
-  text-transform: uppercase;
+  font-family: var(--pl-font-body);
+  font-weight: 600;
+  text-transform: lowercase;
   letter-spacing: var(--pl-tracking-label);
   color: var(--pl-text-muted);
 }

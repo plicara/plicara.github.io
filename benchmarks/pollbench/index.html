@@ -10,11 +10,15 @@
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon-180.png" />
-    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/archivo.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jetbrains-mono-400.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jetbrains-mono-700.woff2" crossorigin />
+    <!-- The display serif and the body sans render above the fold on every
+         page; JetBrains Mono only sets figures and code, so it loads late. -->
+    <link rel="preload" as="font" type="font/woff2"
+          href="/assets/fonts/hedvig-letters-serif.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2"
+          href="/assets/fonts/figtree.woff2" crossorigin />
+
     <link rel="stylesheet" href="/assets/tokens.css" />
-    <link rel="stylesheet" href="/assets/style.css?v=20260929" />
+    <link rel="stylesheet" href="/assets/style.css?v=20261102" />
     <style>
       .results { grid-template-columns: minmax(0, 1fr); }
       .data-table td.num { white-space: nowrap; }
@@ -106,7 +110,8 @@
       details.full-table[open] summary { margin-bottom: 1rem; }
     </style>
   </head>
-  <body data-scheme="technical">
+  <body>
+    <svg class="paper-defs" aria-hidden="true" focusable="false"><filter id="torn" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter></svg>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="wrap">

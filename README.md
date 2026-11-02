@@ -27,54 +27,46 @@ The guard's first version read the private notebook and needed a token secret th
 
 **One direction only.** `--sync` copies upstream → here and never the reverse. An edit to a vendored file in this repo is the thing that broke last time; `--check` will catch it and tell you to go upstream.
 
-### Schemes on this site
+### One scheme: cut paper
 
-Four schemes, paired by area of the lab, so a reader can tell which half they are in before reading a word:
-
-| Scheme | Where |
-| --- | --- |
-| **Twilight** (dark) / **Cel** (light) | Default — the hero, mission, models, principles, contact, and `/models/`. Warm typeset: Fraunces + Newsreader. |
-| **Blueprint** (dark) / **Notepad** (light) | Benchmarks and tools — the band holding `#tools`, `/tools/`, and `/benchmarks/*`. Applied as `data-scheme="technical"`, which resolves Blueprint at night and Notepad by day, so neither area pins a mode on the reader. Typeset: Archivo. |
-
-**`data-scheme` goes on `<body>`, not `<html>`, on the pages that set one.** `tokens.css` declares its default `:root` block *after* the scheme blocks, so a scheme on the root element loses the custom-property tie-break and the page renders Twilight regardless. Moving that default above the scheme blocks upstream would remove the constraint.
-
-Apply with `data-scheme` on any element. Schemes nest and paint their own ground, so a results table can sit inside a lab page in its own scheme.
-
-**A scheme that paints a ground must be full-bleed and must sit in `.wrap`.** Use `.band`, which does both. An inset rectangle with text flush to its edge reads as a mistake rather than a register change — the ground has to run to the edge of the viewport and the content has to keep the same measure as everything above it.
-
-### Seams
-
-Where two schemes meet, the ground changes along a **straight inked edge**: a 3px rule in the page's ink colour above and below the technical band, and under the hero. There is no squiggle.
-
-Cards, buttons, pills and the contact card take the mark's own language: a heavy ink outline and a hard, blur-free offset shadow, one colour per surface. The shadow is a token (`--pl-shadow`, `--pl-shadow-btn`), and inside the band it takes the band's accent.
-
-### Case
-
-The display rule changed in 2026-08 and `style.css` now follows it:
+Since 2026-11 every page uses **one scheme and one type system**, so the lab, the essays, the benchmarks and the tools read as one site. The old split (twilight/cel for the lab, a "technical" blueprint/notepad band with its own typeset for benchmarks and tools) is retired. No page sets `data-scheme`.
 
 | | |
 | --- | --- |
-| **Display roles** (`h1`–`h3`, the brand lockup, data-table row headers) | **Lowercase** — `text-transform: lowercase`, so it is a property of the role rather than a thing to remember per heading |
-| **Mono labels** (nav, buttons, tags, pills, column heads) | Uppercase, `0.2em` tracking |
-| **Eyebrows** | Lowercase mono — `01. the mission`, not `01. THE MISSION` |
+| **Daylight** (default) | Kraft ground, ink text, pine accent |
+| **Lamplight** (`prefers-color-scheme: dark`) | Umber ground, cream text, orange accent |
+| **Display** | Hedvig Letters Serif, lowercase |
+| **Body, labels, UI** | Figtree; labels lowercase at weight 600 |
+| **Figures and code** | JetBrains Mono |
+
+Colour arrives as **flat paper blocks** with torn edges: `.torn` plus one of `.block-fired`, `.block-pine`, `.block-pink`, `.block-butter` (or `.block-empty`, a dashed outline for things that are not here yet). The block colour sits on a `::before` layer with the `#torn` displacement filter, so the text above it stays sharp. Each block takes its ink from the brand's `--pl-on-*` guard. Fired holds ink, never cream. Cards and the contact card are linen sheets torn the same way. Nothing moves on hover; titles underline.
+
+**Every page carries the filter once**, as `<svg class="paper-defs">` right after `<body>`. `research/build.py` writes it into generated pages; hand-written pages carry it in their markup. A page without it shows square blocks, not broken ones.
+
+A light paper grain sits over the whole page (`body::after`), multiplied by day and screened at a third of the strength under lamplight. Print drops it.
+
+### Case
+
+| | |
+| --- | --- |
+| **Display roles** (`h1`–`h3`, the brand lockup, data-table row headers) | Lowercase, `text-transform: lowercase` |
+| **Labels** (nav, buttons, tags, eyebrows, column heads, footer) | Lowercase, Figtree 600 |
 | **Body text and pull quotes** | Keep their capitals |
 
-That last row is the one that is easy to get wrong. `brand.md` is explicit that **a quotation keeps its capitals even when set in the display face**, because a pull quote is body voice printed large rather than a display role. The mission statement on the home page is styled by `.mission-statement`, which deliberately does *not* inherit the `h1`–`h3` lowercase rule.
-
-Uppercase still marks a label as a label, and it would still wreck the package names — `regexbench` and `labloop` are identifiers, and `REGEXBENCH` is a different string — which is why the mono label role never contains one.
+A quotation keeps its capitals even when set in the display face. `.mission-statement` does not inherit the heading rule. Package names such as `regexbench` are unchanged by the lowercase transform, which is one reason the labels moved off uppercase.
 
 ### Fonts
 
-Self-hosted in `assets/fonts/`, no external requests. Fraunces and Newsreader are preloaded because they render the hero; Archivo and JetBrains Mono load normally. All four are open licence — Fraunces, Newsreader and Archivo are SIL OFL 1.1, JetBrains Mono is Apache-2.0.
+Self-hosted in `assets/fonts/`, no external requests. Hedvig Letters Serif and Figtree are preloaded because they render above the fold on every page; JetBrains Mono loads normally. Hedvig Letters Serif and Figtree are SIL OFL 1.1, JetBrains Mono is Apache-2.0.
 
 ### Illustration
 
-Drawn in the same language as the mark: thick ink outline, flat fills nudged off-register. The hero carries the mark itself, with an offset shadow behind it, and no wave field. `assets/brand/waves.py` is retained for reference but is no longer used by any page.
+The house mark and the paper-plane glyphs are the characters. The home page sets the mark large beside the title card and uses the planes on the tiles, beside the tools, and as icons for the principles. Where a glyph sits on the page ground it uses `<picture>` to swap in the `-dark` build under lamplight; on a coloured block it keeps the light build. `assets/brand/waves.py` is retained for reference but is no longer used by any page.
 
 
 ### The house mark
 
-**The mark is shown in colour**, so it is a `background-image` rather than a masked shape: a mask can only take one colour, and the colour build carries rust, orange and teal facets under the line. That costs two builds, because the outline is sumi on light grounds and cream on dark ones and a single file cannot be both. `style.css` resolves `--pl-mark` and `--pl-mark-small` per scheme, so markup just asks for the token.
+**The mark is shown in colour**, so it is a `background-image` rather than a masked shape: a mask can only take one colour, and the colour build carries rust, orange and teal facets under the line. That costs two builds, because the outline is sumi on light grounds and cream on dark ones and a single file cannot be both. `style.css` resolves `--pl-mark` and `--pl-mark-small` from the reader's light or dark preference, so markup just asks for the token. The home page hero uses `<picture>` for the same swap.
 
 | Where | File |
 | --- | --- |

@@ -2,9 +2,9 @@
 title: Pi profiles
 date: 2026-10-13
 summary: Pi lets you build your own agent, but gives you nowhere to put it. Part 1 is a small launcher that keeps a separate Pi setup for each kind of work, with shared session history. Part 2 is why I think the people who get deepest into Pi end up needing several agents, and a hypothesis about where the work is heading.
-author: Adrian Tame Jacobo
+author: Adrian Tame
 author_url: https://adriantj.github.io/
-publisher: Plicara Labs
+publisher: plicara labs
 slug: pi-profiles
 ---
 
@@ -33,7 +33,7 @@ slug: pi-profiles
   .pf-fig figcaption { margin-top: 1rem; color: var(--pl-text-muted); font-size: .9rem; line-height: 1.5; }
 </style>
 
-Two pieces on one idea, kept together. **[Part 1](#part-1)** is the practical one: a small launcher I built so Pi can keep a separate setup for each kind of work. **[Part 2](#part-2)** is the why, and a hypothesis I would like to test. Part 1 also leaves a thread open, an earlier experiment on what happens when an agent dies halfway (write-up coming soon), which is the problem the `marathon` profile exists for.
+Two pieces on one idea, kept together. **[Part 1](#part-1)** is the practical one: a small launcher I built so Pi can keep a separate setup for each kind of work. **[Part 2](#part-2)** is the why, and a hypothesis I would like to test.
 
 ## Part 1: a shelf for the agents you build {#part-1}
 
@@ -203,7 +203,7 @@ That is a very different kind of user from someone using a mainstream applicatio
 
 ### The one thing I was missing
 
-Pi is minimal, obviously, so I understand why some things are not in it. Durability is a good example. [Pi Durable](https://earendil.com/posts/pi-durable/) is an incredible direction and very interesting, but it is also very opinionated, so it lives separately from the minimal core. That is the right call, and I tested it (write-up coming soon) because long unattended runs are exactly where it matters.
+Pi is minimal, obviously, so I understand why some things are not in it. Durability is a good example. [Pi Durable](https://earendil.com/posts/pi-durable/) is an incredible direction and very interesting, but it is also very opinionated, so it lives separately from the minimal core. That is the right call, and long unattended runs are exactly where it matters.
 
 The one thing I felt was actually missing from Pi was the ability to keep more than one agent: to create profiles and move between them. So I built my own. I am not saying it is for everyone. I am saying it is for me, and that is the point of Pi. Several other people have built [their own versions](/essays/pi-profiles/), which tells me I'm not the only one who wanted it.
 

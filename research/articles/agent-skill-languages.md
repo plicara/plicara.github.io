@@ -2,9 +2,9 @@
 title: What language are agent skills written in?
 date: 2026-08-24
 summary: 3.8 million AI agent instruction files on GitHub, read by a model that speaks every language. So why are 85.3% of them in English, and what is changing?
-author: Adrian Tame Jacobo
+author: Adrian Tame
 author_url: https://adriantj.github.io/
-publisher: Plicara Labs
+publisher: plicara labs
 slug: agent-skill-languages
 ---
 

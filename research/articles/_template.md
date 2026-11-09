@@ -12,7 +12,7 @@ title: A short, specific title
 date: 2026-01-01
 summary: One or two sentences for the index page and search results.
 # Optional keys:
-#   author: Adrian Tame Jacobo         (defaults to "plicara labs")
+#   author: Adrian Tame         (defaults to "plicara labs")
 #   author_url: https://adriantj.github.io/
 #   publisher: plicara labs       (renders as "writing for ...")
 #   authors: Adrian Tame          (legacy alias for author)

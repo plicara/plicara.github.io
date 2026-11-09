@@ -2,9 +2,9 @@
 title: What agent skills are actually made of
 date: 2026-08-30
 summary: 1.9 million agent skills on GitHub. Only 12 in 100 come with any code attached, and when they do it is usually Python, whatever the skill is about.
-author: Adrian Tame Jacobo
+author: Adrian Tame
 author_url: https://adriantj.github.io/
-publisher: Plicara Labs
+publisher: plicara labs
 slug: agent-skill-programming-languages
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: a regex can pass its tests and still fail in use
 date: 2026-08-21
-author: Adrian Tame Jacobo
+author: Adrian Tame
 author_url: https://adriantj.github.io/
-publisher: Plicara Labs
+publisher: plicara labs
 slug: whether-anyone-ever-ran-it
 summary: A study of generated regular expressions, benchmark answer keys, and vulnerability screening across corpora. Passing tests is a limited guarantee; corpus differences do not establish what caused them.
 ---

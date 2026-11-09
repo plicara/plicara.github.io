@@ -2,9 +2,9 @@
 title: Benchmarks are living things
 date: 2026-10-02
 summary: A benchmark can keep returning scores long after it stops telling us much. I've been thinking about how to recognize that point, and what to do when the question we need it to answer changes.
-author: Adrian Tame Jacobo
+author: Adrian Tame
 author_url: https://adriantj.github.io/
-publisher: Plicara Labs
+publisher: plicara labs
 slug: benchmarks-are-living-things
 ---
 

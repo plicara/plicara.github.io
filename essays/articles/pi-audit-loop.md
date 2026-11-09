@@ -2,9 +2,9 @@
 title: What I learned rebuilding Pi Audit Loop
 date: 2026-10-02
 summary: A review and simplification loop found real bugs, but it also confused findings with repairs. I rebuilt it around one change, a checked revision and a final diff review.
-author: Adrian Tame Jacobo
+author: Adrian Tame
 author_url: https://adriantj.github.io/
-publisher: Plicara Labs
+publisher: plicara labs
 slug: pi-audit-loop
 ---
 

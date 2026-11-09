@@ -80,6 +80,33 @@ class ArticleRenderingTest(unittest.TestCase):
             self.assertIn("https://plicara.ai/essays/moved/", sitemap)
             self.assertNotIn("https://plicara.ai/research/moved/", sitemap)
 
+    def test_renamed_article_redirects_to_its_fragment(self):
+        page = build.render_redirect("old", "essays", "Merged", "new", "part-2")
+        self.assertIn("url=/essays/new/#part-2", page)
+        self.assertIn('href="https://plicara.ai/essays/new/"', page)
+
+    def test_withdrawn_article_leaves_a_noindex_notice_and_no_listing(self):
+        info = {"section": "research", "title": "Gone", "date": "2026-11-09",
+                "evidence": "https://example.com/evidence"}
+        notice = build.render_withdrawn("gone", info)
+        self.assertIn('<meta name="robots" content="noindex" />', notice)
+        self.assertIn("https://example.com/evidence", notice)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            research = root / "research"
+            (research / "articles").mkdir(parents=True)
+            (root / "sitemap.xml").write_text("<urlset>\n</urlset>")
+            with patch.multiple(build, ROOT=str(root), RESEARCH=str(research), ARTICLES=str(research / "articles"),
+                                ESSAYS=str(root / "essays"), ESSAY_ARTICLES=str(root / "essays" / "articles"),
+                                REDIRECTS={}, WITHDRAWN={"gone": info}), \
+                    patch.object(build.sys, "argv", ["build.py", "--no-pdf"]), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                build.main()
+            self.assertIn("withdrawn 2026-11-09", (research / "gone" / "index.html").read_text())
+            self.assertNotIn("/research/gone/", (root / "sitemap.xml").read_text())
+            self.assertNotIn("/research/gone/", (research / "index.html").read_text())
+            self.assertNotIn("/research/gone/", (research / "feed.xml").read_text())
+
     def test_essay_pages_link_back_to_essays(self):
         sec = build.sections()[1]
         rendered = build.render_article({"title": "T", "date": "2026-09-04", "summary": "S"}, "Body", "t", False, sec)

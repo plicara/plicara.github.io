@@ -1,7 +1,7 @@
 ---
-title: Pi profiles, part 1: a shelf for the agents you build
+title: Pi profiles
 date: 2026-10-13
-summary: Pi lets you build your own agent, but it gives you nowhere to put it. I built a small launcher that keeps a separate Pi setup for each kind of work, with shared session history and one shared set of packages.
+summary: Pi lets you build your own agent, but gives you nowhere to put it. Part 1 is a small launcher that keeps a separate Pi setup for each kind of work, with shared session history. Part 2 is why I think the people who get deepest into Pi end up needing several agents, and a hypothesis about where the work is heading.
 author: Adrian Tame Jacobo
 author_url: https://adriantj.github.io/
 publisher: Plicara Labs
@@ -33,14 +33,15 @@ slug: pi-profiles
   .pf-fig figcaption { margin-top: 1rem; color: var(--pl-text-muted); font-size: .9rem; line-height: 1.5; }
 </style>
 
+Two pieces on one idea, kept together. **[Part 1](#part-1)** is the practical one: a small launcher I built so Pi can keep a separate setup for each kind of work. **[Part 2](#part-2)** is the why, and a hypothesis I would like to test. Part 1 also leaves a thread open, an earlier experiment on what happens when an agent dies halfway (write-up coming soon), which is the problem the `marathon` profile exists for.
 
-I have been lucky enough to use a lot of coding agents. I'd call myself a heavy user of all of them, but I definitely like some more than others. The one I keep coming back to as my main harness is Pi, and this article is about a small system I built on top of it, which I've called pi-profiles.
+## Part 1: a shelf for the agents you build {#part-1}
+
+I have been lucky enough to use a lot of coding agents. I'd call myself a heavy user of all of them, but I definitely like some more than others. The one I keep coming back to as my main harness is Pi, and this part is about a small system I built on top of it, which I've called pi-profiles.
 
 The short version: a profile is a separate Pi setup for a separate way of working. Think Chrome profiles, but for your coding agent. It is not only which tools are loaded. It is how much the agent does on its own, what it is allowed to touch and when it is supposed to stop. I have one profile for everyday work at the keyboard, one for long unattended runs and one I keep only for testing a single extension. I pick the one I want when I launch Pi, and my session history follows me between them.
 
-The companion piece, [part 2: Agents, plural](/essays/agents-plural/), is about why I ended up working this way and the philosophical mumbo jumbo that lead me here, and both sit next to an earlier experiment on what happens when an agent dies halfway (write-up coming soon), which is the problem `marathon` exists for.
-
-## What is Pi?
+### What is Pi?
 
 [Pi](https://github.com/earendil-works/pi) is a minimal coding agent harness. Out of the box it gives a model a small set of tools (read, write, edit, bash) and very little else. Everything beyond that comes from things you add: skills, slash commands, extensions and packages that other people publish (or yourself, obviously). The idea is that the people using the tool are the ones who decide what it should be. This is a very different philosophy from the more walled garden approach that tools like Claude Code or Codex take, and gives power back to power users.
 
@@ -50,7 +51,7 @@ It is very easy to create a tool right now. Code is cheap. What is hard is stand
 
 If you have never used Pi, it also has its own tutorial, which is genuinely good and worth going through before anything else in this article.
 
-## What Pi profiles are
+### What Pi profiles are
 
 Pi solves a simple problem very well: you get to build your own agent. What it doesn't give you is a shelf to put those agents on.
 
@@ -81,7 +82,7 @@ Most of what makes `marathon` safe to leave alone is code, not instructions. The
 
 It also works the other way. `marathon` has a deep research workflow, and if those skills were loaded in `daily` they could trigger when I don't want them to. Deep research is its own part of the stack for me. Keeping it out of the profiles where I never want it is part of the point.
 
-### Why `SoL-Pi` has a profile of its own
+#### Why `SoL-Pi` has a profile of its own
 
 The `SoL-Pi` profile exists because of a mistake. When NVIDIA released SoL-Pi, I wanted to test it on long sessions, and my first attempt was the marathon stack plus SoL-Pi. One of the marathon extensions is [pi-nolo](https://www.npmjs.com/package/pi-nolo), a permissions extension I needed for the loops. To do its job, pi-nolo re-registers Pi's built-in `edit` tool. SoL-Pi also extends `edit`, with a parameter that lets it fuse an edit and a follow-up command into one step. Whichever extension loads first keeps the `edit` slot, and pi-nolo was winning. So SoL-Pi's fusion feature never fired on a single edit for the whole trial.
 
@@ -91,7 +92,7 @@ I didn't know that at the time. I actually opened an issue on SoL-Pi's GitHub th
 
 That is the third reason I keep profiles, next to working style and context: controlled experiments. If you want to know what one extension does, you need a setup where it is the only thing that changed.
 
-## Using it
+### Using it
 
 The launcher is a single Bash script. Install it by putting it on your path:
 
@@ -123,7 +124,7 @@ pi-profile install ./pi-marathon test   # local folders work too, to test before
 
 Packages are not copied. They are fetched from npm or git the first time the profile launches, the same way Pi installs them normally. That also means installing someone else's profile runs their packages, so it carries the same trust as `npm install`. Read their `settings.json` first.
 
-## Under the hood
+### Under the hood
 
 This is the part I find most interesting, because the whole thing is small. Pi already has the two hooks the launcher needs. `PI_CODING_AGENT_DIR` tells Pi which directory to load its configuration from. `PI_CODING_AGENT_SESSION_DIR` tells it where to keep session history. Launching a profile is just:
 
@@ -169,7 +170,7 @@ A few of those choices are worth explaining.
 
 It is also worth being clear about what the launcher does not do. It doesn't change Pi itself or override any of its behaviour. It doesn't switch anything inside a running session; you pick the profile when you start Pi. Skills in `~/.agents/skills/` are still loaded in every profile, because that is Pi's cross-harness skill location. A project's own `.pi/` folder still loads on top, as usual. And a profile is not a sandbox. It changes what the agent has available, not what it is allowed to touch on your machine. The limits in `marathon` come from its extensions and its rules, not from the profile.
 
-## Other people are building this too
+### Other people are building this too
 
 I'm not the only one who wanted this. There is a [Pi issue](https://github.com/earendil-works/pi/issues/3966) proposing a built-in `--profile` flag on top of `PI_CODING_AGENT_DIR`, mostly to keep state such as credentials, sessions and settings separate between environments. People are still asking for it to be reconsidered, and as far as I can tell there is no plan for native profiles in Pi. And there are several packages that each mean something slightly different by a profile:
 
@@ -184,3 +185,82 @@ These come from each project's own description, and they will probably have chan
 
 If you want to try mine, the code and my profiles are at [github.com/AdrianTJ/pi-profiles](https://github.com/AdrianTJ/pi-profiles). Make it fit the way you work. That is the whole point of Pi.
 
+## Part 2: Agents, plural {#part-2}
+
+A while ago I noticed that every Pi session I started was already 15 to 20% full before I had typed anything. One of my extensions, a to-do tracker, was loading a huge amount into context on every start. It was useful, but it was absolutely massacring my ability to work on anything else. Debugging that, and working out which other extension could do the same job, is how I ended up building Pi profiles, which is what part 1 above describes.
+
+This piece is about why I work that way, and where I think it is all heading. The practical side, how the launcher works, is in part 1. This one is the why.
+
+### Pi, and the people it is for
+
+[Pi](https://github.com/earendil-works/pi) is a pretty beautiful system. It is useful, it is extensible, it is open by design and it lets you play. And we are in an era where you can use AI tools to build the system with itself, which is a bit crazy when you think about it. A tool that builds itself is a very interesting idea, and it is really how Pi is meant to be used.
+
+The other harnesses are powerful too. [Claude Code](https://claude.com/product/claude-code), [Codex](https://github.com/openai/codex), [Cursor](https://cursor.com), [Goose](https://github.com/block/goose), and a long tail of smaller ones. There is even Oh My Pi, which is built on Pi and goes in the opposite direction: a ton of functionality, a ton of skills, everything switched on. I like it and I use it quite a bit. But for me it is overkill, and it cuts against what I think Pi is about.
+
+There is a lot of excitement around Pi among the people I talk to who build systems. It is the same kind of person who got excited when [TypeSafe](https://typesafe.ai) released [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), or who goes deep into [LazyVim](https://www.lazyvim.org). Engineers who like to work with their tools, take them apart and modify them. There is always going to be a place for those people and for the work they do.
+
+That is a very different kind of user from someone using a mainstream application where the decisions are made for you. It is the Linux crowd versus the Mac crowd. I'm not arguing about the merits of either, whether you're on a Mac or on a 14-year-old ThinkPad that is modded to high heaven. There is a need for both, and a beauty in both. Some people just want their tools to work for them. Some people want modular control. Pi is for the second group, and its whole philosophy is minimalism plus extensibility by the people who use it.
+
+### The one thing I was missing
+
+Pi is minimal, obviously, so I understand why some things are not in it. Durability is a good example. [Pi Durable](https://earendil.com/posts/pi-durable/) is an incredible direction and very interesting, but it is also very opinionated, so it lives separately from the minimal core. That is the right call, and I tested it (write-up coming soon) because long unattended runs are exactly where it matters.
+
+The one thing I felt was actually missing from Pi was the ability to keep more than one agent: to create profiles and move between them. So I built my own. I am not saying it is for everyone. I am saying it is for me, and that is the point of Pi. Several other people have built [their own versions](/essays/pi-profiles/), which tells me I'm not the only one who wanted it.
+
+The to-do extension was the first push. Testing was the second. [Ponytail](https://www.npmjs.com/package/pi-ponytail) is a popular extension, and a good one, but it changes the agent's behaviour quite drastically, and with everything else loaded alongside it I couldn't tell what it was doing to my setup. Then NVIDIA released [SoL-Pi](https://github.com/NVlabs/SoL-Pi) and I wanted to try it on long sessions. I tried it inside my normal setup, and another extension silently switched off its main feature for the whole trial. I even opened an issue on their GitHub before I realised it was my setup, not their code (the full story is in [the other article](/essays/pi-profiles/)). I had changed more than one thing at once, and the trial told me nothing.
+
+### A lab, not a single stream
+
+Native Pi in its minimalism is absolutely beautiful, but it is also restrictive. Some people will like that. What I want is a lab. The way I think is more like a laboratory than a single stream of work. I want to isolate environments, test one thing at a time and separate tasks by profile.
+
+Pi is a generalist tool, which is part of the point. But sometimes you need a specialised one. A screwdriver will take ten times less effort than trying to do the same job with a hammer, if a hammer is all you have. People talk about Pi as a Swiss army knife. I don't think it is one. It is a very simple stick that you build into something useful to you. I want to build many things that are useful to me.
+
+The difference between my profiles is not really the tools. It is the way of working. `daily` assumes I am in the loop the whole time: back and forth, one task, everything visible. `marathon` assumes I am gone for ten hours, so it needs things I don't want anywhere near my daily work, like Pi sessions that can spawn other Pi sessions, an approval mode that won't stop at 3am, and hard rules about budgets, worktrees and when to give up. Those are different permissions and different failure modes. Putting them in one configuration makes both worse.
+
+<figure class="pl-fig pf-fig" id="figure-3">
+<span class="figlabel">Figure 3. Two ways of working</span>
+<div class="pf-scroll" tabindex="0" role="region" aria-label="You are present throughout daily and only at the ends of marathon"><svg viewBox="0 0 760 300" role="img" aria-label="Who is present over time in daily versus marathon"><line class="axis" x1="120" y1="34" x2="120" y2="250"/><text class="small" x="120" y="274" text-anchor="middle">0h</text><line class="axis" x1="244" y1="34" x2="244" y2="250"/><text class="small" x="244" y="274" text-anchor="middle">2h</text><line class="axis" x1="368" y1="34" x2="368" y2="250"/><text class="small" x="368" y="274" text-anchor="middle">4h</text><line class="axis" x1="492" y1="34" x2="492" y2="250"/><text class="small" x="492" y="274" text-anchor="middle">6h</text><line class="axis" x1="616" y1="34" x2="616" y2="250"/><text class="small" x="616" y="274" text-anchor="middle">8h</text><line class="axis" x1="740" y1="34" x2="740" y2="250"/><text class="small" x="740" y="274" text-anchor="middle">10h</text><text class="name" x="0" y="80" style="font-size:15px">daily</text><text class="small" x="0" y="100">at the keyboard</text><circle class="on" cx="124.0" cy="74" r="4"/><circle class="on" cx="137.4" cy="92" r="4"/><circle class="on" cx="150.8" cy="74" r="4"/><circle class="on" cx="164.2" cy="92" r="4"/><circle class="on" cx="177.6" cy="74" r="4"/><circle class="on" cx="191.0" cy="92" r="4"/><circle class="on" cx="204.4" cy="74" r="4"/><circle class="on" cx="217.8" cy="92" r="4"/><circle class="on" cx="231.2" cy="74" r="4"/><circle class="on" cx="244.6" cy="92" r="4"/><circle class="on" cx="258.0" cy="74" r="4"/><circle class="on" cx="271.4" cy="92" r="4"/><circle class="on" cx="284.8" cy="74" r="4"/><circle class="on" cx="298.2" cy="92" r="4"/><circle class="on" cx="311.6" cy="74" r="4"/><circle class="on" cx="325.0" cy="92" r="4"/><circle class="on" cx="338.4" cy="74" r="4"/><circle class="on" cx="351.8" cy="92" r="4"/><circle class="on" cx="365.2" cy="74" r="4"/><circle class="on" cx="378.6" cy="92" r="4"/><circle class="on" cx="392.0" cy="74" r="4"/><circle class="on" cx="405.4" cy="92" r="4"/><circle class="on" cx="418.8" cy="74" r="4"/><circle class="on" cx="432.2" cy="92" r="4"/><circle class="on" cx="445.6" cy="74" r="4"/><circle class="on" cx="459.0" cy="92" r="4"/><circle class="on" cx="472.4" cy="74" r="4"/><circle class="on" cx="485.8" cy="92" r="4"/><circle class="on" cx="499.2" cy="74" r="4"/><circle class="on" cx="512.6" cy="92" r="4"/><circle class="on" cx="526.0" cy="74" r="4"/><circle class="on" cx="539.4" cy="92" r="4"/><circle class="on" cx="552.8" cy="74" r="4"/><circle class="on" cx="566.2" cy="92" r="4"/><circle class="on" cx="579.6" cy="74" r="4"/><circle class="on" cx="593.0" cy="92" r="4"/><circle class="on" cx="606.4" cy="74" r="4"/><circle class="on" cx="619.8" cy="92" r="4"/><circle class="on" cx="633.2" cy="74" r="4"/><circle class="on" cx="646.6" cy="92" r="4"/><circle class="on" cx="660.0" cy="74" r="4"/><circle class="on" cx="673.4" cy="92" r="4"/><circle class="on" cx="686.8" cy="74" r="4"/><circle class="on" cx="700.2" cy="92" r="4"/><circle class="on" cx="713.6" cy="74" r="4"/><circle class="on" cx="727.0" cy="92" r="4"/><text class="small" x="124" y="128">you and the agent go back and forth, one task at a time</text><text class="name" x="0" y="200" style="font-size:15px">marathon</text><text class="small" x="0" y="220">away</text><circle class="on" cx="128" cy="196" r="6"/><text class="small" x="120" y="172">you brief it</text><rect class="busy" x="140" y="186" width="530" height="20" rx="3"/><circle class="on" cx="742" cy="196" r="6"/><text class="small" x="742" y="172" text-anchor="end">you read the result</text><path class="line" d="M270 184 L270 208"/><text class="small" x="270" y="232" text-anchor="middle">tests must pass</text><path class="line" d="M430 184 L430 208"/><text class="small" x="430" y="232" text-anchor="middle">git push blocked</text><path class="line" d="M590 184 L590 208"/><text class="small" x="590" y="232" text-anchor="middle">budget stop</text></svg></div>
+<figcaption>An illustration of how the two profiles are meant to be used, not a measurement. With <code>daily</code> I am in the loop the whole time. With <code>marathon</code> I leave it, so the rules I rely on are checks that run in code.</figcaption>
+</figure>
+
+This is the one place where I disagree with the philosophy of the team behind Pi, and I'm probably the only one. It is not agent, singular. It is agents, plural. If you really want to get into Pi, profiles are a necessary part of that learning journey, because you need to be able to test things out.
+
+### Isn't this the opposite of minimalism?
+
+The obvious objection is that more profiles means more configuration to maintain, which is exactly what Pi is trying to avoid. I think it is the other way around. The alternative to several small profiles is not one small profile. It is one large profile that slowly accumulates everything you have ever found useful, until it looks like Oh My Pi.
+
+Profiles let each setup stay minimal. My SoL-Pi profile has one package. `daily` has seven. `marathon` has eleven, because unattended work needs more machinery. None of them carries the others' tools. The complexity moves from what is loaded to what you choose, and choosing is the part I want to be deliberate about anyway.
+
+There is a second opinion baked in that is worth naming: my profiles share session history. I care more about the continuity of my work than about keeping agents apart. I can start something in `daily`, realise it is a marathon job and pick up the same thread there. Other people want each profile to be its own agent with its own memory, and that is a fair choice too. It is just not mine.
+
+### The models got good
+
+The other part of this is that the models keep getting better. Something people forget, and I forget too, is that this is the worst these models will ever be.
+
+At some point this year the models crossed a line for me. They understand context well enough to do what you mean without careful wordsmithing. I like to talk things through, and most of what I write, including this article, starts as a voice conversation with an agent: bouncing ideas around, arguing, recording. That only works because the models now follow a messy spoken explanation.
+
+So here is a strong claim. I think prompt engineering is basically dead, and the skills way of working is going with it. If you came into these tools today with no skills and none of the old habits, I suspect you would get better results than someone carrying over everything from six months or a year ago. Boris, who created Claude Code, recently shared how he prompts it, and it is about as basic as a prompt gets: build me a game. And it works. What matters now is harness and context engineering.
+
+That is my experience. It is not yet evidence, and I would not accept it from anyone else on those terms. But some of the evidence I do have points the same way.
+
+<figure class="pl-fig pf-fig" id="figure-4">
+<span class="figlabel">Figure 4. Do models read skills?</span>
+<div class="pf-scroll" tabindex="0" role="region" aria-label="Squares showing sessions that opened the skill file"><svg viewBox="0 0 760 210" role="img" aria-label="7 of 21 sessions opened the skill file; 0 of 3 after the edit"><text class="lbl" x="0" y="22">Before the edit: 7 of 21 sessions opened the skill file</text><rect class="on" x="0" y="34" width="24" height="24" rx="2"/><rect class="on" x="30" y="34" width="24" height="24" rx="2"/><rect class="on" x="60" y="34" width="24" height="24" rx="2"/><rect class="on" x="90" y="34" width="24" height="24" rx="2"/><rect class="on" x="120" y="34" width="24" height="24" rx="2"/><rect class="on" x="150" y="34" width="24" height="24" rx="2"/><rect class="on" x="180" y="34" width="24" height="24" rx="2"/><rect class="off" x="210" y="34" width="24" height="24" rx="2"/><rect class="off" x="240" y="34" width="24" height="24" rx="2"/><rect class="off" x="270" y="34" width="24" height="24" rx="2"/><rect class="off" x="300" y="34" width="24" height="24" rx="2"/><rect class="off" x="330" y="34" width="24" height="24" rx="2"/><rect class="off" x="360" y="34" width="24" height="24" rx="2"/><rect class="off" x="390" y="34" width="24" height="24" rx="2"/><rect class="off" x="420" y="34" width="24" height="24" rx="2"/><rect class="off" x="450" y="34" width="24" height="24" rx="2"/><rect class="off" x="480" y="34" width="24" height="24" rx="2"/><rect class="off" x="510" y="34" width="24" height="24" rx="2"/><rect class="off" x="540" y="34" width="24" height="24" rx="2"/><rect class="off" x="570" y="34" width="24" height="24" rx="2"/><rect class="off" x="600" y="34" width="24" height="24" rx="2"/><text class="lbl" x="0" y="120">Right after I put the rule there: 0 of 3</text><rect class="off" x="0" y="132" width="24" height="24" rx="2"/><rect class="off" x="30" y="132" width="24" height="24" rx="2"/><rect class="off" x="60" y="132" width="24" height="24" rx="2"/><rect class="on" x="0" y="184" width="14" height="14" rx="2"/><text class="small" x="22" y="196">opened SKILL.md</text><rect class="off" x="180" y="184" width="14" height="14" rx="2"/><text class="small" x="202" y="196">did not</text></svg></div>
+<figcaption>One square per session in my Pi Audit Loop experiments. Small numbers from one setup, so this is an observation, not a proof.</figcaption>
+</figure>
+
+- **Models often don't read skills.** In my earlier [Pi Audit Loop](/essays/pi-audit-loop/) experiments, 7 of 21 sessions opened the bundled skill files at all, and 0 of 3 did right after I put an important rule there. Moving it into a tool description and a tool message, at the point where the model had to act on it, was what got it in front of the model at all, and even then it did not reliably change what the model did.
+- **The guarantees I rely on are code.** In `marathon`, the review gate refuses a clean verdict unless the tests ran since the last change, and the loop blocks `git push`. Those are extensions. The written rules in that profile matter, but they are not what I trust when nobody is watching.
+- **The context cost is real.** The to-do extension at the start of this piece is the clearest case I have. Every skill, tool definition and extension takes up context and can trigger when you don't want it to.
+
+None of that proves skills are fading in general. It is one person's setup and a few small experiments. So the honest version of my claim is a hypothesis: skills will stop encoding ways of working and mostly encode taste, how you like things done, while the important parts move into hooks, extensions, permissions and slash commands you invoke at a particular moment.
+
+That is testable. When I wrote that [the harness is the signal](/essays/harness-is-signal/), the idea was to watch what we build around models to understand what they can and cannot do. The same approach works here. The [GitSkills](https://arxiv.org/abs/2608.10906) dataset has about 3.8 million `SKILL.md` files from 282,200 public repositories, and it is what my earlier articles on [the languages skills are written in](/research/agent-skill-languages/) were built on. If I'm right, I'd expect skill files to shift over time from procedures towards preferences, and hooks and extensions to grow alongside them, especially among people who actively customise their harnesses. If I'm wrong, the data should show that too. That is the next piece.
+
+### Become a harness engineer
+
+There is a call to action here regardless of how that test comes out. The way Pi was created, the philosophy of the team and the purpose of the tool make it a very useful base for everything. But it also forces you to think about context engineering. In Pi you see the cost of every skill and extension, because you put each one there yourself. I'd love to have every skill and extension loaded for free, but that isn't how it works.
+
+If you want to become a harness engineer and actually think about these problems, the tool you need is something like Pi. Instead of building software by importing libraries, you are designing the harness and the agents that help you through the work.
+
+So design the environment, not just the prompt. And keep more than one.

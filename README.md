@@ -115,6 +115,8 @@ Essays live in a second section built by the same script: sources in `essays/art
 
 `uv run --locked python research/build.py --no-pdf` updates the HTML and RSS feed while preserving links to existing PDFs. It does not regenerate those PDFs. The feed uses published article summaries and stable article URLs; drafts stay excluded by the same build loop as the index.
 
+To take an article down, delete its markdown source and PDF and add it to `WITHDRAWN` in `research/build.py`. Its URL then serves a short noindex notice instead of a 404, and it leaves the index, feed and sitemap. To fold one article into another, add a `REDIRECTS` entry of the form `(section, new_slug, fragment)`.
+
 Run `uv run --locked python -m unittest discover -s research` after rebuilding. Run `make setup` and `make setup-browser`, serve the site on port 4001, and run `uv run --locked python tools/check_browser.py` for mobile/desktop layout and keyboard-scrolling checks. Pull requests run both checks and reject uncommitted generated-page changes. When article wording changes, regenerate its downloadable PDF as well. Archived whitepapers under `research/papers/` remain versioned historical artifacts; an article that revises their interpretation should say so explicitly.
 
 ## How this repo gets online
